@@ -9,7 +9,7 @@ case class CiteProperty(propertyDef: CitePropertyDef, propertyValue: Any) {
 
 
 object CiteProperty {
-  def apply(propName: String, propType: CitePropertyType, propValue: Any): CiteProperty = {
+  def apply(propName: String, propType: CitePropertyType, propValue: Any, vocabularyList: Vector[String] = Vector.empty): CiteProperty = {
     propType match {
       case CtsUrnType => {
         propValue match {
@@ -48,7 +48,17 @@ object CiteProperty {
         }
       }
 
-      case _ => throw CiteObjectException("unimplemented cite type " + propType)
+      case ControlledVocabType => {
+        propValue match {
+          case s: String => if (vocabularyList.contains(s)) {
+              CiteProperty(CitePropertyDef(propName, propType), s)
+            } else {
+              throw CiteObjectException("value " + propValue + " is not in the controlled vocabulary list")
+            }
+
+          case _ => throw CiteObjectException("value " + propValue + " is not a String")
+        }
+      }
     }
   }
 }
