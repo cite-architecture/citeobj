@@ -11,7 +11,7 @@ class CiteCollectionSpec extends FlatSpec {
   "A CITE collection" should "offer a constructor signature for instantiating a corpus from a delimited text file" in  pending
 
 
-  it should  "have a vector of cite objects" in {
+  it should  "have a vector of cite objects" in pending /* {
     val urn = Cite2Urn("urn:cite2:hmt:msA.v1:12r")
     val props = Vector(
       CiteProperty("folio", "12"),
@@ -47,7 +47,7 @@ class CiteCollectionSpec extends FlatSpec {
     val coll = CiteCollection( Vector(obj))
     assert (coll.isOrdered == false)
   }
-
+*/
 
     /*
     val relationSet = CiteRelationSet("src/test/resources/venA-Iliad-1.tsv")
