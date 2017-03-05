@@ -20,16 +20,7 @@ Status:  early stages of development.
 
 ## Notes on design and work in progress
 
-### Collections of citable objects
 
-Objects may have properties of the following types:
-
-- CTS URN
-- CITE2 URN
-- numeric value
-- boolean value
-- arbitrary string value
-- controlled vocabulary
 
 ###Some requirements
 

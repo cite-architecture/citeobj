@@ -8,14 +8,13 @@ import edu.holycross.shot.cite._
 */
 class CitePropertyDefSpec extends FlatSpec {
 
-  "A CITE property specification" should "have a human readable label" in {
-    val citePropertyDef = CitePropertyDef("text", CtsUrnType)
-    assert (citePropertyDef.propertyName == "text")
-  }
-
-  it should "have a property type" in {
-    val citePropertyDef = CitePropertyDef("text", CtsUrnType)
+  "A CITE property specification" should "have a property type" in {
+    val citePropertyDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"), CtsUrnType)
     assert (citePropertyDef.propertyType == CtsUrnType)
+  }
+  it should "have a urn" in {
+    val citePropertyDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"), CtsUrnType)
+    assert (citePropertyDef.urn == Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"))
   }
 
 

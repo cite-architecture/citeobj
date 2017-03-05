@@ -8,42 +8,49 @@ import edu.holycross.shot.cite._
 */
 class CitePropertySpec extends FlatSpec {
 
-  "A CITE property" should "recognize CtsUrn types" in {
-    val citeProperty = CiteProperty("text",CtsUrnType,CtsUrn("urn:cts:greekLit:tlg0012.tlg001:"))
+  "A CITE property" should "do something" in pending
 
-    val expectedValue = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
-    val expectedName = "text"
+  /*"recognize CtsUrn types" in {
+    val citeProperty = CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech4"),CtsUrnType,CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.85-1.91"))
+
+    val expectedUrn = Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech4")
     val expectedType = CtsUrnType
+    val expectedValue = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.85-1.91")
 
+
+    assert(citeProperty.urn == expectedUrn)
+    //assert(citeProperty.propertyType == expectedType)
     assert(citeProperty.propertyValue == expectedValue)
-    assert(citeProperty.propertyDef.propertyName == expectedName)
-    assert(citeProperty.propertyDef.propertyType == expectedType)
   }
+
+
   it should "throw an exception if a the value  for a CtsUrn type is not a CtsUrn" in {
     try {
-      val citeProperty = CiteProperty("text",CtsUrnType,"urn:cts:greekLit:tlg0012.tlg001:")
+      val citeProperty = CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech12"),CtsUrnType,"urn:cts:greekLit:tlg0012.tlg001:")
       fail("Should have thrown a CiteObjectException")
     } catch {
       case coex: CiteObjectException => assert (coex.message == "value urn:cts:greekLit:tlg0012.tlg001: is not a CtsUrn")
-      case _ : Throwable => fail("Should have thrown a CiteObjectException")
+      case e : Throwable => fail("Should have thrown a CiteObjectException but threw " + e.getMessage())
     }
   }
 
-  it should "recognize Cite2Urn types" in {
-    val citeProperty = CiteProperty("personal name",Cite2UrnType,Cite2Urn("urn:cite2:hmt:pers:pers1"))
 
+  it should "recognize Cite2Urn types" in {
+    val citeProperty = CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2UrnType,Cite2Urn("urn:cite2:hmt:pers:pers1"))
+
+
+    val expectedUrn = Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4")
     val expectedValue = Cite2Urn("urn:cite2:hmt:pers:pers1")
-    val expectedName = "personal name"
     val expectedType = Cite2UrnType
 
+    assert(citeProperty.urn == expectedUrn)
+    assert(citeProperty.propertyType == expectedType)
     assert(citeProperty.propertyValue == expectedValue)
-    assert(citeProperty.propertyDef.propertyName == expectedName)
-    assert(citeProperty.propertyDef.propertyType == expectedType)
   }
 
   it should "throw an exception if a the value  for a Cite2Urn type is not a Cite2Urn" in {
     try {
-      val citeProperty = CiteProperty("personal name",Cite2UrnType,"urn:cite2:hmt:pers:pers1")
+      val citeProperty = CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2UrnType,"urn:cite2:hmt:pers:pers1")
       fail("Should have thrown a CiteObjectException")
     } catch {
       case coex: CiteObjectException => assert (coex.message == "value urn:cite2:hmt:pers:pers1 is not a Cite2Urn")
@@ -55,28 +62,28 @@ class CitePropertySpec extends FlatSpec {
 
 
   it should "recognize numeric types" in {
-    val citeProperty = CiteProperty("sequence",NumericType,12)
+    val citeProperty = CiteProperty( Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),NumericType,12)
 
-    val expectedValue = 12
-    val expectedName = "sequence"
+    val expectedValue = 4
+    val expectedUrn = Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4")
     val expectedType = NumericType
 
+    assert(citeProperty.urn == expectedUrn)
+    assert(citeProperty.propertyType == expectedType)
     assert(citeProperty.propertyValue == expectedValue)
-    assert(citeProperty.propertyDef.propertyName == expectedName)
-    assert(citeProperty.propertyDef.propertyType == expectedType)
   }
 
   it should "throw an exception if a the value  for a numeric type is not a number" in {
     try {
-      val citeProperty = CiteProperty("sequence",NumericType,"12")
+      val citeProperty = CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),NumericType,"12")
       fail("Should have thrown a CiteObjectException")
     } catch {
       case coex: CiteObjectException => assert (coex.message == "value 12 is not a Numeric")
       case _ : Throwable => fail("Should have thrown a CiteObjectException")
     }
   }
-
-
+*/
+/*
 
   it should "recognize boolean types" in {
     val citeProperty = CiteProperty("validated",BooleanType,true)
@@ -85,9 +92,9 @@ class CitePropertySpec extends FlatSpec {
     val expectedName = "validated"
     val expectedType = BooleanType
 
+    assert(citeProperty.urn == expectedUrn)
+    assert(citeProperty.propertyType == expectedType)
     assert(citeProperty.propertyValue == expectedValue)
-    assert(citeProperty.propertyDef.propertyName == expectedName)
-    assert(citeProperty.propertyDef.propertyType == expectedType)
   }
 
   it should "throw an exception if a the value  for a boolean type is not a boolean" in {
@@ -109,9 +116,9 @@ class CitePropertySpec extends FlatSpec {
     val expectedName = "page"
     val expectedType = StringType
 
+    assert(citeProperty.urn == expectedUrn)
+    assert(citeProperty.propertyType == expectedType)
     assert(citeProperty.propertyValue == expectedValue)
-    assert(citeProperty.propertyDef.propertyName == expectedName)
-    assert(citeProperty.propertyDef.propertyType == expectedType)
   }
 
   it should "throw an exception if a the value  for a string type is not a string" in {
@@ -132,9 +139,9 @@ class CitePropertySpec extends FlatSpec {
     val expectedName = "rv"
     val expectedType = ControlledVocabType
 
+    assert(citeProperty.urn == expectedUrn)
+    assert(citeProperty.propertyType == expectedType)
     assert(citeProperty.propertyValue == expectedValue)
-    assert(citeProperty.propertyDef.propertyName == expectedName)
-    assert(citeProperty.propertyDef.propertyType == expectedType)
   }
 
   it should "throw an exception if a the value for a controlled vocabulary type is not in the given vocabulary" in {
@@ -147,7 +154,7 @@ class CitePropertySpec extends FlatSpec {
     }
   }
 
-
+*/
 
 
 

@@ -24,7 +24,7 @@ lazy val crossed = crossProject.in(file(".")).
 
         //"org.scala-lang.modules" %% "scala-xml" % "1.0.6",
 
-        "edu.holycross.shot.cite" %%% "xcite" % "2.0.0",
+        "edu.holycross.shot.cite" %%% "xcite" % "2.0.1",
         "edu.holycross.shot" %%% "orca" % "2.3.0"
       )
     ).
