@@ -7,14 +7,18 @@ import edu.holycross.shot.cite._
 */
 class CiteCollectionDataSpec extends FlatSpec {
 
-  val dataV: Vector[CiteProperty] = Vector(
-    CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
-    CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2Urn("urn:cite2:hmt:pers:pers1")),
-    CiteProperty(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech4"),CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.85-1.91"))
+  val dataV: Vector[CitePropertyValue] = Vector(
+    CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
+    CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2Urn("urn:cite2:hmt:pers:pers1")),
+    CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech4"),CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.85-1.91"))
   )
 
-  "A CITE collection" should  "have a vector of cite properties" in {
-
+  "A CITE data collection" should  "have a vector of cite property values" in {
+    val dataCollection = CiteCollectionData(dataV)
+    dataCollection.data match {
+      case v: Vector[CitePropertyValue] => assert(true)
+      case _ => fail("Should have find a vector of cite property values")
+    }
   }
   it should "support selecting all properties of an object using URN twiddling" in {
     val dataCollection = CiteCollectionData(dataV)
