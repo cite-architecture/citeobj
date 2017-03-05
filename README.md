@@ -15,31 +15,25 @@ Status:  early stages of development.
 
 ## Using, building, testing
 
-`citeobj` is compiled for both the JVM and ScalaJS using scala versions 2.11 and 2.12.  Due to a dependency on `scala-xml`, it cannot be used with Scala 2.10.
+`citeobj` is compiled for both the JVM and ScalaJS using scala versions 2.11 and 2.12.  Due to a dependency on `scala-xml`, the JVM builds cannot be used with Scala 2.10.  ScalaJS builds can be compiled for 2.10 as well as 2.11 and 2.12.
 
 
 ## Notes on design and work in progress
 
 
+- A CITE property is a pairing of a property-level Cite2Urn with some value.
+- A CITE data collection is a vector of CITE properties.  Applying URN twiddling to a CITE data collection creates a new (possibly empty) CITE data collection.
+- A Catalog documents the structure of properties.
 
-###Some requirements
+## Desiderata
 
-- instantiating an object should validate values for each property against their type
-- retrieve value by string name of property
-- retrieval by a concrete object URN returns an object structure
-- retrieval bt property level URN returns a value of the property's type
+Different kinds of validation:
 
+- enforce 1<->1 relation of *properties* in a data collection and *property definitions* in a catalog
+- enforce presence of all defined properties for all object instances of an collection
+- validate valid values for each property
 
+Need some kind of collection-level metadata, in addition to metdata residing in property definitions:
 
-### Questions
-
-When adding to a collection, perhaps expand an instance into a collection of property-level URN statements? This would reduce property value retrieval to reference by property-level URN.
-
-So maybe a collection is not a vector of **objects**, but a vector of **property values**?  Kind of like leaf-node passages of text.  And erhaps like URN collapsing on texts, we can collapse to object-level?
-
-Can we think of these concrete property values as *name* in URN mapping to *type-value* pair?
-
-
-### Data about the collection
-
-Need to be able to 'catalog' the collection: list names/types of members. (Perhaps recognize/document annotated methods???? ~~ extensions???)
+- label
+- ordered or not
