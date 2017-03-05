@@ -2,7 +2,7 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
-case class Repository (citeCollection: CiteCollection, catalog: Catalog) {
+case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
   // enforce 1-1 relation of texts cataloged as online
   // and texts cited in the corpus
 
