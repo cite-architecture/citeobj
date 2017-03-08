@@ -49,26 +49,22 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
       }
     }
 
-
-
-
     assert(catalogSet.size ==
        citeObj.propertyList.size, s"for ${citeObj.urn}, catalog defines ${collectionDef.propertyDefs.size} properties but found ${citeObj.propertyList.size}")
 
     val catalogPropUrns =  catalogSet.map(_.urn)
     for (p <- citeObj.propertyList) {
 
-      println(p)
       assert(catalogPropUrns.contains(p.urn.dropSelector))
+      val propDef = catalogSet.filter(_.urn == p.urn.dropSelector)
+      assert(propDef.size == 1)
 
       // get type from catalog def
-      val expectedType = {
-        val propDef = catalogSet.filter(_.urn == p.urn.dropSelector)
-        assert(propDef.size == 1)
-        propDef(0).propertyType
-      }
+      val expectedType = propDef(0).propertyType
+      // get controlled vocab vector:
+      val vocabVector = propDef(0).vocabularyList
 
-      assert(CiteCollectionRepository.typesMatch(p.propertyValue,expectedType ),s"For ${p.urn}, ${p.propertyValue} did not match ${expectedType}")
+      assert(CiteCollectionRepository.typesMatch(p.propertyValue,expectedType,vocabVector ),s"For ${p.urn}, ${p.propertyValue} did not match ${expectedType}")
     }
 
     true
@@ -115,7 +111,7 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 
 object CiteCollectionRepository {
 
-  def typesMatch(propertyVal: Any, expected: CitePropertyType) : Boolean = {
+  def typesMatch(propertyVal: Any, expected: CitePropertyType, vocabList: Vector[String]) : Boolean = {
     expected match {
       case CtsUrnType => {
         propertyVal match {
@@ -137,43 +133,25 @@ object CiteCollectionRepository {
         }
       }
 
-
       case BooleanType => {
         propertyVal match {
           case b: Boolean => true
           case _ => false
         }
       }
-
-
       case StringType => {
         propertyVal match {
           case s: String => true
           case _ => false
         }
       }
-      case _ => false // unimplemented type??
-
-    }
-  }
-}
-
-  /*()
-
-
-
-
       case ControlledVocabType => {
-        propValue match {
-          case s: String => if (vocabularyList.contains(s)) {
-              CiteProperty(urn,  propType, s)
-            } else {
-              throw CiteObjectException("value " + propValue + " is not in the controlled vocabulary list")
-            }
+        propertyVal match {
+          case s: String => if (vocabList.contains(s)) {true} else { false }
 
-          case _ => throw CiteObjectException("value " + propValue + " is not a String")
+          case _ => false
         }
       }
     }
   }
-}*/
+}

@@ -140,4 +140,38 @@ class CiteCollectionRepositorySpec extends FlatSpec {
       case _ : Throwable => fail("Expected an assertion error")
     }
   }
+
+  it should "validate controlled vocab lists" in {
+
+    val props: Vector[CitePropertyDef]   = Vector(
+      CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:"), "speaker", Cite2UrnType),
+      CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),"text passage",CtsUrnType),
+      CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.rating:"),"idiosyncratic rating",ControlledVocabType,Vector("good","bad","ugly"))
+    )
+
+    val collectionDefV : Vector[CiteCollectionDef] = Vector (
+      CiteCollectionDef(Cite2Urn("urn:cite2:hmt:speeches.v1:"), "speeches in the Iliad", propertyDefs = props, orderingProperty = Some(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:")))
+    )
+
+    val dataV : Vector[CitePropertyValue] = Vector(
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.label:speech1"),"Speech 1"),
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech1"),CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.26-1.32")),
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:speech1"),1),
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.rating:speech1"),"good"),
+
+
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2Urn("urn:cite2:hmt:pers:pers1")),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.label:speech4"),"Speech 4"),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech4"),CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.85-1.91")),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:speech4"),4),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.rating:speech4"),"ugly")
+      )
+
+      val dataCollection = CiteCollectionData(dataV)
+      val catalogInfo = CiteCatalog(collectionDefV)
+      val repo = CiteCollectionRepository(dataCollection, catalogInfo)
+
+      assert(repo.data.collections.size == repo.catalog.size, s"${repo.data.data.size} collections in data, but ${repo.catalog.size}in catalog")
+  }
 }

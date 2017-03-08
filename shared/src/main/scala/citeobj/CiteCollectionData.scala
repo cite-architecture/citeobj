@@ -36,6 +36,13 @@ case class CiteCollectionData (data: Vector[CitePropertyValue]) {
     data.isEmpty
   }
 
+
+  /** Find URNs for each collection in the data set.
+  */
+  def collections = {
+    data.map(_.urn.dropProperty).map(_.dropSelector).toSet
+  }
+
   /** Find URNs for each object in the collection.
   */
   def objects = {
