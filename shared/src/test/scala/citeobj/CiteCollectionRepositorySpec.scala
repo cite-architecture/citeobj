@@ -42,7 +42,7 @@ class CiteCollectionRepositorySpec extends FlatSpec {
       case _ => fail("Could not find collection catalog.")
     }
   }
-/*
+
   it should "throw an AssertionError if the catalog is empty" in {
     try {
       val repo = CiteCollectionRepository(dataCollection, CiteCatalog(Vector.empty))
@@ -90,21 +90,54 @@ class CiteCollectionRepositorySpec extends FlatSpec {
 
   it should "identify all collections in the repository" in {
     val repo = CiteCollectionRepository(dataCollection, catalogInfo)
-    assert (repo.collections == Set(Cite2Urn("urn:cite2:hmt:speeches.v1:")))
+    val expected = Set(Cite2Urn("urn:cite2:hmt:speeches.v1:"))
+    assert (repo.collections ==  expected, s"${repo.collections} did not match ${expected}")
   }
 
   it should "identify all propoerties in the repository" in {
     val repo = CiteCollectionRepository(dataCollection, catalogInfo)
-    assert (repo.properties == Set(
-      Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:"), Cite2Urn("urn:cite2:hmt:speeches.v1.passage:")
-    ))
+    val expected = Set(
+      Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:"), Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),
+      Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:"),
+      Cite2Urn("urn:cite2:hmt:speeches.v1.label:")
+    )
+    assert (repo.properties == expected, s"${repo.properties} did not match ${expected}")
   }
 
-  it should "enforce presence of all defined properties for all object instances of an collection"  in {
-    // get property list
+  it should "throw an exception if any defined properties are missing for an object in a collection"  in {
+    val shortData : Vector[CitePropertyValue] = Vector(
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.label:speech1"),"Speech 1"),
+      CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:speech1"),1)
+    )
 
-    // check for each object
+
+    val badData = CiteCollectionData(shortData)
+    try {
+      val repo = CiteCollectionRepository(badData, catalogInfo)
+    } catch {
+      case e: java.lang.AssertionError => assert(true)
+      case _ : Throwable => fail("Expected an assertion error")
+    }
+
   }
-*/
-  it should "validate valid values for each property"  in pending
+
+  it should "throw an Exception if any values are not of the proper type"  in {
+
+    val badDataType : Vector[CitePropertyValue] = Vector(
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.label:speech1"),1),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:speech1"),CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.26-1.32")),
+        CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:speech1"),1)
+      )
+
+
+    val badData = CiteCollectionData(badDataType)
+    try {
+      val repo = CiteCollectionRepository(badData, catalogInfo)
+    } catch {
+      case e: java.lang.AssertionError => assert(true)
+      case _ : Throwable => fail("Expected an assertion error")
+    }
+  }
 }
