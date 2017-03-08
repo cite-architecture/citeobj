@@ -43,5 +43,16 @@ class CiteCollectionDataSpec extends FlatSpec {
     }
   }
 
+  it should "provide a function listing distinct properties in the collection" in {
+    val dataCollection = CiteCollectionData(dataV)
+    val expectedProps = Vector(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:"),
+    Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"))
 
+    assert(dataCollection.properties == expectedProps)
+  }
+
+
+
+
+  it should "provide a function listing distinct objects in the collection" in pending
 }

@@ -51,11 +51,13 @@ class CiteCollectionDefSpec extends FlatSpec {
 
   it should "identify the ordering property in ordered collections" in {
     assert (ccDef.isOrdered)
-    ccDef.orderingProperty match {      
+    ccDef.orderingProperty match {
       case orderProp: Some[Cite2Urn] => assert(true)
       case _ => "Could not find ordering property for an ordered CITE collection"
     }
   }
+  it should "list all cataloged properties" in pending
+  it should "list all cataloged collections" in pending
 
 
 
