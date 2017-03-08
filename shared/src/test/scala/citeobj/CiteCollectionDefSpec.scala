@@ -17,21 +17,22 @@ class CiteCollectionDefSpec extends FlatSpec {
   val ccDef = CiteCollectionDef(
     Cite2Urn("urn:cite2:hmt:speeches.v1:"),
     "Speeches in the Iliad",
+    None,
     Some(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:")),
     propsVector
   )
 
 
-  "The catalog of a CITE data collection" should  "have a URN" in {
+  "The definition of a CITE data collection" should  "have a URN" in {
     ccDef.urn match {
       case u: Cite2Urn => assert(true)
       case _ => "Could not find a URN for the CITE collection in its definition"
     }
   }
 
-  it should "have a human-readable label" in {
-    ccDef.label match {
-      case s: String  => assert(true)
+  it should "have a property for a human-readable label" in {
+    ccDef.labelProperty match {
+      case u: Cite2Urn  => assert(true)
       case _ => "Could not find a label for the CITE collection in its definition"
     }
   }
@@ -56,9 +57,6 @@ class CiteCollectionDefSpec extends FlatSpec {
       case _ => "Could not find ordering property for an ordered CITE collection"
     }
   }
-  it should "list all cataloged properties" in pending
-  it should "list all cataloged collections" in pending
-
 
 
 }

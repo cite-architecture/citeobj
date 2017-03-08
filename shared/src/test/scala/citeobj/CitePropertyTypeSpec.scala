@@ -2,7 +2,7 @@ package edu.holycross.shot.citeobj
 
 import org.scalatest.FlatSpec
 import edu.holycross.shot.cite._
-import scala.io.Source
+
 
 /**
 */
