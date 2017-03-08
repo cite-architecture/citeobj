@@ -43,15 +43,13 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
     val catalogSet = {
       collectionDef.orderingProperty match {
         case oprop : Some[Cite2Urn] => {
-          collectionDef.propertyDefs :+ CitePropertyDef(oprop.get,"sequence",Cite2UrnType,Vector.empty)
+          collectionDef.propertyDefs :+ CitePropertyDef(oprop.get,"sequence",NumericType,Vector.empty)
         }
         case None => collectionDef.propertyDefs
       }
     }
 
 
-
-    //println("DATA: " + catalogSet)
 
 
     assert(catalogSet.size ==
@@ -70,7 +68,7 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
         propDef(0).propertyType
       }
 
-      assert(CiteCollectionRepository.typesMatch(p.propertyValue,expectedType ))
+      assert(CiteCollectionRepository.typesMatch(p.propertyValue,expectedType ),s"For ${p.urn}, ${p.propertyValue} did not match ${expectedType}")
     }
 
     true
@@ -118,54 +116,52 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 object CiteCollectionRepository {
 
   def typesMatch(propertyVal: Any, expected: CitePropertyType) : Boolean = {
-    true
-  }
-}
-
-  /*()
-  def apply(urn: Cite2Urn, propType: CitePropertyType, propValue: Any, vocabularyList: Vector[String] = Vector.empty): CiteProperty = {
-    propType match {
+    expected match {
       case CtsUrnType => {
-        propValue match {
-          case u: CtsUrn => CiteProperty(urn, propType, u)
-          case _ : CitePropertyType=> throw CiteObjectException("value " + propValue + " is not a CtsUrn")
+        propertyVal match {
+          case u: CtsUrn => true
+          case _ : CitePropertyType=> false
         }
       }
-
-      case _ => throw CiteObjectException("Unimplemented type")
-    }
-  }
-}
-
       case Cite2UrnType => {
-        propValue match {
-          case u: Cite2Urn => CiteProperty(urn, propType, u)
-          case _ => throw CiteObjectException("value " + propValue + " is not a Cite2Urn")
+        propertyVal match {
+          case u: Cite2Urn => true
+          case _ => false
         }
       }
 
       case NumericType => {
-        propValue match {
-          case n: java.lang.Number => CiteProperty(urn, propType, n)
-          case _ => throw CiteObjectException("value " + propValue + " is not a Numeric")
+        propertyVal match {
+          case n: java.lang.Number => true
+          case _ => false
         }
       }
 
 
       case BooleanType => {
-        propValue match {
-          case b: Boolean => CiteProperty(urn, propType, b)
-          case _ => throw CiteObjectException("value " + propValue + " is not a Boolean")
+        propertyVal match {
+          case b: Boolean => true
+          case _ => false
         }
       }
 
 
       case StringType => {
-        propValue match {
-          case s: String => CiteProperty(urn, propType, s)
-          case _ => throw CiteObjectException("value " + propValue + " is not a String")
+        propertyVal match {
+          case s: String => true
+          case _ => false
         }
       }
+      case _ => false // unimplemented type??
+
+    }
+  }
+}
+
+  /*()
+
+
+
 
       case ControlledVocabType => {
         propValue match {
