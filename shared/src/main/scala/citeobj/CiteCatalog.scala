@@ -2,15 +2,29 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 import scala.xml._
+import scala.collection.mutable.ArrayBuffer
 
 
+/** Catalog defining structure of all collections in a repository.
+*
+* @param collections Defintions of structure of individual collections.
+*/
 case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
 
+  /** Number of collections in the repository.
+  */
   def size : Int = collections.size
+
+  /** True if no collections in the repository.
+  */
   def isEmpty: Boolean = collections.isEmpty
 
+  /** Set of URNs identifying all collections in the repository.
+  */
   def urns = collections.map(_.urn).toSet
 
+  /** Set of URNs identifying all properties in the repository.
+  */
   def properties = {
     val propertyUrns = collections.flatMap(_.propertyDefs.map(_.urn))
     val labelUrns = collections.map(_.labelProperty)
@@ -21,46 +35,64 @@ case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
   }
 
 
+  /** Create a new catalog composed of entries
+  * matching a given URN.
+  *
+  * @param filterUrn URN to match against.
+  * @return A new CiteCatalog containing only entries
+  * matching `filterUrn`.
+  */
   def ~~(filterUrn: Cite2Urn) : CiteCatalog = {
     CiteCatalog(collections.filter(_.urn ~~ filterUrn))
   }
 }
 
-// factory methods
+/** Object providing factory methods for
+* creating CiteCatalog instances from various
+* kinds of sources.
+*/
 object CiteCatalog {
-  def fromXmlString(xml: String) = {
+
+  /** Create a catalog from a (presumably very long) String.
+  *
+  * @param xml String of XML validating against CITE Catalog schema.
+  */
+  def fromXmlString(xml: String): CiteCatalog = {
     fromNodeSeq(XML.loadString(xml))
   }
 
-  def fromNodeSeq(root: NodeSeq) = {
 
-    //println("ROOT = " + root)
+  /** Create a catalog from the parsed root of an XML document validating against CITE Catalog schema.
+  *
+  * @param root Root node of a CiteCatalog.
+  */
+  def fromNodeSeq(root: NodeSeq): CiteCatalog = {
+    var collectionDefs = ArrayBuffer[CiteCollectionDef]()
 
     val collectionNodes = root \\ "citeCollection"
-    println("Found " + collectionNodes.size + " collections")
     for (coll <- collectionNodes) {
       val cdef = collectionDefFromXml(coll)
+      collectionDefs += cdef
     }
-
-    /*
-    what we need:
-    urn
-    labelling string 9for collection
-    label property
-    ordering property
-    property defs
-    */
+    CiteCatalog(collectionDefs.toVector)
   }
-  def collectionDefFromXml(collectionNode: scala.xml.Node) /*: CiteCollectionDefSpec */ = {
-    val labelNode = collectionNode \  "@label"
+
+
+
+
+  /** Create a [[CiteCollectionDef]] from an XML node.
+  *
+  * @param collectionNode Root node  of a CITE Collection in the CITE Catalog schema (element `citeCollection`).
+  */
+  def collectionDefFromXml(collectionNode: scala.xml.Node) : CiteCollectionDef  = {
     val urnNode = collectionNode \  "@urn"
     val urn = Cite2Urn(urnNode.text)
-    val label = Cite2Urn("urn:cite2:" + urn.namespace + ":" + urn.collectionComponent + "." + labelNode.text + ":")
 
     val titleNode = collectionNode \\ "title"
     val title = titleNode.text
-    println(title)
-    println("URN " + urn + " and LABLE: " + label)
+
+    val labelNode = collectionNode \  "@label"
+    val label = Some(Cite2Urn("urn:cite2:" + urn.namespace + ":" + urn.collectionComponent + "." + labelNode.text + ":"))
 
     val orderingNode = collectionNode \ "orderedBy" \ "@property"
     println(orderingNode)
@@ -70,15 +102,64 @@ object CiteCatalog {
         case _ => None
       }
     }
-    println ("ordering: " + orderingProperty)
+
+    var propertyDefs = ArrayBuffer[CitePropertyDef]()
     val propertyNodes = collectionNode \ "citeProperty"
 
     for (propNode <- propertyNodes) {
-      propDefFromXml(  propNode)
+      val propDef = propDefFromXml(propNode,urn.toString)
+      propertyDefs += propDef
     }
+    CiteCollectionDef(urn,title,label,orderingProperty,propertyDefs.toVector)
   }
 
-  def propDefFromXml(nodeSeq: NodeSeq) = {
 
+
+  /** Create a [[CitePropertyDef]] from an XML node.
+  *
+  * @param collectionNode Root node  of a CITE property in the CITE Catalog schema (element `citeProperty`).
+  * @param urnBase String value of the collection's URN, used to form explicit URNs for properties.
+  */
+  def propDefFromXml(propertyNode: NodeSeq, urnBase: String): CitePropertyDef = {
+    var vocabList = ArrayBuffer[String]()
+    val vocabNodes = propertyNode \\ "value"
+    for (vocabItem <- vocabNodes) {
+      vocabList += vocabItem.text
+    }
+
+    val nameNode = propertyNode \  "@name"
+    val pName = nameNode.text
+
+    val typeNode = propertyNode \  "@type"
+    val pType = typeForString(typeNode.text, (vocabList.size > 0))
+
+    val labelNode = propertyNode \  "@label"
+    val pLabel = labelNode.text
+
+    val urn = Cite2Urn(urnBase + pName)
+    CitePropertyDef(urn,pLabel,pType,vocabList.toVector)
+  }
+
+
+  /** Determing Cite property type based on string name and presence of controlled vocabulary list.
+  *
+  * @param s Value of  `@type` attribute in a `citeProperty` XML element.
+  * @param vocablist True if property has a controlled vocabulary list.
+  */
+  def typeForString(s: String, vocabList: Boolean): CitePropertyType = {
+    if (vocabList) {
+      s match {
+        case "string" => ControlledVocabType
+        case _ => throw CiteException("Controlled vocabulary lists only allowed with string type data.")
+      }
+
+    } else {
+      s match {
+        case "cite2urn" => Cite2UrnType
+        case "number" => NumericType
+        case "string" => StringType
+        case _ => throw CiteException("Unrecognized attribute value for string: " + s)
+      }
+    }
   }
 }

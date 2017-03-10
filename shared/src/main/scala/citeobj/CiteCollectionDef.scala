@@ -3,6 +3,13 @@ package edu.holycross.shot.citeobj
 import edu.holycross.shot.cite._
 
 
+/** Catalog entry defining a single CITE Collection.
+*
+* @param urn URN for the collection.
+* @param collectionLabel Readable label for the collection.
+* @param labellingProperty URN for property labelling individual objects.  If None, a default will be created by the [[labelProperty]] function.
+* @param orderingProperty URN for the property sequencing objects, if the collection is ordered.
+*/
 case class CiteCollectionDef(
   urn: Cite2Urn,
   collectionLabel: String,
@@ -24,8 +31,6 @@ case class CiteCollectionDef(
 
     }
   }
-
-
 
   /** True if collection is ordered.
   */
