@@ -28,7 +28,6 @@ case class CiteCollectionDef(
       case None => {
         Cite2Urn("urn:cite2:" + urn.namespace + ":" + urn.collectionComponent + ".label:")
       }
-
     }
   }
 

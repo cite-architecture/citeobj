@@ -95,7 +95,6 @@ object CiteCatalog {
     val label = Some(Cite2Urn("urn:cite2:" + urn.namespace + ":" + urn.collectionComponent + "." + labelNode.text + ":"))
 
     val orderingNode = collectionNode \ "orderedBy" \ "@property"
-    println(orderingNode)
     val orderingProperty = {
       orderingNode.size match {
         case 1 => Some(Cite2Urn(urn.toString + orderingNode.text))

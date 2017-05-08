@@ -23,7 +23,7 @@ class CiteObjectSpec extends FlatSpec {
   )
 
 
-  "A CITE object" should "be construction by a repository" in pending
+  "A CITE object" should "be constructed by a repository" in pending
 
 
 }

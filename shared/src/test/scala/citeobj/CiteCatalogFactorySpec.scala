@@ -46,8 +46,8 @@ class CiteCatalogFactorySpec extends FlatSpec {
     val collObject = CiteCatalog.collectionDefFromXml(collectionElements(0))
     assert(collObject.urn == Cite2Urn("urn:cite2:hmt:msA.v1:"))
     assert(collObject.collectionLabel == "Folios of the Venetus A Manuscript")
-    println(collObject.labellingProperty.get == Cite2Urn("urn:cite2:hmt:msA.v1.Label:"))
-    println(collObject.orderingProperty.get == Cite2Urn("urn:cite2:hmt:msA.v1:Sequence"))
+    assert(collObject.labellingProperty.get == Cite2Urn("urn:cite2:hmt:msA.v1.Label:"))
+    assert(collObject.orderingProperty.get == Cite2Urn("urn:cite2:hmt:msA.v1:Sequence"))
     assert(collObject.propertyDefs.size == 6)
 
   }
