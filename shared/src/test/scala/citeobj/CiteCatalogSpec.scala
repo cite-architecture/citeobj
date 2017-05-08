@@ -48,6 +48,15 @@ class CiteCatalogSpec extends FlatSpec {
     val speechCatalog = catalog ~~ speechCollection
   }
 
+  it should "support selecting a collection definition by collection URN" in {
+    val catalog = CiteCatalog(Vector(ccDef))
+    val collectionDef = catalog.collection(Cite2Urn("urn:cite2:hmt:speeches.v1:"))
+    collectionDef match {
+      case cdef : Option[CiteCollectionDef] => assert(true)
+      case _ => fail("Should have found a CiteCollectionDef")
+    }
+  }
+
 
 
 }

@@ -23,6 +23,18 @@ case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
   */
   def urns = collections.map(_.urn).toSet
 
+  /** Select a specific [[CiteCollectionDef]] by URN value.
+  */
+  def collection(urn: Cite2Urn) :  Option[CiteCollectionDef] = {
+    val filtered = collections.filter(_.urn == urn)
+    filtered.size match  {
+      case 0 => None
+      case 1 => Some(filtered(0))
+      case _ => throw CiteObjectException("Duplicate URNs found in catalog: " + urn)
+    }
+
+  }
+
   /** Set of URNs identifying all properties in the repository.
   */
   def properties = {
