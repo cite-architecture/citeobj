@@ -9,4 +9,5 @@ case class CitePropertyDef(urn: Cite2Urn, label: String, propertyType: CitePrope
     case ControlledVocabType => assert (vocabularyList.nonEmpty)
     case _ => assert(vocabularyList.isEmpty)
   }
+
 }

@@ -31,9 +31,9 @@ class CiteCatalogFactorySpec extends FlatSpec {
     val propertyElements = root \\ "citeProperty"
     assert(propertyElements.size == 6)
 
-    val firstProp = CiteCatalog.propDefFromXml(propertyElements(0),"urn:cite2:hmt:msA.v1:")
+    val firstProp = CiteCatalog.propDefFromXml(propertyElements(0),Cite2Urn("urn:cite2:hmt:msA.v1:"))
 
-    assert(firstProp.urn ==  Cite2Urn("urn:cite2:hmt:msA.v1:URN"))
+    assert(firstProp.urn ==  Cite2Urn("urn:cite2:hmt:msA.v1.URN:"))
     assert(firstProp.label == "The URN for this folio")
     assert (firstProp.propertyType.toString == "Cite2UrnType")
   }

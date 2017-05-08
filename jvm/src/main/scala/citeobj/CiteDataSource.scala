@@ -6,11 +6,16 @@ import java.io._
 
 import com.github.tototoshi.csv._
 
+import scala.collection.mutable.ArrayBuffer
+
 
 
 
 object CiteDataSource {
 
+
+  // write api docs for these objects...
+  //
   implicit object PoundFormat extends DefaultCSVFormat {
     override val delimiter = '#'
   }
@@ -25,12 +30,50 @@ object CiteDataSource {
 
   /** Create [[CiteCollectionData]] from maps of property names to serialized data strings.
   *
-  * @param dataMaps Vector of maps with each vector representing one CITE object, and
+  * @param dataMap Vector of maps with each vector representing one CITE object, and
   * each mapping representing a mapping of property name to string value for that property.
   * @param collectionDef [[CiteCollectionDef]] for this collection.
   */
-  def collectionForMappedText(dataMaps: Vector[Map[String,String]], collectionDef: CiteCollectionDef) = {
+  def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) = {
+    var propertyBuffer = ArrayBuffer[CitePropertyValue]()
+    println("\n\nWORK ON COLLE DEF " + collectionDef.urn)
+    for (p <- collectionDef.propertyDefs) {
+      println("\t" + p)
+    }
 
+    val lcMap = dataMap.map{ case (k,v) => (k.toLowerCase,v)}
+    println("LC MAP keys "+ lcMap.keySet)
+    val collectionUrn = collectionDef.urn
+    val urn = Cite2Urn(lcMap("urn"))
+    val lcLabelProperty = lcLabel(collectionDef)
+    val label = lcMap(lcLabelProperty)
+
+
+    //println("Figure out how to extract props for " + dataMap.keySet)
+    for (k <- dataMap.keySet) {
+      if ((k.toLowerCase == lcLabelProperty) || (k.toLowerCase == "urn")) {
+          // omit
+      } else {
+       //println("Configure " + k + " -> " + dataMap(k))
+       val propUrn = collectionUrn.addProperty(k)
+       println("Prop urn is " + propUrn)
+       val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn)
+       println("Get type from " + propDef)
+
+
+       //println("\t-> " + dataMap(lcMap(k)))
+      }
+    }
+  }
+
+
+  /** Find lowercase version of the name of the labelling property
+  * in a CITE Collection's definition.
+  *
+  * @param collectionDef Definition of the collection's structure.
+  */
+  def lcLabel(collectionDef: CiteCollectionDef) = {
+    collectionDef.labelProperty.property.toLowerCase
   }
 
   /** Create [[CiteCollectionData]] from a delimited text file.
@@ -44,15 +87,26 @@ object CiteDataSource {
     delimiter match {
       case '#' => {
         val reader = CSVReader.open(f) (PoundFormat)
-        collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
+        for (propertyMap <- reader.allWithHeaders() ) {
+          println("PROP MAP keys " + propertyMap.keySet)
+          propertiesForMappedText(propertyMap, collectionDefinition)
+        }
+        //
+        //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
       case ',' => {
         val reader = CSVReader.open(f) (CommaFormat)
-        collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
+        for (propertyMap <- reader.allWithHeaders() ) {
+          propertiesForMappedText(propertyMap, collectionDefinition)
+        }
+        //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
       case '\t' => {
         val reader = CSVReader.open(f) (TabFormat)
-        collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
+        for (propertyMap <- reader.allWithHeaders() ) {
+          propertiesForMappedText(propertyMap, collectionDefinition)
+        }
+        //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
     }
 

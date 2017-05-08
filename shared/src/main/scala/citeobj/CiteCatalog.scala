@@ -118,7 +118,7 @@ object CiteCatalog {
     val propertyNodes = collectionNode \ "citeProperty"
 
     for (propNode <- propertyNodes) {
-      val propDef = propDefFromXml(propNode,urn.toString)
+      val propDef = propDefFromXml(propNode,urn)
       propertyDefs += propDef
     }
     CiteCollectionDef(urn,title,label,orderingProperty,propertyDefs.toVector)
@@ -131,7 +131,7 @@ object CiteCatalog {
   * @param collectionNode Root node  of a CITE property in the CITE Catalog schema (element `citeProperty`).
   * @param urnBase String value of the collection's URN, used to form explicit URNs for properties.
   */
-  def propDefFromXml(propertyNode: NodeSeq, urnBase: String): CitePropertyDef = {
+  def propDefFromXml(propertyNode: NodeSeq, baseUrn: Cite2Urn): CitePropertyDef = {
     var vocabList = ArrayBuffer[String]()
     val vocabNodes = propertyNode \\ "value"
     for (vocabItem <- vocabNodes) {
@@ -147,7 +147,7 @@ object CiteCatalog {
     val labelNode = propertyNode \  "@label"
     val pLabel = labelNode.text
 
-    val urn = Cite2Urn(urnBase + pName)
+    val urn = baseUrn.addProperty(pName)
     CitePropertyDef(urn,pLabel,pType,vocabList.toVector)
   }
 

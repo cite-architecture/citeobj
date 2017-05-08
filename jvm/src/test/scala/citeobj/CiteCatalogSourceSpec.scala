@@ -16,4 +16,5 @@ class CiteCatalogSourceSpec extends FlatSpec {
     }
   }
 
+
 }
