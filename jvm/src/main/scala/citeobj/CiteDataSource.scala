@@ -58,7 +58,9 @@ object CiteDataSource {
        val propUrn = collectionUrn.addProperty(k)
        println("Prop urn is " + propUrn)
        val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn)
-       println("Get type from " + propDef)
+       // check that you have one and only  one propDef ...
+
+       println("Get type from " + propDef(0).propertyType)
 
 
        //println("\t-> " + dataMap(lcMap(k)))
