@@ -71,7 +71,6 @@ object CiteCatalog {
   * @param columns Array of Strings.
   */
   def collectionTuple(columns: Vector[String]) = {
-    println(columns(0))
     val urn = Cite2Urn(columns(0))
     val collectionLabel = columns(1)
 
@@ -91,18 +90,34 @@ object CiteCatalog {
     }
     val rights = columns(4)
     (urn,collectionLabel,labelProperty,orderingProperty,rights)
-    ///(urn,collectionLabel,rights)
-/*
-[4:35]
-collection,urn:cite2:hmt:msA.v1:,Folios of the Venetus A manuscript,collection,urn:cite2:hmt:msA.v1.label:,collection,urn:cite2:hmt:msA.v1.sequence:
-
-[4:36]
-property,collection,urn:cite2:hmt:msA.v1.rv:,Recto or verso,String,recto#verso
-
-[4:36]
-property,collection,urn:cite2:hmt:msA.v1.sequence,Page sequence,Numeric,
-    */
   }
+
+
+
+
+
+
+  /** Convert string content of a property line in
+  * CEX catalog format to a tuple of objects.
+  *
+  * @param columns Vector of Strings.
+  */
+  def propertyTuple(columns: Vector[String], listDelimiter: String = "#") = {
+    val urn = Cite2Urn(columns(0))
+    val label = columns(1)
+
+
+    val vocabList = {
+      columns.size match {
+        case 4 => columns(3).split(listDelimiter).toVector
+        case _  => Vector[String]()
+      }
+    }
+    val propertyType = typeForString(columns(2), (vocabList.size > 0))
+
+    (urn,label,propertyType,vocabList)
+  }
+
   /** Create catalog object from a String in cex format.
   *
   * @param src String of cex-format catalog description.
@@ -112,11 +127,16 @@ property,collection,urn:cite2:hmt:msA.v1.sequence,Page sequence,Numeric,
   */
   def apply(src: String, columnDelimiter: String = "#", listDelimiter: String = "," ) : CiteCatalog = {
     val buffer = ArrayBuffer[CiteCollectionDef]()
+
     val columnsByRows = src.split("\n").toVector.map(_.split(columnDelimiter).toVector)
+
     val collectionEntries = columnsByRows.filter(_(0) == "collection")
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
 
     val propertyEntries = columnsByRows.filter(_(0)== "property")
+    val propertyTuples = propertyEntries.map(arr => propertyTuple(arr.drop(1), listDelimiter) )
+
+
 
     CiteCatalog(buffer.toVector)
   }
@@ -134,7 +154,7 @@ property,collection,urn:cite2:hmt:msA.v1.sequence,Page sequence,Numeric,
       }
 
     } else {
-      s match {
+      s.toLowerCase match {
         case "cite2urn" => Cite2UrnType
         case "number" => NumericType
         case "string" => StringType

@@ -58,5 +58,7 @@ class CiteCatalogSpec extends FlatSpec {
   }
 
 
+  it should "stringify to CEX format" in pending
+
 
 }
