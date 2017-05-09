@@ -10,7 +10,7 @@ class CiteCatalogFactorySpec extends FlatSpec {
   <value>verso</value></valueList></citeProperty> </citeCollection></collectionService>"""
 
   "A CITE catalog factory" should "make a catalog from a (long) string of XML" in {
-    val cat = CiteCatalog.fromXmlString(catalogString)
+    val cat = CiteCatalogSource.fromXmlString(catalogString)
     cat match {
       case c: CiteCatalog => assert(true)
       case _ => fail("Failed to build a CiteCatalog from XML node sequence")
@@ -19,7 +19,7 @@ class CiteCatalogFactorySpec extends FlatSpec {
 
   it should "make a catalog from an XML NodeSeq on the root element" in {
     val root = XML.loadString(catalogString)
-    val cat = CiteCatalog.fromNodeSeq(root)
+    val cat = CiteCatalogSource.fromNodeSeq(root)
     cat match {
       case c: CiteCatalog => assert(true)
       case _ => fail("Failed to build a CiteCatalog from XML node sequence")
@@ -31,7 +31,7 @@ class CiteCatalogFactorySpec extends FlatSpec {
     val propertyElements = root \\ "citeProperty"
     assert(propertyElements.size == 6)
 
-    val firstProp = CiteCatalog.propDefFromXml(propertyElements(0),Cite2Urn("urn:cite2:hmt:msA.v1:"))
+    val firstProp = CiteCatalogSource.propDefFromXml(propertyElements(0),Cite2Urn("urn:cite2:hmt:msA.v1:"))
 
     assert(firstProp.urn ==  Cite2Urn("urn:cite2:hmt:msA.v1.URN:"))
     assert(firstProp.label == "The URN for this folio")
@@ -43,7 +43,7 @@ class CiteCatalogFactorySpec extends FlatSpec {
     val root = XML.loadString(catalogString)
     val collectionElements = root \\ "citeCollection"
     assert (collectionElements.size == 1)
-    val collObject = CiteCatalog.collectionDefFromXml(collectionElements(0))
+    val collObject = CiteCatalogSource.collectionDefFromXml(collectionElements(0))
     assert(collObject.urn == Cite2Urn("urn:cite2:hmt:msA.v1:"))
     assert(collObject.collectionLabel == "Folios of the Venetus A Manuscript")
     assert(collObject.labellingProperty.get == Cite2Urn("urn:cite2:hmt:msA.v1.Label:"))
