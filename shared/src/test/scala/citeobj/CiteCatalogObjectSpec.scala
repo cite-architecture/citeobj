@@ -54,8 +54,17 @@ class CiteCatalogObjectSpec extends FlatSpec {
     assert(propertyDefinition.label == "Page sequence")
     assert(propertyDefinition.propertyType == NumericType)
     assert(propertyDefinition.vocabularyList.isEmpty)
-
   }
+
+  it should "correctly handle controlled vocabulary lists when converting a column of strings to a PropertyDefinition" in {
+    val cols = property1Line.split(",").toVector.drop(1)
+    val propertyDefinition = CiteCatalog.propertyDefinition(cols,listDelimiter = "#")
+    assert (propertyDefinition.urn == Cite2Urn("urn:cite2:hmt:msA.v1.rv:"))
+    assert(propertyDefinition.label == "Recto or verso")
+    assert(propertyDefinition.propertyType == ControlledVocabType)
+    assert(propertyDefinition.vocabularyList.size == 2)
+  }
+
 
   it should "create a CiteCatalog from a CEX citecatalog block" in {
     //val cex = collectionLine + "\n" + property1Line + "\n"+ property2Line + "\n"

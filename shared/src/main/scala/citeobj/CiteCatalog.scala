@@ -145,7 +145,7 @@ object CiteCatalog {
   */
   def typeForString(s: String, vocabList: Boolean): CitePropertyType = {
     if (vocabList) {
-      s match {
+      s.toLowerCase match {
         case "string" => ControlledVocabType
         case _ => throw CiteException("Controlled vocabulary lists only allowed with string type data.")
       }
