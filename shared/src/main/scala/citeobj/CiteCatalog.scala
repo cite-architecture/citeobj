@@ -2,7 +2,7 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
-
+import scala.collection.mutable.ArrayBuffer
 
 
 /** Catalog defining structure of all collections in a repository.
@@ -65,6 +65,61 @@ case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
 */
 object CiteCatalog {
 
+  /** Convert string content of a collection line in
+  * CEX catalog format to a tuple of objects.
+  *
+  * @param columns Array of Strings.
+  */
+  def collectionTuple(columns: Vector[String]) = {
+    println(columns(0))
+    val urn = Cite2Urn(columns(0))
+    val collectionLabel = columns(1)
+
+    val labelProperty = {
+      if (columns(2).isEmpty) {
+        None
+      } else {
+        Some(Cite2Urn(columns(2)))
+      }
+    }
+    val orderingProperty = {
+      if (columns(3).isEmpty) {
+        None
+      } else {
+        Some(Cite2Urn(columns(3)))
+      }
+    }
+    val rights = columns(4)
+    (urn,collectionLabel,labelProperty,orderingProperty,rights)
+    ///(urn,collectionLabel,rights)
+/*
+[4:35]
+collection,urn:cite2:hmt:msA.v1:,Folios of the Venetus A manuscript,collection,urn:cite2:hmt:msA.v1.label:,collection,urn:cite2:hmt:msA.v1.sequence:
+
+[4:36]
+property,collection,urn:cite2:hmt:msA.v1.rv:,Recto or verso,String,recto#verso
+
+[4:36]
+property,collection,urn:cite2:hmt:msA.v1.sequence,Page sequence,Numeric,
+    */
+  }
+  /** Create catalog object from a String in cex format.
+  *
+  * @param src String of cex-format catalog description.
+  * @param columnDelimiter String delimiting columns.
+  * @param listDelimiter String delimiting items in optional controlled vocabulary
+  * list.
+  */
+  def apply(src: String, columnDelimiter: String = "#", listDelimiter: String = "," ) : CiteCatalog = {
+    val buffer = ArrayBuffer[CiteCollectionDef]()
+    val columnsByRows = src.split("\n").toVector.map(_.split(columnDelimiter).toVector)
+    val collectionEntries = columnsByRows.filter(_(0) == "collection")
+    val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
+
+    val propertyEntries = columnsByRows.filter(_(0)== "property")
+
+    CiteCatalog(buffer.toVector)
+  }
 
   /** Determing Cite property type based on string name and presence of controlled vocabulary list.
   *
