@@ -15,6 +15,7 @@ case class CiteCollectionDef(
   collectionLabel: String,
   labellingProperty: Option[Cite2Urn] = None,
   orderingProperty: Option[Cite2Urn] = None,
+  license: String = "public domain",
   propertyDefs: Vector[CitePropertyDef]) {
 
 

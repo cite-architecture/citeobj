@@ -100,8 +100,6 @@ object CiteCatalog {
   def propertyDefinition(columns: Vector[String], listDelimiter: String = "#"): CitePropertyDef = {
     val urn = Cite2Urn(columns(0))
     val label = columns(1)
-
-
     val vocabList = {
       columns.size match {
         case 4 => columns(3).split(listDelimiter).toVector
@@ -124,14 +122,18 @@ object CiteCatalog {
     val buffer = ArrayBuffer[CiteCollectionDef]()
 
     val columnsByRows = src.split("\n").toVector.map(_.split(columnDelimiter).toVector)
+    val propertyEntries = columnsByRows.filter(_(0) == "property")
+    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) )
 
     val collectionEntries = columnsByRows.filter(_(0) == "collection")
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
 
-    val propertyEntries = columnsByRows.filter(_(0)== "property")
-    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) )
 
-
+    for (c <- collectionTuples)  {
+      val urn = c._1
+      val properties = propertyVector.filter(_.urn ~~ urn)
+      buffer += CiteCollectionDef(c._1,c._2,c._3,c._4,c._5,properties )
+    }
 
     CiteCatalog(buffer.toVector)
   }

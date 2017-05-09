@@ -79,7 +79,7 @@ object CiteCatalogSource {
       val propDef = propDefFromXml(propNode,urn)
       propertyDefs += propDef
     }
-    CiteCollectionDef(urn,title,label,orderingProperty,propertyDefs.toVector)
+    CiteCollectionDef(urn,title,label,orderingProperty,"insert rights statement",propertyDefs.toVector)
   }
 
 

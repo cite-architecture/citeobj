@@ -19,6 +19,7 @@ class CiteCollectionDefSpec extends FlatSpec {
     "Speeches in the Iliad",
     None,
     Some(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:")),
+    "CC attribution-share-alike",
     propsVector
   )
 
