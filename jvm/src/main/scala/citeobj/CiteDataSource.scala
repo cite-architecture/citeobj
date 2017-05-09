@@ -34,15 +34,15 @@ object CiteDataSource {
   * each mapping representing a mapping of property name to string value for that property.
   * @param collectionDef [[CiteCollectionDef]] for this collection.
   */
-  def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) = {
+  def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) = { //: Vector[CitePropertyValue] = {
     var propertyBuffer = ArrayBuffer[CitePropertyValue]()
-    println("\n\nWORK ON COLLE DEF " + collectionDef.urn)
+    /*println("\n\nWORK ON COLLE DEF " + collectionDef.urn)
     for (p <- collectionDef.propertyDefs) {
       println("\t" + p)
     }
-
+*/
     val lcMap = dataMap.map{ case (k,v) => (k.toLowerCase,v)}
-    println("LC MAP keys "+ lcMap.keySet)
+    //println("LC MAP keys "+ lcMap.keySet)
     val collectionUrn = collectionDef.urn
     val urn = Cite2Urn(lcMap("urn"))
     val lcLabelProperty = lcLabel(collectionDef)
@@ -56,16 +56,19 @@ object CiteDataSource {
       } else {
        //println("Configure " + k + " -> " + dataMap(k))
        val propUrn = collectionUrn.addProperty(k)
-       println("Prop urn is " + propUrn)
+       //println("Prop urn is " + propUrn)
+
        val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn)
        // check that you have one and only  one propDef ...
+       val typedValue = CitePropertyValue.valueForString(dataMap(k), propDef(0))
 
-       println("Get type from " + propDef(0).propertyType)
-
-
+       val citePropertyVal = CitePropertyValue(propUrn, typedValue)
+       propertyBuffer += citePropertyVal
        //println("\t-> " + dataMap(lcMap(k)))
       }
     }
+
+    propertyBuffer
   }
 
 
@@ -84,30 +87,33 @@ object CiteDataSource {
   * @param collectionDefinition [[CiteCollectionDef]] for this collection.
   * @param delimiter Character used as column delimiter.
   */
-  def fromFile(f: String, collectionDefinition: CiteCollectionDef, delimiter: Char = '#') /*: CiteCollectionData */ = {
+  def fromFile(f: String, collectionDefinition: CiteCollectionDef, delimiter: Char = '#') : CiteCollectionData  = {
 
     delimiter match {
       case '#' => {
         val reader = CSVReader.open(f) (PoundFormat)
-        for (propertyMap <- reader.allWithHeaders() ) {
+        val vectorList = for (propertyMap <- reader.allWithHeaders() ) yield {
           println("PROP MAP keys " + propertyMap.keySet)
           propertiesForMappedText(propertyMap, collectionDefinition)
         }
+        CiteCollectionData(vectorList.flatMap( v => v).toVector)
         //
         //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
       case ',' => {
         val reader = CSVReader.open(f) (CommaFormat)
-        for (propertyMap <- reader.allWithHeaders() ) {
+            val vectorList =  for (propertyMap <- reader.allWithHeaders() ) yield{
           propertiesForMappedText(propertyMap, collectionDefinition)
         }
+        CiteCollectionData(vectorList.flatMap( v => v).toVector)
         //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
       case '\t' => {
         val reader = CSVReader.open(f) (TabFormat)
-        for (propertyMap <- reader.allWithHeaders() ) {
+        val vectorList =  for (propertyMap <- reader.allWithHeaders() )yield {
           propertiesForMappedText(propertyMap, collectionDefinition)
         }
+        CiteCollectionData(vectorList.flatMap( v => v).toVector)
         //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
     }
