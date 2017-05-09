@@ -47,28 +47,13 @@ class CiteCatalogObjectSpec extends FlatSpec {
   it should "correctly parse delimited text when options are represented by null strings" in pending
   it should "throw an exception if URNs are not correctly  formatted" in pending
 
-  it should "convert a column of strings to a property tuple" in {
+  it should "convert a column of strings to a PropertyDefinition" in {
     val cols = property2Line.split(",").toVector.drop(1)
-    val propertyTuple = CiteCatalog.propertyTuple(cols)
-    propertyTuple._1 match {
-      case u: Cite2Urn => assert(true)
-      case _ => fail(s"${propertyTuple._1} should have been a URN")
-    }
-
-    propertyTuple._2 match {
-      case s: String => assert(true)
-      case _ => fail(s"${propertyTuple._2} should have been a String")
-    }
-
-    propertyTuple._3 match {
-      case pt: CitePropertyType => assert(true)
-      case _ => fail(s"${propertyTuple._3} should have been a CitePropertyType")
-    }
-
-    propertyTuple._4 match {
-      case v: Vector[String] => assert(true)
-      case _ => fail(s"${propertyTuple._4} should have been a Vector of Strings")
-    }
+    val propertyDefinition = CiteCatalog.propertyDefinition(cols)
+    assert (propertyDefinition.urn == Cite2Urn("urn:cite2:hmt:msA.v1.sequence:"))
+    assert(propertyDefinition.label == "Page sequence")
+    assert(propertyDefinition.propertyType == NumericType)
+    assert(propertyDefinition.vocabularyList.isEmpty)
 
   }
 

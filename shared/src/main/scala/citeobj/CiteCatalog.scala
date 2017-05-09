@@ -92,17 +92,12 @@ object CiteCatalog {
     (urn,collectionLabel,labelProperty,orderingProperty,rights)
   }
 
-
-
-
-
-
   /** Convert string content of a property line in
   * CEX catalog format to a tuple of objects.
   *
   * @param columns Vector of Strings.
   */
-  def propertyTuple(columns: Vector[String], listDelimiter: String = "#") = {
+  def propertyDefinition(columns: Vector[String], listDelimiter: String = "#"): CitePropertyDef = {
     val urn = Cite2Urn(columns(0))
     val label = columns(1)
 
@@ -115,7 +110,7 @@ object CiteCatalog {
     }
     val propertyType = typeForString(columns(2), (vocabList.size > 0))
 
-    (urn,label,propertyType,vocabList)
+    CitePropertyDef(urn,label,propertyType,vocabList)
   }
 
   /** Create catalog object from a String in cex format.
@@ -134,7 +129,7 @@ object CiteCatalog {
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
 
     val propertyEntries = columnsByRows.filter(_(0)== "property")
-    val propertyTuples = propertyEntries.map(arr => propertyTuple(arr.drop(1), listDelimiter) )
+    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) )
 
 
 
