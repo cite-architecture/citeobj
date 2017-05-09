@@ -1,4 +1,4 @@
 #`citeobj`: release notes
 
 
-**1.0**: initial release.
+**1.0**: initial release.  Supports building a CiteCollectionRepository in various ways, including from a String in CEX 1.1 format.  Alternatively, in the JVM subproject, XML catalogs can be used with delimited text data to create a repository.
