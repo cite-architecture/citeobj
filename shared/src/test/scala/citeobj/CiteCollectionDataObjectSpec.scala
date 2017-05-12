@@ -1,0 +1,62 @@
+package edu.holycross.shot.citeobj
+import org.scalatest.FlatSpec
+import edu.holycross.shot.cite._
+import edu.holycross.shot.cex._
+
+/**
+*/
+class CiteCollectionDataObjectSpec extends FlatSpec {
+
+/*
+
+  val collectionLine = "collection,urn:cite2:hmt:msA.v1:,Folios of the Venetus A manuscript,urn:cite2:hmt:msA.v1.label:,urn:cite2:hmt:msA.v1.sequence:,Public domain"
+
+  val property1Line = "property,urn:cite2:hmt:msA.v1.rv:,Recto or verso,String,recto#verso"
+
+  val property2Line = "property,urn:cite2:hmt:msA.v1.sequence:,Page sequence,Number,"
+*/
+
+val srcData = """#!citecatalog
+
+collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
+
+property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:vaimg.v1.label:#Label#String#
+property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+
+#!citedata
+siglum,sequence,URN,rv,Label,codex
+msA,1,urn:cite2:hmt:msA.v1:1r,recto,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r,urn:cite2:hmt:codex:msA
+msA,2,urn:cite2:hmt:msA.v1:1v,verso,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v,urn:cite2:hmt:codex:msA
+msA,3,urn:cite2:hmt:msA.v1:2r,recto,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r,urn:cite2:hmt:codex:msA
+msA,4,urn:cite2:hmt:msA.v1:2v,verso,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2v,urn:cite2:hmt:codex:msA
+msA,5,urn:cite2:hmt:msA.v1:3r,recto,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 3r,urn:cite2:hmt:codex:msA
+msA,6,urn:cite2:hmt:msA.v1:3v,verso,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 3v,urn:cite2:hmt:codex:msA
+msA,7,urn:cite2:hmt:msA.v1:4r,recto,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 4r,urn:cite2:hmt:codex:msA
+msA,8,urn:cite2:hmt:msA.v1:4v,verso,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 4v,urn:cite2:hmt:codex:msA
+msA,9,urn:cite2:hmt:msA.v1:5r,recto,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 5r,urn:cite2:hmt:codex:msA
+"""
+
+
+  "The CiteCollectionDataObject" should "construct CiteCollectionData from a delimited text string" in {
+    val collData = CiteCollectionData(srcData,",")
+    collData match {
+      case cd: CiteCollectionData => assert(true)
+      case _ => fail("Should have created CiteCollectionData")
+    }
+  }
+
+  it should "be able to determine the collection URN for data in a CEX citedata block" in {
+    val dataBlock = """Siglum,Sequence,URN,RV,Label,CodexURN
+msA,1,urn:cite2:hmt:msA.v1:1r,recto,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r,urn:cite2:hmt:codex:msA
+msA,2,urn:cite2:hmt:msA.v1:1v,verso,Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v,urn:cite2:hmt:codex:msA"
+"""
+    assert (CiteCollectionData.collectionForDataBlock(dataBlock,",") == Cite2Urn("urn:cite2:hmt:msA.v1:"))
+
+  }
+}

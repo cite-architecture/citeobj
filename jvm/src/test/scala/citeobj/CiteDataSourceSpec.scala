@@ -14,12 +14,14 @@ class CiteDataSourceSpec extends FlatSpec {
     val collDef = cat.collection(Cite2Urn("urn:cite2:hmt:msA.v1:")).get
     val fName = "jvm/src/test/resources/venetusA-v1.tsv"
     val data = CiteDataSource.fromFile(fName, collDef)
-    println("DATA FROM CSV: " + data)
+    println("VALIDATE DATA FROM CSV HERE ")
 
   }
   it should "accept explicit naming of pound signs as delimiters" in pending
   it should "optionally accept tabs as delimiters" in pending
-  it should "optionally accept commas as delimiters" in pending /*{
+  it should "optionally accept commas as delimiters" in pending
+
+  /*{
     val fName = "jvm/src/test/resources/venetusAsample.csv"
     val data = CiteDataSource.fromFile(fName)
     println(data)
