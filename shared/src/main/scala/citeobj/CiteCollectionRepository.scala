@@ -110,6 +110,20 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 
 
 object CiteCollectionRepository {
+  /** Creates CITE Collection data from a CEX source.
+  *
+  * @param src Text in CEX format.  Note that there must be  one `citedata` block per
+  * collection and at least one `citecatalog` block that may contain catalog data for
+  * any number of collections.
+  * @param delimiter String defining structural units of delimited text content.
+  * @param delimiter2 Secondary delimiter used within controlled vocabulary lists,
+  * if any.
+
+  def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionRepository = {
+
+  }
+*/
+
 
   def typesMatch(propertyVal: Any, expected: CitePropertyType, vocabList: Vector[String]) : Boolean = {
     expected match {
@@ -148,7 +162,6 @@ object CiteCollectionRepository {
       case ControlledVocabType => {
         propertyVal match {
           case s: String => if (vocabList.contains(s)) {true} else { false }
-
           case _ => false
         }
       }

@@ -65,52 +65,6 @@ case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
 */
 object CiteCatalog {
 
-  /** Convert string content of a collection line in
-  * CEX catalog format to a tuple of objects.
-  *
-  * @param columns Array of Strings.
-  */
-  def collectionTuple(columns: Vector[String]) = {
-    val urn = Cite2Urn(columns(0))
-    val collectionLabel = columns(1)
-
-    val labelProperty = {
-      if (columns(2).isEmpty) {
-        None
-      } else {
-        Some(Cite2Urn(columns(2)))
-      }
-    }
-    val orderingProperty = {
-      if (columns(3).isEmpty) {
-        None
-      } else {
-        Some(Cite2Urn(columns(3)))
-      }
-    }
-    val rights = columns(4)
-    (urn,collectionLabel,labelProperty,orderingProperty,rights)
-  }
-
-  /** Convert string content of a property line in
-  * CEX catalog format to a tuple of objects.
-  *
-  * @param columns Vector of Strings.
-  */
-  def propertyDefinition(columns: Vector[String], listDelimiter: String = "#"): CitePropertyDef = {
-    val urn = Cite2Urn(columns(0))
-    val label = columns(1)
-    val vocabList = {
-      columns.size match {
-        case 4 => columns(3).split(listDelimiter).toVector
-        case _  => Vector[String]()
-      }
-    }
-    val propertyType = typeForString(columns(2), (vocabList.size > 0))
-
-    CitePropertyDef(urn,label,propertyType,vocabList)
-  }
-
   /** Create catalog object from a String in cex format.
   *
   * @param src String of cex-format catalog description.
@@ -120,15 +74,21 @@ object CiteCatalog {
   */
   def apply(src: String, columnDelimiter: String = "#", listDelimiter: String = "," ) : CiteCatalog = {
     val buffer = ArrayBuffer[CiteCollectionDef]()
+    //println("Using delimiter " + columnDelimiter)
 
-    val columnsByRows = src.split("\n").toVector.map(_.split(columnDelimiter).toVector)
+    val lines = src.split("\n").toVector.filter(_.nonEmpty)
+
+    //println("LILNES: " + lines)
+    val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
+    //println("COLS BY ROWS " + columnsByRows)
     val propertyEntries = columnsByRows.filter(_(0) == "property")
+    //println("Work on prop Entries " + propertyEntries + " from " + columnsByRows)
     val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) )
 
     val collectionEntries = columnsByRows.filter(_(0) == "collection")
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
 
-
+    //println(s"WROK ON PROP VECT ${propertyVector} and COLL TUPLES ${collectionTuples}")
     for (c <- collectionTuples)  {
       val urn = c._1
       val properties = propertyVector.filter(_.urn ~~ urn)
@@ -137,6 +97,56 @@ object CiteCatalog {
 
     CiteCatalog(buffer.toVector)
   }
+
+
+
+    /** Convert string content of a collection line in
+    * CEX catalog format to a tuple of objects.
+    *
+    * @param columns Array of Strings.
+    */
+    def collectionTuple(columns: Vector[String]) = {
+      val urn = Cite2Urn(columns(0))
+      val collectionLabel = columns(1)
+
+      val labelProperty = {
+        if (columns(2).isEmpty) {
+          None
+        } else {
+          Some(Cite2Urn(columns(2)))
+        }
+      }
+      val orderingProperty = {
+        if (columns(3).isEmpty) {
+          None
+        } else {
+          Some(Cite2Urn(columns(3)))
+        }
+      }
+      val rights = columns(4)
+      (urn,collectionLabel,labelProperty,orderingProperty,rights)
+    }
+
+    /** Convert string content of a property line in
+    * CEX catalog format to a tuple of objects.
+    *
+    * @param columns Vector of Strings.
+    */
+    def propertyDefinition(columns: Vector[String], listDelimiter: String = "#"): CitePropertyDef = {
+      val urn = Cite2Urn(columns(0))
+      val label = columns(1)
+      val vocabList = {
+        columns.size match {
+          case 4 => columns(3).split(listDelimiter).toVector
+          case _  => Vector[String]()
+        }
+      }
+      val propertyType = typeForString(columns(2), (vocabList.size > 0))
+
+      CitePropertyDef(urn,label,propertyType,vocabList)
+    }
+
+
 
   /** Determing Cite property type based on string name and presence of controlled vocabulary list.
   *

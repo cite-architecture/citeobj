@@ -76,7 +76,6 @@ case class CiteCollectionData (data: Vector[CitePropertyValue]) {
 
 object CiteCollectionData {
 
-
   /** Creates CITE Collection data from a CEX source.
   *
   * @param src Text in CEX format.  Note that there must be  one `citedata` block per
@@ -87,19 +86,30 @@ object CiteCollectionData {
   * if any.
   */
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionData = {
-    val catalog = CiteCatalog(cexSource)
-
     val cex = CexParser(cexSource)
-    val dataSets = cex.block("citedata")
 
+    val catalogSrcString = cex.block("citecatalog").filter(_.nonEmpty).mkString("\n")
+    val catalog = CiteCatalog(catalogSrcString, delimiter, delimiter2)
+    //println("catalog " + catalog)
+    val dataSets = cex.block("citedata")
+    //println("data block " + dataSets)
     val propBuffer = ArrayBuffer[CitePropertyValue]()
     for (ds <- dataSets){
       val collUrn = CiteCollectionData.collectionForDataBlock(ds,delimiter)
-      val collectionDef = catalog.collection(collUrn).get
-      val mapped = mapsForDelimited(ds,delimiter).map(_.toMap)
-      for (row <- mapped) {
-        for (propVal <- propertiesForMappedText(row, collectionDef)) {
-          propBuffer +=  propVal
+      val collectionDef = catalog.collection(collUrn)
+      //println("cOlL def " + collectionDef)
+      collectionDef match {
+        case None =>
+        case cd: Some[CiteCollectionDef] => {
+          val mapped = mapsForDelimited(ds,delimiter).map(_.toMap)
+          //println("MAPPED " + mapped)
+          for (row <- mapped) {
+
+            for (propVal <- propertiesForMappedText(row, cd.get)) {
+              //println("ADD " + propVal)
+              propBuffer +=  propVal
+            }
+          }
         }
       }
     }
@@ -117,11 +127,20 @@ object CiteCollectionData {
   * CITE Collection.
   * @param delimiter String value delimiting columns in the CEX source.
   */
-  def collectionForDataBlock(dataBlock: String, delimiter : String = "#") = {//: Cite2Urn = {
+  def collectionForDataBlock(dataBlock: String, delimiter : String) = {//: Cite2Urn = {
     val dataLines = dataBlock.split("\n").toVector
-    val lcHeader = dataLines(0).split(delimiter).toVector.map(_.trim).map(_.toLowerCase)
-    val columnIdx = lcHeader.indexOf("urn")
-    Cite2Urn(dataLines(1).split(delimiter)(columnIdx)).dropSelector
+    if (dataLines.size < 2) {
+      throw CiteObjectException("Data block has too few lines: " + dataLines.size)
+
+    } else {
+      val lcHeader = dataLines(0).split(delimiter).toVector.map(_.trim).map(_.toLowerCase)
+      if (lcHeader.size < 0) {
+        throw CiteObjectException("No header found for required property 'urn'")
+      } else {
+        val columnIdx = lcHeader.indexOf("urn")
+        Cite2Urn(dataLines(1).split(delimiter)(columnIdx)).dropSelector
+      }
+    }
   }
 
 
@@ -131,40 +150,48 @@ object CiteCollectionData {
   * each mapping representing a mapping of property name to string value for that property.
   * @param collectionDef [[CiteCollectionDef]] for this collection.
   */
-  def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) = { //: Vector[CitePropertyValue] = {
+  def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) : Vector[CitePropertyValue] = {
     var propertyBuffer = ArrayBuffer[CitePropertyValue]()
 
-    /*println("\n\nWORK ON COLLE DEF " + collectionDef.urn)
-    for (p <- collectionDef.propertyDefs) {
-      println("\t" + p)
-    }
-*/
+
+    //println(s"Map ${dataMap} \n\twith def ${collectionDef}")
     val lcMap = dataMap.map{ case (k,v) => (k.toLowerCase,v)}
-    //println("LC MAP keys "+ lcMap.keySet)
     val collectionUrn = collectionDef.urn
     val urn = Cite2Urn(lcMap("urn"))
     val lcLabelProperty = lcLabel(collectionDef)
     val label = lcMap(lcLabelProperty)
 
+
+    val objectSelectorString = {
+      for (k <- dataMap.keySet) yield {
+        if (k.toLowerCase == "urn") {
+          dataMap(k)
+        } else { ""}
+      }
+    }.filter(_.nonEmpty).toSeq(0)
+
+    val objectSelectorUrn = Cite2Urn(objectSelectorString)
+    //println("OBJ URN " + objectSelectorUrn )
     for (k <- dataMap.keySet) {
       if ((k.toLowerCase == lcLabelProperty) || (k.toLowerCase == "urn")) {
           // omit
       } else {
-       //println("Configure " + k + " -> " + dataMap(k))
-       val propUrn = collectionUrn.addProperty(k)
-       //println("Prop urn is " + propUrn)
-
-       val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn)
+       val propUrn = objectSelectorUrn.addProperty(k)
+       //println("With prop" + propUrn)
+       //println("CHeck out " + collectionDef.propertyDefs.map(_.urn))
+       val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn.dropSelector)
        // check that you have one and only  one propDef ...
-       val typedValue = CitePropertyValue.valueForString(dataMap(k), propDef(0))
+       //println("PROP DEF " + propDef)
+       if (propDef.size == 1) {
+         val typedValue = CitePropertyValue.valueForString(dataMap(k), propDef(0))
+         val citePropertyVal = CitePropertyValue(propUrn, typedValue)
+         propertyBuffer += citePropertyVal
+       }else{}
 
-       val citePropertyVal = CitePropertyValue(propUrn, typedValue)
-       propertyBuffer += citePropertyVal
-       //println("\t-> " + dataMap(lcMap(k)))
       }
     }
-
-    propertyBuffer
+    //println("has buffer " + propertyBuffer.toVector + "\n\n")
+    propertyBuffer.toVector
   }
 
   /** Find lowercase version of the name of the labelling property
