@@ -11,6 +11,7 @@ import edu.holycross.shot.cite._
 * @param catalog Documentation of the structure of each collection.
 */
 case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
+  // Mutual validation of data and catalog:
   assert(data.isEmpty == false)
   assert(catalog.isEmpty == false)
   // enforce 1<->1 relation of properties
@@ -18,67 +19,60 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
   // catalog and data
   assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
 
+  // Validate contents of all objects in the repository against their
+  // catalog description.
+  for (c <- data.objects) {
+    assert(objectValidates(c),"Failed to validate object " + c)
+  }
+
+
 
   /** Construct a citable object for an identifying URN.
   *
   * @param obj URN uniquely identifying a single object.
   */
   def citableObject(objUrn: Cite2Urn, labelPropertyUrn : Cite2Urn): CiteObject = {
+
     val objectData = data ~~ objUrn
+
+    val urnProperty = objUrn.addProperty("urn")
+    val identifier = objectData ~~ urnProperty
+    assert(identifier.data.size == 1, s"For ${urnProperty}, found ${identifier.data.size} matches")
+    val dropUrnProperty = objectData -- identifier
+
     val labeller = objectData ~~ labelPropertyUrn
     assert(labeller.data.size == 1)
     val labelProperty = labeller.data(0)
-    val remainingProps = objectData -- labeller
+    val remainingProps = dropUrnProperty -- labeller
 
     CiteObject(objUrn, labelProperty.propertyValue.toString,remainingProps.data )
-
   }
 
-
   /** True if the given [[CiteObject]] validates against the collection's definition.
+  * In actuality, won't ever return false, but will throw an Exception if requirements
+  * checked by `assert` statements are violated, otherwise returns true.
   *
   * @param citeObj Citable object to evaluate.
   * @param collectionDef Collection definition to use in evaulating object.
   */
   def objMatchesCatalog(citeObj: CiteObject,collectionDef: CiteCollectionDef): Boolean = {
-    //println("DOES OBJ MATCH DEF?")
-    //println(citeObj)
-    //println(collectionDef)
-
-    //
-    //ADD ORDERING PROPERTY IF PRESENT TO LIST OF
-    // PROPERTIES TO CHECK
-    val catalogSet = {
-      collectionDef.orderingProperty match {
-        case oprop : Some[Cite2Urn] => {
-          collectionDef.propertyDefs :+ CitePropertyDef(oprop.get,"sequence",NumericType,Vector.empty)
-        }
-        case None => collectionDef.propertyDefs// :+ CitePropertyDef(collectionDef.urn.addProperty("urn"),"URN",Cite2UrnType,Vector.empty)
-      }
-    }
-
+    val catalogSet = collectionDef.propertyDefs
     val catalogPropUrns =  catalogSet.map(_.urn)
 
     val objUrnSet = citeObj.propertyList.map(_.urn).toSet
     val catUrnSet = catalogPropUrns.toSet
-    //assert(objUrnSet == catUrnSet)
-    println("OBJURNSET ")
-    for (o <- objUrnSet) {
-      println("\t" + o)
-    }
-    println("CATURNSET " + catUrnSet)
 
+    // Constructed object elevates URN and label
+    // properties out of the catalog set:
+    val expectedSize = catUrnSet.size - 2
 
-    assert(catalogSet.size ==
-       citeObj.propertyList.size, s"for ${citeObj.urn}, catalog defines ${collectionDef.propertyDefs.size} properties but found ${citeObj.propertyList.size} in \n${citeObj.propertyList.map(_.urn)}")
-
-
+    assert(expectedSize ==
+       citeObj.propertyList.size, s"for ${citeObj.urn}, expected ${expectedSize} properties but found ${citeObj.propertyList.size} in \n${citeObj.propertyList.map(_.urn)}")
 
     for (p <- citeObj.propertyList) {
-
       assert(catalogPropUrns.contains(p.urn.dropSelector))
       val propDef = catalogSet.filter(_.urn == p.urn.dropSelector)
-      assert(propDef.size == 1)
+      assert(propDef.size == 1, s"Wrong number propDefs (${propDef.size})  for " + p.urn.dropSelector + " from \n\n" + propDef.mkString("\n\n"))
 
       // get type from catalog def
       val expectedType = propDef(0).propertyType
@@ -99,18 +93,12 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
   */
   def objectValidates(objectUrn: Cite2Urn): Boolean = {
     val collectionCatalog = catalog ~~ objectUrn
-    assert(collectionCatalog.size == 1)
+    assert(collectionCatalog.size == 1, s"Validating ${objectUrn}, found ${collectionCatalog.size} matching objects")
 
     val collectionDefinition = collectionCatalog.collections(0)
-
     val asCitableObject = citableObject(objectUrn,collectionDefinition.labelProperty)
 
     objMatchesCatalog(asCitableObject,collectionDefinition)
-  }
-
-  //Validate contents of all collections in the repository.
-  for (c <- data.objects) {
-    assert(objectValidates(c),"Failed to validate object " + c)
   }
 
 

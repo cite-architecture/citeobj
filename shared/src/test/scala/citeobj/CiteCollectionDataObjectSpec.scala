@@ -19,7 +19,7 @@ property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
 property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
 #!citedata
-siglum#sequence#urn#rv#Label#codex
+siglum#sequence#urn#rv#label#codex
 msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
 msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
 msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
@@ -37,7 +37,7 @@ msA#9#urn:cite2:hmt:msA.v1:5r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     collData match {
       case cd: CiteCollectionData =>    {
         // 9 records, six properties
-        //assert(cd.size == 9*6)
+        assert(cd.size == 9*6)
         assert(cd.collections ==  Set(Cite2Urn("urn:cite2:hmt:msA.v1:")))
       }
       case _ => fail("Should have created CiteCollectionData")

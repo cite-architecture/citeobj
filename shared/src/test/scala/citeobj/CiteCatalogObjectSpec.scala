@@ -76,4 +76,6 @@ class CiteCatalogObjectSpec extends FlatSpec {
 
   }
 
+
+  it should "correctly handle ordered collections" in pending 
 }
