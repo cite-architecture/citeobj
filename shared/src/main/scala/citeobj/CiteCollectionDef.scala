@@ -7,8 +7,10 @@ import edu.holycross.shot.cite._
 *
 * @param urn URN for the collection.
 * @param collectionLabel Readable label for the collection.
-* @param labellingProperty URN for property labelling individual objects.  If None, a default will be created by the [[labelProperty]] function.
+* @param labellingProperty Optionally specified URN for property labelling individual objects.  If None, a default will be created by the [[labelProperty]] function.
 * @param orderingProperty URN for the property sequencing objects, if the collection is ordered.
+* @param license Statement of licensing terms applying to the collection as a whole.
+* @param propertyDefs [[CitePropertyDef]]s for all properties appearing in the collection.
 */
 case class CiteCollectionDef(
   urn: Cite2Urn,
@@ -21,7 +23,7 @@ case class CiteCollectionDef(
 
   /** URN for required labelling property.
   * If not set by constructor, defaults to a
-  * property named "label" in this colleciton.
+  * property named "label" in this collection.
   */
   def labelProperty: Cite2Urn = {
     labellingProperty match {

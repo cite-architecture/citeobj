@@ -18,6 +18,8 @@ class CitePropertyValueSpec extends FlatSpec {
     }
   }
 
+  it should "require that its URN include a property-level collection component" in pending
+  it should "require that its URN include an object selector" in pending
 
 
 

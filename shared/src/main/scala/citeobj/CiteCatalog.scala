@@ -148,7 +148,7 @@ object CiteCatalog {
 
 
 
-  /** Determing Cite property type based on string name and presence of controlled vocabulary list.
+  /** Determine [[CitePropertyType]] based on string name and presence of controlled vocabulary list.
   *
   * @param s Value of  `@type` attribute in a `citeProperty` XML element.
   * @param vocablist True if property has a controlled vocabulary list.

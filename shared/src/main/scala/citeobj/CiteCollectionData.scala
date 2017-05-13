@@ -5,8 +5,11 @@ import edu.holycross.shot.cex._
 
 import scala.collection.mutable.ArrayBuffer
 
-/** All data values for a repository of citable
-* objects and properties.
+/** Data values for a repository of citable objects and properties.
+* The data are organized as a Vector of [[CitePropertyValue]]s.  URN twiddling
+* on this Vector can be used to construct any other valid sets of values,
+* such as all values in a given collection, or all values used to create
+* an individual [[CiteObject]].
 *
 * @param data vector of property values. Because [[CitePropertyValue]]s have URNs, they can be grouped
 * by object using URN twiddling.
@@ -19,10 +22,23 @@ case class CiteCollectionData (data: Vector[CitePropertyValue]) {
     CiteCollectionData(data.filter(_.urn ~~ filterUrn))
   }
 
+  /** Union of this collection with a second collection.
+  * The resulting collection continues the set of unique members
+  * belonging to either collection.
+  *
+  * @param collection2 Collection to unite with this collection.
+  */
   def ++(collection2 : CiteCollectionData): CiteCollectionData = {
     CiteCollectionData(this.data ++ collection2.data)
   }
 
+
+  /** Difference of this collection with a second collection.
+  * The resulting collection contains member elements in one collection
+  * but not the other.
+  *
+  * @param collection2 Collection to unite with this collection.
+  */
   def --(collection2 : CiteCollectionData): CiteCollectionData = {
     CiteCollectionData(this.data diff collection2.data)
   }
@@ -74,11 +90,14 @@ case class CiteCollectionData (data: Vector[CitePropertyValue]) {
   }
 }
 
+
+/** Factory for creating [[CiteCollectionData]] from source data in CEX format.
+*/
 object CiteCollectionData {
 
   /** Creates CITE Collection data from a CEX source.
   *
-  * @param src Text in CEX format.  Note that there must be  one `citedata` block per
+  * @param cexSource Text in CEX format.  Note that there must be  one `citedata` block per
   * collection and at least one `citecatalog` block that may contain catalog data for
   * any number of collections.
   * @param delimiter String defining structural units of delimited text content.
@@ -90,14 +109,13 @@ object CiteCollectionData {
 
     val catalogSrcString = cex.block("citecatalog").filter(_.nonEmpty).mkString("\n")
     val catalog = CiteCatalog(catalogSrcString, delimiter, delimiter2)
-    //println("catalog " + catalog)
+    //println("catalog properties = " + catalog.properties)
     val dataSets = cex.block("citedata")
     //println("data block " + dataSets)
     val propBuffer = ArrayBuffer[CitePropertyValue]()
     for (ds <- dataSets){
       val collUrn = CiteCollectionData.collectionForDataBlock(ds,delimiter)
       val collectionDef = catalog.collection(collUrn)
-      //println("cOlL def " + collectionDef)
       collectionDef match {
         case None =>
         case cd: Some[CiteCollectionDef] => {
@@ -153,8 +171,7 @@ object CiteCollectionData {
   def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) : Vector[CitePropertyValue] = {
     var propertyBuffer = ArrayBuffer[CitePropertyValue]()
 
-
-    //println(s"Map ${dataMap} \n\twith def ${collectionDef}")
+    //println(s"Map ${dataMap.size} properties using def containing ${collectionDef.propertyDefs.size} props")
     val lcMap = dataMap.map{ case (k,v) => (k.toLowerCase,v)}
     val collectionUrn = collectionDef.urn
     val urn = Cite2Urn(lcMap("urn"))
@@ -173,24 +190,25 @@ object CiteCollectionData {
     val objectSelectorUrn = Cite2Urn(objectSelectorString)
     //println("OBJ URN " + objectSelectorUrn )
     for (k <- dataMap.keySet) {
-      if ((k.toLowerCase == lcLabelProperty) || (k.toLowerCase == "urn")) {
-          // omit
-      } else {
        val propUrn = objectSelectorUrn.addProperty(k)
        //println("With prop" + propUrn)
        //println("CHeck out " + collectionDef.propertyDefs.map(_.urn))
+       //println("Look for " +propUrn.dropSelector + "in " + collectionDef.propertyDefs.map(_.urn))
        val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn.dropSelector)
        // check that you have one and only  one propDef ...
-       //println("PROP DEF " + propDef)
+       //println("PROP DEF " + propDef.size)
+
        if (propDef.size == 1) {
          val typedValue = CitePropertyValue.valueForString(dataMap(k), propDef(0))
          val citePropertyVal = CitePropertyValue(propUrn, typedValue)
          propertyBuffer += citePropertyVal
-       }else{}
+       }else{
+         println("No propdef matching " + propUrn)
+       }
 
-      }
+      //}
     }
-    //println("has buffer " + propertyBuffer.toVector + "\n\n")
+    //println(s"has ${propertyBuffer.toVector.size} items in buffer " + propertyBuffer.toVector + "\n\n")
     propertyBuffer.toVector
   }
 

@@ -68,7 +68,6 @@ class CiteCatalogObjectSpec extends FlatSpec {
 
   it should "create a CiteCatalog from a CEX citecatalog block" in {
     val cex = collectionLine + "\n" + property1Line + "\n"+ property2Line + "\n"
-    //val cex = collectionLine  + "\n"+ property2Line + "\n"
 
     val cat = CiteCatalog(cex, columnDelimiter = ",", listDelimiter = "#")
     assert (cat.size == 1)

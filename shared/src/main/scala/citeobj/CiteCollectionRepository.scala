@@ -16,12 +16,10 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
   // enforce 1<->1 relation of properties
   // (and therefore collections, too) between
   // catalog and data
-  assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties")
+  assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
 
 
-  /** Construct a citable object for a an identifying URN.
-  * Returns None if a valid [[CiteObject]] cannot be
-  * constructed.
+  /** Construct a citable object for an identifying URN.
   *
   * @param obj URN uniquely identifying a single object.
   */
@@ -36,8 +34,18 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 
   }
 
-  def objMatchesCatalog(citeObj: CiteObject,collectionDef: CiteCollectionDef): Boolean = {
 
+  /** True if the given [[CiteObject]] validates against the collection's definition.
+  *
+  * @param citeObj Citable object to evaluate.
+  * @param collectionDef Collection definition to use in evaulating object.
+  */
+  def objMatchesCatalog(citeObj: CiteObject,collectionDef: CiteCollectionDef): Boolean = {
+    //println("DOES OBJ MATCH DEF?")
+    //println(citeObj)
+    //println(collectionDef)
+
+    //
     //ADD ORDERING PROPERTY IF PRESENT TO LIST OF
     // PROPERTIES TO CHECK
     val catalogSet = {
@@ -45,14 +53,27 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
         case oprop : Some[Cite2Urn] => {
           collectionDef.propertyDefs :+ CitePropertyDef(oprop.get,"sequence",NumericType,Vector.empty)
         }
-        case None => collectionDef.propertyDefs
+        case None => collectionDef.propertyDefs// :+ CitePropertyDef(collectionDef.urn.addProperty("urn"),"URN",Cite2UrnType,Vector.empty)
       }
     }
 
-    assert(catalogSet.size ==
-       citeObj.propertyList.size, s"for ${citeObj.urn}, catalog defines ${collectionDef.propertyDefs.size} properties but found ${citeObj.propertyList.size}")
-
     val catalogPropUrns =  catalogSet.map(_.urn)
+
+    val objUrnSet = citeObj.propertyList.map(_.urn).toSet
+    val catUrnSet = catalogPropUrns.toSet
+    //assert(objUrnSet == catUrnSet)
+    println("OBJURNSET ")
+    for (o <- objUrnSet) {
+      println("\t" + o)
+    }
+    println("CATURNSET " + catUrnSet)
+
+
+    assert(catalogSet.size ==
+       citeObj.propertyList.size, s"for ${citeObj.urn}, catalog defines ${collectionDef.propertyDefs.size} properties but found ${citeObj.propertyList.size} in \n${citeObj.propertyList.map(_.urn)}")
+
+
+
     for (p <- citeObj.propertyList) {
 
       assert(catalogPropUrns.contains(p.urn.dropSelector))
@@ -66,14 +87,15 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 
       assert(CiteCollectionRepository.typesMatch(p.propertyValue,expectedType,vocabVector ),s"For ${p.urn}, ${p.propertyValue} did not match ${expectedType}")
     }
-
+    //passed all assertions!
     true
   }
+
   /** True if we can construct a valid object for a URN,
   * confirm 1<->1 relation of cataloged properties and
-  * actual properties, and verify type of each property value.
+  * actual properties, and validate the type of each property value.
   *
-  * @param obj URN uniquely identifyiing an object.  It is an assertion exception if the URN does not match 1 and only 1 entry in the [[catalog]].
+  * @param objectUrn URN uniquely identifyiing an object.  It is an assertion exception if the URN does not match 1 and only 1 entry in the [[catalog]].
   */
   def objectValidates(objectUrn: Cite2Urn): Boolean = {
     val collectionCatalog = catalog ~~ objectUrn
@@ -88,7 +110,7 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 
   //Validate contents of all collections in the repository.
   for (c <- data.objects) {
-    assert(objectValidates(c))
+    assert(objectValidates(c),"Failed to validate object " + c)
   }
 
 
@@ -109,22 +131,35 @@ case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCata
 
 
 
+/** Factory for creating [[CiteCollectionRepository]] from a CEX source.
+*/
 object CiteCollectionRepository {
+
   /** Creates CITE Collection data from a CEX source.
   *
-  * @param src Text in CEX format.  Note that there must be  one `citedata` block per
+  * @param cexSource Text in CEX format.  Note that there must be  one `citedata` block per
   * collection and at least one `citecatalog` block that may contain catalog data for
   * any number of collections.
   * @param delimiter String defining structural units of delimited text content.
   * @param delimiter2 Secondary delimiter used within controlled vocabulary lists,
   * if any.
-
+  */
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionRepository = {
-
+    //data: CiteCollectionData, catalog: CiteCatalog
+    val data = CiteCollectionData(cexSource,delimiter,delimiter2)
+    val catalog = CiteCatalog(cexSource,delimiter,delimiter2)
+    CiteCollectionRepository(data,catalog)
   }
-*/
 
 
+  /** True if a given value is an appropriate type and value for the specified
+  * [[CitePropertyType]].
+  *
+  * @param propertyVal Value to test.
+  * @param expected [[CitePropertyType]] the value must validate against.
+  * @param vocabList Vector of controlled vocabulary items if relevant, or
+  * an empty vector otherwise.
+  */
   def typesMatch(propertyVal: Any, expected: CitePropertyType, vocabList: Vector[String]) : Boolean = {
     expected match {
       case CtsUrnType => {

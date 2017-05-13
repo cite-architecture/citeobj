@@ -21,4 +21,6 @@ class CitePropertyDefSpec extends FlatSpec {
     assert (citePropertyDef.label == "Text passage")
   }
 
+  it should "ensure that the property URN has no object selector" in pending
+  it should "ensure that the property URN has a collection component ith propert-level identifier" in pending
 }

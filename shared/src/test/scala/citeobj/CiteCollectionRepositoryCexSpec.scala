@@ -5,12 +5,13 @@ import edu.holycross.shot.cite._
 
 /**
 */
-class CiteObjectSpec extends FlatSpec {
+class CiteCollectionRepositoryCexSpec extends FlatSpec {
 
 
-  "A CITE object" should "be constructed by a repository" in {
 
-        val cex = """#!citecatalog
+  "A Cite Collection repository" should "be able to construct a repository from CEX source" in {
+
+    val cex = """#!citecatalog
 collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
@@ -28,16 +29,6 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 """
 
     val repo = CiteCollectionRepository(cex,"#",",")
-    val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
-    val labelPropertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.label:")
-    val citableObj = repo.citableObject(objectUrn,labelPropertyUrn)
-    println(citableObj)
-
   }
-
-  it should "require an object selector on its URN" in pending
-  it should "require a version-level identifier in its collection component" in pending
-  it should "require a non-empty labelling string" in pending
-
 
 }
