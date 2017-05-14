@@ -4,7 +4,7 @@ import edu.holycross.shot.cite._
 
 
 /** Trait defining the minimum functionality of a discrete citable object. */
-trait BaseObject {
+trait BaseCitable {
 
   /** URN uniquely identifying this object.  The URN must include
   * an object selector component, and its collection hierarachy must be at the version level.
@@ -34,6 +34,6 @@ trait BaseObject {
 * @param propertyList Possibly empty vector of any further [[CitePropertyValue]]s
 * belonging to this object.
 */
-case class CiteObject(urn: Cite2Urn, label: String, propertyList: Vector[CitePropertyValue]) extends BaseObject {
+case class CiteObject(urn: Cite2Urn, label: String, propertyList: Vector[CitePropertyValue]) extends BaseCitable {
   //
 }
