@@ -11,23 +11,28 @@ trait BinaryImageSource {
   def binaryImageSource: BinaryImageAccess
 }
 
+
+// these concrete implementations must be JVM-specific
+//
+
 /** Binary image data from a local file.
 *
 * @param localFile File in local file system with binary image data.
-*/
+
 case class LocalImageSource(val localFile: File) extends BinaryImageSource {
   type BinaryImageAccess = File
   def binaryImageSource = {localFile}
 }
-
+*/
 /** Binary image data from a networked source.
 *
 * @param url URL to binary image data.
-*/
+
 case class NetworkedImageSource(val url: URL) extends BinaryImageSource {
   type BinaryImageAccess = URL
   def binaryImageSource = {url}
 }
+*/
 
 
 /** Citable image object extended by binary data access.
