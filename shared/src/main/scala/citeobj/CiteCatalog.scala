@@ -34,7 +34,13 @@ import js.annotation.JSExport
       case 1 => Some(filtered(0))
       case _ => throw CiteObjectException("Duplicate URNs found in catalog: " + urn)
     }
+  }
 
+  def isOrdered(urn : Cite2Urn) : Boolean = {
+    collection(urn).get.orderingProperty match {
+      case None => false
+      case seqProp : Option[Cite2Urn] => true
+    }
   }
 
   /** Set of URNs identifying all properties in the repository.
