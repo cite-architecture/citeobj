@@ -8,6 +8,25 @@ import edu.holycross.shot.cite._
 */
 class CiteCatalogObjectSpec extends FlatSpec {
 
+
+    val cexSrc = """#!citecatalog
+collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
+property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:msA.v1.label:#Label#String#
+property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citedata
+siglum#sequence#urn#rv#label#codex
+msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
+msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
+msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
+"""
+
+
   val collectionLine = "collection,urn:cite2:hmt:msA.v1:,Folios of the Venetus A manuscript,urn:cite2:hmt:msA.v1.label:,urn:cite2:hmt:msA.v1.sequence:,Public domain"
 
   val property1Line = "property,urn:cite2:hmt:msA.v1.rv:,Recto or verso,String,recto#verso"
@@ -76,6 +95,13 @@ class CiteCatalogObjectSpec extends FlatSpec {
 
   }
 
+  it should "create a CiteCatalog from any valid CEX source" in {
+    val cat = CiteCatalog(cexSrc, "#", ",")
+    assert(cat.size == 1)
+    val coll1 = cat.collections(0)
+    assert(coll1.urn == Cite2Urn("urn:cite2:hmt:msA.v1:"))
+  }
 
-  it should "correctly handle ordered collections" in pending 
+
+  it should "correctly handle ordered collections" in pending
 }

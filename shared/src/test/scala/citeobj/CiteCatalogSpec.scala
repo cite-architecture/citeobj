@@ -7,6 +7,8 @@ import edu.holycross.shot.cite._
 */
 class CiteCatalogSpec extends FlatSpec {
 
+
+
   val propsVector: Vector[CitePropertyDef] = Vector(
     CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),"Text passage",CtsUrnType),
     CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:"),"Speaker",Cite2UrnType),
@@ -58,7 +60,12 @@ class CiteCatalogSpec extends FlatSpec {
     }
   }
 
-
+  it should "identify if a collection is ordered" in {
+    val catalog = CiteCatalog(Vector(ccDef))
+    assert(catalog.isOrdered(Cite2Urn("urn:cite2:hmt:speeches.v1:")))
+  }
+  it should "report false for unordered collection" in pending
+  it should "do something appropriate if asked for ordering on a non-existent urn but I don't know what yet" in pending
   it should "stringify to CEX format" in pending
 
 

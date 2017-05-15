@@ -1,6 +1,7 @@
 package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
+import scala.collection.mutable.ArrayBuffer
 
 import scala.scalajs.js
 import js.annotation.JSExport
@@ -14,25 +15,34 @@ import js.annotation.JSExport
 * @param catalog Documentation of the structure of each collection.
 */
 @JSExport  case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
-  // Mutual validation of data and catalog:
-  assert(data.isEmpty == false)
-  assert(catalog.isEmpty == false)
-  // enforce 1<->1 relation of properties
-  // (and therefore collections, too) between
-  // catalog and data
-  assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
 
-  // Validate contents of all objects in the repository against their
-  // catalog description.
-  for (c <- data.objects) {
-    assert(objectValidates(c),"Failed to validate object " + c)
+  assert (validateAll)
+
+  /** Validate that data and catalog agree.
+  */
+  def validateAll: Boolean = {
+    // Mutual validation of data and catalog:
+    assert(data.isEmpty == false)
+    assert(catalog.isEmpty == false)
+    // enforce 1<->1 relation of properties
+    // (and therefore collections, too) between
+    // catalog and data
+    assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
+
+    // Validate contents of all objects in the repository against their
+    // catalog description.
+    for (c <- data.objects) {
+      assert(objectValidates(c),"Failed to validate object " + c)
+    }
+    // if we make it this far without exceptions, we're valid:
+    true
   }
-
-
 
   /** Construct a citable object for an identifying URN.
   *
   * @param obj URN uniquely identifying a single object.
+  * @param labelPropertyUrn URN of property to elevate to required label of
+  * a [[CitableObject]].
   */
   def citableObject(objUrn: Cite2Urn, labelPropertyUrn : Cite2Urn): CiteObject = {
 
@@ -51,6 +61,71 @@ import js.annotation.JSExport
     CiteObject(objUrn, labelProperty.propertyValue.toString,remainingProps.data )
   }
 
+  /** Construct a citable object for an identifying URN.
+  *
+  * @param obj URN uniquely identifying a single object.
+  */
+  def citableObject(objUrn: Cite2Urn) : CiteObject = {
+    val collectionDef = collectionDefinition(objUrn.dropSelector)
+    collectionDef match {
+      case None => throw CiteObjectException(s"Could not find collection definition for ${objUrn}")
+      case cd: Option[CiteCollectionDef] =>   citableObject(objUrn, cd.get.labelProperty)
+    }
+  }
+
+  /** Convert all data to a Vector of [[CiteObject]]s.
+  *
+  * @param ccd [[CiteCollectionData]] to convert to a Vector of [[CiteObject]]s.
+  */
+  def citableObjects : Vector[CiteObject] = {
+    val buffer = ArrayBuffer[CiteObject]()
+    val collUrns = data.collections
+    for (u <- collUrns) {
+      val propUrn = u.addProperty("urn")
+      val urndata = data ~~ propUrn
+      for (uprop <- urndata.data) {
+        uprop.propertyValue match {
+          case objUrn : Cite2Urn => {
+            buffer += citableObject(objUrn)
+          }
+          case _ => println("Could not figure out type of " + uprop.propertyValue)
+        }
+      }
+    }
+    buffer.toVector
+  }
+
+  /** Make a Vector of [[CiteObject]]s for a collection.
+  * If the collection is ordered, the resulting Vector will
+  * be sorted by the collection's  ordering property.
+  *
+  * @param coll Collection URN.
+  */
+  def citableObjects(coll: Cite2Urn) :  Vector[CiteObject]  = {
+    val v = citableObjects.filter(_.urn ~~ coll)
+    if (isOrdered(coll)) {
+      v.sortWith(sortValue(_) < sortValue(_))
+    } else {
+      v
+    }
+  }
+
+  /** Find catalog entry for a given collection.
+  *
+  * @param collUrn Collection's URN.
+  */
+  def collectionDefinition(collUrn: Cite2Urn): Option[CiteCollectionDef]= {
+    catalog.collection(collUrn)
+  }
+
+  /** Find data set for a given collection.
+  *
+  * @param collUrn Collection's URN.
+  */
+  def collectionData(collUrn: Cite2Urn): CiteCollectionData = {
+    data ~~ collUrn
+  }
+
   /** True if the given [[CiteObject]] validates against the collection's definition.
   * In actuality, won't ever return false, but will throw an Exception if requirements
   * checked by `assert` statements are violated, otherwise returns true.
@@ -58,7 +133,7 @@ import js.annotation.JSExport
   * @param citeObj Citable object to evaluate.
   * @param collectionDef Collection definition to use in evaulating object.
   */
-  def objMatchesCatalog(citeObj: CiteObject,collectionDef: CiteCollectionDef): Boolean = {
+  def objectMatchesCatalog(citeObj: CiteObject,collectionDef: CiteCollectionDef): Boolean = {
     val catalogSet = collectionDef.propertyDefs
     val catalogPropUrns =  catalogSet.map(_.urn)
 
@@ -101,15 +176,116 @@ import js.annotation.JSExport
     val collectionDefinition = collectionCatalog.collections(0)
     val asCitableObject = citableObject(objectUrn,collectionDefinition.labelProperty)
 
-    objMatchesCatalog(asCitableObject,collectionDefinition)
+    objectMatchesCatalog(asCitableObject,collectionDefinition)
   }
-
 
   /** Set of all collections in the repository,
   * identified by URN.
   */
   def collections = {
     catalog.urns
+  }
+
+  /** True if collection is ordered.
+  *
+  * @param coll Collection to test.
+  */
+  def isOrdered(coll: Cite2Urn): Boolean = {
+    catalog.isOrdered(coll)
+  }
+
+  /** Look up value of ordering property for a citable object.
+  *
+  * @param obj Citable object.
+  * @param propertyKey URN identifying its ordering property.
+  */
+  def sortValue(obj: CiteObject, propertyKey: Cite2Urn) = {
+    val propVect = obj.propertyList.filter(_.urn ~~ propertyKey)
+    require (propVect.size == 1, s"Wrong number of ordering properties (${propVect.size}) for ${propertyKey} in ${obj.propertyList}")
+    propVect(0).propertyValue match {
+      case d: Double => d
+      case _ => throw CiteObjectException(s"Did not find property value for ${propVect(0)}")
+    }
+  }
+
+  /** Look up value of ordering property for a citable object.
+  *
+  * @param obj Citable object.
+  */
+  def sortValue(obj: CiteObject): Double = {
+    // find its orderingKey:
+    val collectionDef = collectionDefinition(obj.urn.dropSelector)
+    collectionDef match {
+      case None => throw CiteObjectException(s"Could not find collection definition for ${obj}")
+      case cd: Option[CiteCollectionDef] =>   sortValue(obj, cd.get.orderingProperty.get)
+    }
+  }
+
+  /** Find first citable object in an ordered collection.
+  *
+  * @param coll Collection URN.
+  */
+  def first(coll: Cite2Urn) : CiteObject = {
+    if (! isOrdered(coll)) {
+      throw CiteException(s"${coll} is not an ordered collection.")
+    } else {
+      val v = citableObjects(coll)
+      v(0)
+    }
+  }
+
+  /** Find last citable object in an ordered collection.
+  *
+  * @param coll Collection URN.
+  */
+  def last(coll: Cite2Urn) : CiteObject = {
+    if (! isOrdered(coll)) {
+      throw CiteException(s"${coll} is not an ordered collection.")
+    } else {
+      val v = citableObjects(coll)
+      v.last
+    }
+  }
+
+
+  /** Find following citable object in an ordered collection.
+  *
+  * @param obj Find object following this.
+  */
+  def next(obj: CiteObject) : Option[CiteObject] = {
+    val objects = citableObjects(obj.urn.dropSelector)
+    val limit = objects.size - 2
+    val idx = indexOf(obj)
+    idx match {
+      case x if x == limit => None
+      case n => {
+        Some(objects(n + 1))
+      }
+    }
+  }
+
+  /** Find preceding citable object in an ordered collection.
+  *
+  * @param obj Find object preceding this.
+  */
+  def prev(obj: CiteObject) : Option[CiteObject] = {
+    val objects = citableObjects(obj.urn.dropSelector)
+    val idx = indexOf(obj)
+    idx match {
+      case 0 => None
+      case n => {
+        Some(objects(n - 1))
+      }
+    }
+  }
+
+  /** Index of a citable object in an ordered collection.
+  *
+  * @param obj A citable object in an ordered collection.
+  */
+  def indexOf(obj: CiteObject) : Int = {
+    val v = citableObjects(obj.urn.dropSelector)
+    v.indexOf(obj)
   }
 
   /** Set of all properties in the repository,
