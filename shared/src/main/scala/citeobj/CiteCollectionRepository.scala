@@ -95,7 +95,6 @@ import js.annotation.JSExport
     buffer.toVector
   }
 
-
   /** Find catalog entry for a given collection.
   *
   * @param collUrn Collection's URN.
@@ -207,39 +206,47 @@ import js.annotation.JSExport
     }
   }
 
-
-
-
-  /** Make a Vector of [[CiteObject]]s for a colletion.
+  /** Make a Vector of [[CiteObject]]s for a collection.
   * If the collection is ordered, the resulting Vector will
   * be sorted by the collection's  ordering property.
   *
   * @param coll Collection URN.
   */
-  def collectionVector(coll: Cite2Urn) = { //:  Vector[CiteObject]  = {
+  def collectionVector(coll: Cite2Urn) :  Vector[CiteObject]  = {
     val v = citableObjects.filter(_.urn ~~ coll)
     if (isOrdered(coll)) {
-      val sortedBy = catalog.collection(coll).get.orderingProperty.get
-      println("Order by " + sortedBy)
-
-      v
+      v.sortWith(sortValue(_) < sortValue(_))
     } else {
       v
     }
-    //println("VECTORL " + v)
   }
 
   /** Find first citable object in an ordered collection.
   *
   * @param coll Collection URN.
   */
-  def first(coll: Cite2Urn) = { //: CitableObject = {
+  def first(coll: Cite2Urn) : CiteObject = {
     if (! isOrdered(coll)) {
       throw CiteException(s"${coll} is not an ordered collection.")
     } else {
-
+      val v = collectionVector(coll)
+      v(0)
     }
   }
+
+  /** Find last citable object in an ordered collection.
+  *
+  * @param coll Collection URN.
+  */
+  def last(coll: Cite2Urn) : CiteObject = {
+    if (! isOrdered(coll)) {
+      throw CiteException(s"${coll} is not an ordered collection.")
+    } else {
+      val v = collectionVector(coll)
+      v.last
+    }
+  }
+
 
   /** Set of all properties in the repository,
   * identified by URN.
