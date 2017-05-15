@@ -20,9 +20,9 @@ property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
 #!citedata
 siglum#sequence#urn#rv#label#codex
+msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
 msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
 msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
-msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
 """
   val repo = CiteCollectionRepository(cex,"#",",")
 
@@ -42,5 +42,30 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val citableObj = repo.citableObject(u)
     assert(citableObj.urn == u)
   }
+
+  it should "create a vector of citable objects for all data in the repository" in {
+    val v = repo.citableObjects
+    assert (v.size == 3)
+  }
+
+  it should "create a vector of citable objects for an ordered collection" in  pending /*{
+    val u = Cite2Urn("urn:cite2:hmt:msA.v1:")
+    val v = repo.collectionVector(u)
+
+  }*/
+
+  it should "find the sequence value of a CiteObject given its orderingProperty " in {
+    val u = Cite2Urn("urn:cite2:hmt:msA.v1:2r")
+    val orderProp = Cite2Urn("urn:cite2:hmt:msA.v1.sequence:")
+    val obj = repo.citableObject(u)
+    assert (repo.sortValue(obj,orderProp) == 3.0)
+  }
+
+  it should "find the sequence value of a CiteObject even if not given its orderingProperty " in {
+    val u = Cite2Urn("urn:cite2:hmt:msA.v1:2r")
+    val obj = repo.citableObject(u)
+    assert (repo.sortValue(obj) == 3.0)
+  }
+
 
 }
