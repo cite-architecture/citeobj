@@ -2,6 +2,8 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
+import scala.scalajs.js
+import js.annotation.JSExport
 
 /** An instance of a property value.
 *
@@ -12,7 +14,7 @@ import edu.holycross.shot.cite._
 * be valid for the property type cataloged for the property of which
 * this is an instance.
 */
-case class CitePropertyValue(urn: Cite2Urn, propertyValue: Any)
+@JSExport  case class CitePropertyValue(urn: Cite2Urn, propertyValue: Any)
 
 
 /** Factory for creating values from string serializations.

@@ -15,7 +15,7 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "citeobj",
       organization := "edu.holycross.shot",
-      version := "1.1.0",
+      version := "1.1.1",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       resolvers += Resolver.jcenterRepo,
       libraryDependencies ++= Seq(
@@ -31,7 +31,6 @@ lazy val crossed = crossProject.in(file(".")).
     ).
     jvmSettings(
       libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.4"
-
     ).
     jsSettings(
       skip in packageJSDependencies := false,

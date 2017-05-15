@@ -2,6 +2,8 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
+import scala.scalajs.js
+import js.annotation.JSExport
 
 /** Trait defining the minimum functionality of a discrete citable object. */
 trait BaseCitable {
@@ -34,6 +36,6 @@ trait BaseCitable {
 * @param propertyList Possibly empty vector of any further [[CitePropertyValue]]s
 * belonging to this object.
 */
-case class CiteObject(urn: Cite2Urn, label: String, propertyList: Vector[CitePropertyValue]) extends BaseCitable {
+@JSExport  case class CiteObject(urn: Cite2Urn, label: String, propertyList: Vector[CitePropertyValue]) extends BaseCitable {
   //
 }
