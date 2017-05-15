@@ -1,4 +1,4 @@
-#`citeobj`: release notes
+# `citeobj`: release notes
 
 **1.2.1**:  Better merge of working branches.
 
