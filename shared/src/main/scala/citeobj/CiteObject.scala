@@ -31,11 +31,13 @@ trait BaseCitable {
 * resulting from twiddling on a [[CiteCollectionData]] or from consulting the
 * [[CiteCatalog]] corresponding to the [[CiteCollectionData]].
 *
-* @param urn Identifier required by [[BaseObject]] trait.
-* @param label Human-readable string required by [[BaseObject]] trait.
+* @param urn Identifier required by [[BaseCitable]] trait.
+* @param label Human-readable string required by [[BaseCitable]] trait.
 * @param propertyList Possibly empty vector of any further [[CitePropertyValue]]s
 * belonging to this object.
 */
-@JSExport  case class CiteObject(urn: Cite2Urn, label: String, propertyList: Vector[CitePropertyValue]) extends BaseCitable {
-  //
+@JSExport  case class CiteObject(
+  urn: Cite2Urn,
+  label: String,
+  propertyList: Vector[CitePropertyValue]) extends BaseCitable {
 }

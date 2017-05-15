@@ -1,8 +1,8 @@
 package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
-import java.net.URL
-import java.io.File
+//import java.net.URL
+//import java.io.File
 
 
 /** Trait for a source of binary image data. */
@@ -37,8 +37,8 @@ case class NetworkedImageSource(val url: URL) extends BinaryImageSource {
 
 /** Citable image object extended by binary data access.
 *
-* @param urn Identifier required by [[BaseObject]] trait.
-* @param label Human-readable string required by [[BaseObject]] trait.
+* @param urn Identifier required by [[BaseCitable]] trait.
+* @param label Human-readable string required by [[BaseCitable]] trait.
 * @param propertyList Possibly empty vector of any further [[CitePropertyValue]]s
 * belonging to this object.
 * @param rights Licensing image for binary image data
