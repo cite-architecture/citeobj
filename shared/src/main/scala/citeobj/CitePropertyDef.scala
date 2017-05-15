@@ -2,6 +2,8 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
+import scala.scalajs.js
+import js.annotation.JSExport
 
 /** Definition of the structure of single CITE property.
 *
@@ -13,7 +15,7 @@ import edu.holycross.shot.cite._
 * for this property.  Note that the list can only be non-empty if the [[CitePropertyType]]
 * for this property is `StringType`.
 */
-case class CitePropertyDef(urn: Cite2Urn, label: String, propertyType: CitePropertyType, vocabularyList: Vector[String] = Vector.empty) {
+@JSExport  case class CitePropertyDef(urn: Cite2Urn, label: String, propertyType: CitePropertyType, vocabularyList: Vector[String] = Vector.empty) {
 
   propertyType match {
     case ControlledVocabType => assert (vocabularyList.nonEmpty)

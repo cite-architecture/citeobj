@@ -17,10 +17,10 @@ class CiteCatalogSpec extends FlatSpec {
   val ccDef = CiteCollectionDef(
     Cite2Urn("urn:cite2:hmt:speeches.v1:"),
     "Speeches in the Iliad",
-    None,
-    Some(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:")),
-    "CC attribution-share-alike",
-    propsVector
+    propsVector,
+    labellingProperty = None,
+    orderingProperty = Some(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:")),
+    license = "CC attribution-share-alike"
   )
 
 

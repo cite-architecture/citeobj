@@ -6,6 +6,8 @@ import edu.holycross.shot.cex._
 import scala.collection.mutable.ArrayBuffer
 
 
+import scala.scalajs.js
+import js.annotation.JSExport
 
 
 /** Data values for a repository of citable objects and properties.
@@ -17,7 +19,7 @@ import scala.collection.mutable.ArrayBuffer
 * @param data vector of property values. Because [[CitePropertyValue]]s have URNs, they can be grouped
 * by object using URN twiddling.
 */
-case class CiteCollectionData (data: Vector[CitePropertyValue]) {
+@JSExport  case class CiteCollectionData (data: Vector[CitePropertyValue]) {
 
   /** Filter collection data by identifying URN.
   */

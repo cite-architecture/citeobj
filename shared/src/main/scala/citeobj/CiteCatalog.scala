@@ -4,12 +4,14 @@ import edu.holycross.shot.cite._
 
 import scala.collection.mutable.ArrayBuffer
 
+import scala.scalajs.js
+import js.annotation.JSExport
 
 /** Catalog defining structure of all collections in a repository.
 *
 * @param collections Defintions of structure of individual collections.
 */
-case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
+@JSExport  case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
 
   /** Number of collections in the repository.
   */
@@ -92,7 +94,13 @@ object CiteCatalog {
     for (c <- collectionTuples)  {
       val urn = c._1
       val properties = propertyVector.filter(_.urn ~~ urn)
-      buffer += CiteCollectionDef(c._1,c._2,c._3,c._4,c._5,properties )
+      buffer += CiteCollectionDef(
+        urn = c._1,
+        collectionLabel = c._2,
+        labellingProperty = c._3,
+        orderingProperty= c._4,
+        license= c._5,
+        propertyDefs = properties )
     }
 
     CiteCatalog(buffer.toVector)

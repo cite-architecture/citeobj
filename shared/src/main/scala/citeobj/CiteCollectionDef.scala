@@ -2,6 +2,8 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
+import scala.scalajs.js
+import js.annotation.JSExport
 
 /** Catalog entry defining a single CITE Collection.
 *
@@ -12,13 +14,14 @@ import edu.holycross.shot.cite._
 * @param license Statement of licensing terms applying to the collection as a whole.
 * @param propertyDefs [[CitePropertyDef]]s for all properties appearing in the collection.
 */
-case class CiteCollectionDef(
+@JSExport  case class CiteCollectionDef(
   urn: Cite2Urn,
   collectionLabel: String,
-  labellingProperty: Option[Cite2Urn] = None,
-  orderingProperty: Option[Cite2Urn] = None,
+  propertyDefs: Vector[CitePropertyDef],
   license: String = "public domain",
-  propertyDefs: Vector[CitePropertyDef]) {
+  labellingProperty: Option[Cite2Urn] = None,
+  orderingProperty: Option[Cite2Urn] = None
+) {
 
 
   /** URN for required labelling property.

@@ -2,6 +2,9 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
+import scala.scalajs.js
+import js.annotation.JSExport
+
 /** A cataloged collection of citable data.
 * In initialization, the constructor validates every
 * object in the data against the structure defined
@@ -10,7 +13,7 @@ import edu.holycross.shot.cite._
 * @param data Collection of data values.
 * @param catalog Documentation of the structure of each collection.
 */
-case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
+@JSExport  case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
   // Mutual validation of data and catalog:
   assert(data.isEmpty == false)
   assert(catalog.isEmpty == false)
