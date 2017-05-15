@@ -28,8 +28,6 @@ import js.annotation.JSExport
     assert(objectValidates(c),"Failed to validate object " + c)
   }
 
-
-
   /** Construct a citable object for an identifying URN.
   *
   * @param obj URN uniquely identifying a single object.
@@ -49,6 +47,18 @@ import js.annotation.JSExport
     val remainingProps = dropUrnProperty -- labeller
 
     CiteObject(objUrn, labelProperty.propertyValue.toString,remainingProps.data )
+  }
+
+  def citableObject(objUrn: Cite2Urn) : CiteObject = {
+    val collectionDef = collectionDefinition(objUrn.dropSelector)
+    collectionDef match {
+      case None => throw CiteObjectException(s"Could not find collection definition for ${objUrn}")
+      case cd: Option[CiteCollectionDef] =>   citableObject(objUrn, cd.get.labelProperty)
+    }
+  }
+
+  def collectionDefinition(collUrn: Cite2Urn) = {
+    catalog.collection(collUrn)
   }
 
   /** True if the given [[CiteObject]] validates against the collection's definition.
@@ -110,6 +120,14 @@ import js.annotation.JSExport
   */
   def collections = {
     catalog.urns
+  }
+
+  /** True if collection is ordered.
+  *
+  * @param coll Collection to test.
+  */
+  def isOrdered(coll: Cite2Urn) = {
+    catalog.isOrdered(coll)
   }
 
   /** Set of all properties in the repository,

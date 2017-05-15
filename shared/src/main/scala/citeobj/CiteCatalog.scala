@@ -36,12 +36,18 @@ import js.annotation.JSExport
     }
   }
 
+  /** True if collection is ordered.
+  *
+  * @param coll Collection to test.
+  */
   def isOrdered(urn : Cite2Urn) : Boolean = {
     collection(urn).get.orderingProperty match {
       case None => false
       case seqProp : Option[Cite2Urn] => true
     }
   }
+
+
 
   /** Set of URNs identifying all properties in the repository.
   */

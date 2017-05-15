@@ -26,12 +26,21 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 """
   val repo = CiteCollectionRepository(cex,"#",",")
 
-  "A Cite Collection repository" should "recognize an ordered collection" in pending
+  "A Cite Collection repository" should "recognize an ordered collection" in {
+    assert(repo isOrdered Cite2Urn("urn:cite2:hmt:msA.v1:"))
+  }
   it should "find the first CiteObject in an ordered collection" in pending
   it should "find the last CiteObject in an ordered collection" in pending
   it should "find the CiteObject following a given element in an ordered collection" in pending
   it should "find the CiteObject preceding a given element in an ordered collection" in pending
   it should "convert an ordered collection to ordered Vector of CiteObjects" in pending
   // and maybe all of those for properties?
+
+
+  it should "create a citable object for an identifier" in {
+    val u = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
+    val citableObj = repo.citableObject(u)
+    assert(citableObj.urn == u)
+  }
 
 }
