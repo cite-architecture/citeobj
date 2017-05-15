@@ -73,7 +73,7 @@ import js.annotation.JSExport
     }
   }
 
-  /** Convert data to a Vector of [[CiteObject]]s.
+  /** Convert all data to a Vector of [[CiteObject]]s.
   *
   * @param ccd [[CiteCollectionData]] to convert to a Vector of [[CiteObject]]s.
   */
@@ -93,6 +93,21 @@ import js.annotation.JSExport
       }
     }
     buffer.toVector
+  }
+
+  /** Make a Vector of [[CiteObject]]s for a collection.
+  * If the collection is ordered, the resulting Vector will
+  * be sorted by the collection's  ordering property.
+  *
+  * @param coll Collection URN.
+  */
+  def citableObjects(coll: Cite2Urn) :  Vector[CiteObject]  = {
+    val v = citableObjects.filter(_.urn ~~ coll)
+    if (isOrdered(coll)) {
+      v.sortWith(sortValue(_) < sortValue(_))
+    } else {
+      v
+    }
   }
 
   /** Find catalog entry for a given collection.
@@ -206,21 +221,6 @@ import js.annotation.JSExport
     }
   }
 
-  /** Make a Vector of [[CiteObject]]s for a collection.
-  * If the collection is ordered, the resulting Vector will
-  * be sorted by the collection's  ordering property.
-  *
-  * @param coll Collection URN.
-  */
-  def collectionVector(coll: Cite2Urn) :  Vector[CiteObject]  = {
-    val v = citableObjects.filter(_.urn ~~ coll)
-    if (isOrdered(coll)) {
-      v.sortWith(sortValue(_) < sortValue(_))
-    } else {
-      v
-    }
-  }
-
   /** Find first citable object in an ordered collection.
   *
   * @param coll Collection URN.
@@ -229,7 +229,7 @@ import js.annotation.JSExport
     if (! isOrdered(coll)) {
       throw CiteException(s"${coll} is not an ordered collection.")
     } else {
-      val v = collectionVector(coll)
+      val v = citableObjects(coll)
       v(0)
     }
   }
@@ -242,11 +242,51 @@ import js.annotation.JSExport
     if (! isOrdered(coll)) {
       throw CiteException(s"${coll} is not an ordered collection.")
     } else {
-      val v = collectionVector(coll)
+      val v = citableObjects(coll)
       v.last
     }
   }
 
+
+  /** Find following citable object in an ordered collection.
+  *
+  * @param obj Find object following this.
+  */
+  def next(obj: CiteObject) : Option[CiteObject] = {
+    val objects = citableObjects(obj.urn.dropSelector)
+    val limit = objects.size - 2
+    val idx = indexOf(obj)
+    idx match {
+      case x if x == limit => None
+      case n => {
+        Some(objects(n + 1))
+      }
+    }
+  }
+
+  /** Find preceding citable object in an ordered collection.
+  *
+  * @param obj Find object preceding this.
+  */
+  def prev(obj: CiteObject) : Option[CiteObject] = {
+    val objects = citableObjects(obj.urn.dropSelector)
+    val idx = indexOf(obj)
+    idx match {
+      case 0 => None
+      case n => {
+        Some(objects(n - 1))
+      }
+    }
+  }
+
+  /** Index of a citable object in an ordered collection.
+  *
+  * @param obj A citable object in an ordered collection.
+  */
+  def indexOf(obj: CiteObject) : Int = {
+    val v = citableObjects(obj.urn.dropSelector)
+    v.indexOf(obj)
+  }
 
   /** Set of all properties in the repository,
   * identified by URN.

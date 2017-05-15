@@ -35,13 +35,26 @@ msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(repo.first(collectionUrn) == expected)
   }
 
-
   it should "find the last CiteObject in an ordered collection" in {
     val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:2r"))
     assert(repo.last(collectionUrn) == expected)
   }
-  it should "find the CiteObject following a given element in an ordered collection" in pending
-  it should "find the CiteObject preceding a given element in an ordered collection" in pending
+
+
+  it should "find the index of an object in an ordered vector" in {
+    val obj = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:2r"))
+    assert(repo.indexOf(obj) == 2)
+  }
+  it should "find the CiteObject following a given element in an ordered collection" in {
+      val obj1 = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
+      val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1v"))
+      assert (repo.next(obj1) == Some(expected))
+  }
+  it should "find the CiteObject preceding a given element in an ordered collection" in {
+    val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
+    val obj1 = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1v"))
+    assert (repo.prev(obj1) == Some(expected))
+  }
 
 
   it should "create a citable object for an identifier" in {
@@ -57,7 +70,7 @@ msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   it should "create a vector of citable objects for an ordered collection" in  {
     val u = Cite2Urn("urn:cite2:hmt:msA.v1:")
-    val v = repo.collectionVector(u)
+    val v = repo.citableObjects(u)
     assert (v(0).urn == Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
   }
 
