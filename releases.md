@@ -1,5 +1,7 @@
 #`citeobj`: release notes
 
+**1.2.1**:  Better merge of working branches.
+
 **1.2.0**: Adds functionality for working with ordered collections.
 
 **1.1.1**: Bug fixes in exposing shared code to ScalaJS environment.
