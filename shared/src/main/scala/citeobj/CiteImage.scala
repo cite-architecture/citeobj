@@ -1,78 +1,14 @@
 package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
-//import java.net.URL
-//import java.io.File
 
 
 /** Trait for a source of binary image data. */
-trait BinaryImageSource {
-  type BinaryImageAccess
-  def binaryImageSource: BinaryImageAccess
+trait BinaryImageSource[T] {
+  def protocol: String   // or Cite2Urn
+  def binaryImageSource(u: Cite2Urn): T
 }
 
-
-// these concrete implementations must be JVM-specific
-//
-
-/** Binary image data from a local file.
-*
-* @param localFile File in local file system with binary image data.
-
-case class LocalImageSource(val localFile: File) extends BinaryImageSource {
-  type BinaryImageAccess = File
-  def binaryImageSource = {localFile}
-}
-*/
-/** Binary image data from a networked source.
-*
-* @param url URL to binary image data.
-
-case class NetworkedImageSource(val url: URL) extends BinaryImageSource {
-  type BinaryImageAccess = URL
-  def binaryImageSource = {url}
-}
-*/
-
-
-/** Citable image object extended by binary data access.
-*
-* @param urn Identifier required by [[BaseCitable]] trait.
-* @param label Human-readable string required by [[BaseCitable]] trait.
-* @param propertyList Possibly empty vector of any further [[CitePropertyValue]]s
-* belonging to this object.
-* @param rights Licensing image for binary image data
-* @param binarySource Source for binary image data.
-*/
-case class CitableImage(urn: Cite2Urn,
-  label: String,
-  propertyList: Vector[CitePropertyValue],
-  rights: String,
-  binarySource: BinaryImageSource
-) extends BaseCitable {
-}
-
-
-/** A collection of citeable images.
-*
-* @param urn URN for the collection.  Must include a
-* version level component for collection, and must not
-* include an object selector component.
-* @param protocol Identifier for protocol to use for binary image access.
-* @param baseAccessPoint A generic [[BinaryImageSource]] from which protocol-specific
-* [[BinaryImageSource]]s can be derived for individual images.
-* @param rightsProperty URN for property including licensing data for binary
-* image data accessed via the defined protocol.
-* @param dataCollection Contents of the generic CITE Collection for this collection.
-*/
-class CiteableImageCollection (
-  val urn: Cite2Urn,
-  val protocol: String,
-  val baseAccessPoint: BinaryImageSource,
-  val rightsProperty: Cite2Urn,
-  val dataCollection: CiteCollectionData
-  )  {
-}
 
 /*
 
