@@ -33,6 +33,6 @@ case class CiteRESTImage(baseUrl: URL)  extends BinaryImageSource[URL] {
   def protocol = "CITE Image service" // or urn??
 
   def binaryImageSource(u: Cite2Urn) = {
-  	 new URL(baseUrl.toString + u)
+  	 new URL(baseUrl.toString + s"request=GetBinaryImage&urn=${u}")
   }
 }
