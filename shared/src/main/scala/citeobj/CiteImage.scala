@@ -69,7 +69,6 @@ object ImageExtensions {
           case "CITE image string" => {
             val ajax = CiteImageAjax(initializer)
             binarySourceMap += (collectionUrn -> ajax)
-            println(s"Map now ${binarySourceMap}")
           }
           case s => {println(s"Defer ${s} to jvm method")}
           //case "CITE image URL" =>
