@@ -14,7 +14,7 @@ import js.annotation.JSExport
 *
 * See for example the implementation in the [[CiteImageAjax]] class.
 */
-abstract class BinaryImageSource[T] {
+abstract class BinaryImageSource[+T] {
   def protocol: String   // or should it be a Cite2Urn?
   def binaryImageSource(u: Cite2Urn): T
 }
@@ -61,16 +61,18 @@ object ImageExtensions {
 
       val columnsByRow = rows.map(_.split(separator).toVector)
       for (columns <- columnsByRow) {
-        val coll  = Cite2Urn(columns(0))
+        val collectionUrn  = Cite2Urn(columns(0))
         val protocol = columns(1)
         val initializer = columns(2)
         val rights = columns(3)
-        val imageSource = protocol match {
-          case "CITE image URL" => {
-            println(s"For ${coll}, implement IMG URL"); None
+        protocol match {
+          case "CITE image string" => {
+            val ajax = CiteImageAjax(initializer)
+            binarySourceMap += (collectionUrn -> ajax)
+            println(s"Map now ${binarySourceMap}")
           }
-          case s => {println(s"Defer ${s} to jvm method"); None}
-          //case "CITE image string" =>
+          case s => {println(s"Defer ${s} to jvm method")}
+          //case "CITE image URL" =>
           //case "local jpeg" =>
         }
       }
