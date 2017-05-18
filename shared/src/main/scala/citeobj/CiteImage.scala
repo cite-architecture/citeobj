@@ -34,6 +34,24 @@ case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
   }
 }
 
+
+/** Implement [[BinaryImageSource]] trait for jpeg files in a local file system.
+*
+* @param baseRef Root directory for local jpeg files.
+*/
+case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
+  def protocol = "Local file string"
+
+  def binaryImageSource(u: Cite2Urn): String = {
+    pathString(u, "jpg")
+  }
+
+  def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
+    baseRef + u.collection + "/" + u.objectComponent + "." + fileExtension
+  }
+}
+
+
 /** Class mapping CITE Collections
 */
 case class ImageExtensions(protocolMap: Map[Cite2Urn,BinaryImageSource[Any]])

@@ -21,6 +21,7 @@ class CiteImageSpec extends FlatSpec {
 urn:cite2:hmt:vaimg.v1:#CITE image URL#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#local jpeg#file://./images#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#local file string#./#urn:cite2:hmt:msA.v1.rights:
 """
 
 
@@ -35,6 +36,14 @@ urn:cite2:hmt:vaimg.v1:#local jpeg#file://./images#urn:cite2:hmt:msA.v1.rights:
     assert(citeImages.binaryImageSource(img) == expectedString)
   }
 
+  "A LocalJpegString object" should "create strings for paths to files in a local system usable in any environment" in {
+    val directoryRoot = "./"
+    val expectedPath = "./vaimg/VA012RN_0013.jpg"
+    val jpegSource = LocalJpegString(directoryRoot)
+    assert(jpegSource.protocol == "Local file string")
+    assert(jpegSource.binaryImageSource(img) == expectedPath)
+  }
+
   "The ImageExtensions object" should "construct ImageExtensions from a CEX source" in {
     val imgExtensions = ImageExtensions(cexSrc).get
     assert(imgExtensions.protocolMap.size == 1)
@@ -43,6 +52,5 @@ urn:cite2:hmt:vaimg.v1:#local jpeg#file://./images#urn:cite2:hmt:msA.v1.rights:
     val binarySource = mappedExample._2
     val expected = "http://www.homermultitext.org/hmtdigital/images?request=GetBinaryImage&urn=urn:cite2:hmt:vaimg:VA012RN_0013"
     assert(binarySource.binaryImageSource(img) == expected)
-
   }
 }

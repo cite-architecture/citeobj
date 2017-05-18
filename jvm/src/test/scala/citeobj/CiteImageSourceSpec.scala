@@ -28,16 +28,5 @@ class CiteImageSourceSpec extends FlatSpec {
     assert(citeImages.binaryImageSource(img) == expectedUrl)
   }
 
-  "An AjaxImage" should "create a string value for an AJAX request" in {
-
-    val serviceUrlString = "http://www.homermultitext.org/hmt-digital/images?"
-    val citeImages = CiteImageAjax(serviceUrlString)
-
-    val expectedString = "http://www.homermultitext.org/hmt-digital/images?request=GetBinaryImage&urn=urn:cite2:hmt:vaimg:VA012RN_0013"
-
-    assert(citeImages.protocol == "AJAX request for CITE Image service")
-    assert(citeImages.binaryImageSource(img) == expectedString)
-  }
-
-//
+  
 }
