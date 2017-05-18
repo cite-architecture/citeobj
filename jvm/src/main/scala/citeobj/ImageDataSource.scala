@@ -1,13 +1,8 @@
 package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
-
-
 import java.net.URL
 import java.io.File
-
-/// "http://www.homermultitext.org/hmt-digital/images?request=GetImagePlus&urn=")
-
 
 /** Implement [[BinaryImageSource]] trait for files in a local file system.
 *

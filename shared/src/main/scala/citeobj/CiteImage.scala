@@ -2,22 +2,55 @@ package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 
+import edu.holycross.shot.cex._
 
-/** Trait for a source of binary image data. */
-trait BinaryImageSource[T] {
-  def protocol: String   // or Cite2Urn
+import scala.scalajs.js
+import js.annotation.JSExport
+
+/** Trait for a source of binary image data.
+* Implementing classes must identify the protocol for access
+* and be able to create an object of appropriate type in that protocol
+* for a given object identified by URN.
+*
+* See for example the implementation in the [[CiteImageAjax]] class.
+*/
+abstract class BinaryImageSource[T] {
+  def protocol: String   // or should it be a Cite2Urn?
   def binaryImageSource(u: Cite2Urn): T
 }
 
-
-/*
-
-    #!imagedata
-
-    # Lines are structured as:
-    # collection#protocol#base URL#rights property
-
-    urn:cite2:hmt:vaimg.v1:#CITE image#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-    urn:cite2:hmt:vaimg.v1:#IIIF#http://www.homermultitext.org/image2/context.json#urn:cite2:hmt:msA.v1.rights:
-    urn:cite2:hmt:vaimg.v1:#local file#file://./images#urn:cite2:hmt:msA.v1.rights:
+/** Implement [[BinaryImageSource]] trait for a CITE Image Service
+* accessed from AJAX calls requiring a simple String rather than
+* a JVM URL object. See a similar example of type URL in the
+* JVM subproject's `CiteRESTImage` class.
+*
+* @param baseUrl Base URL for a CITE Image service.
 */
+case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
+  def protocol = "AJAX request for CITE Image service"
+
+  def binaryImageSource(u: Cite2Urn): String = {
+    baseUrl +  s"request=GetBinaryImage&urn=${u}"
+  }
+}
+
+/** Class mapping CITE Collections
+*/
+case class ImageExtensions(protocolMap: Map[Cite2Urn,BinaryImageSource[Any]])
+
+
+/** Factory for making ImageExtensions from CEX source.
+*/
+object ImageExtensions {
+
+  /* Create ImageExtensions map from CEX source.
+  *
+  * @param cexSrc A String in CEX format including one or more
+  * `imagedata` blocks.
+  */
+  def apply(cexSrc: String) = {
+    val cex = CexParser(cexSrc)
+    val imageblocks = cex.block("imagedata")
+
+  }
+}
