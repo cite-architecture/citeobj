@@ -48,9 +48,37 @@ object ImageExtensions {
   * @param cexSrc A String in CEX format including one or more
   * `imagedata` blocks.
   */
-  def apply(cexSrc: String) = {
-    val cex = CexParser(cexSrc)
-    val imageblocks = cex.block("imagedata")
+  def apply(cexSrc: String, separator: String = "#") : Option[ImageExtensions] = {
 
+    var binarySourceMap = Map[Cite2Urn,BinaryImageSource[Any]]()
+    val cex = CexParser(cexSrc)
+    val imageBlocks = cex.block("imagedata")
+    if (imageBlocks.size == 0 ) {
+      None
+    } else {
+
+      val rows = imageBlocks.mkString("\n").split("\n").filter(_.nonEmpty).toVector
+
+      val columnsByRow = rows.map(_.split(separator).toVector)
+      for (columns <- columnsByRow) {
+        val coll  = Cite2Urn(columns(0))
+        val protocol = columns(1)
+        val initializer = columns(2)
+        val rights = columns(3)
+        val imageSource = protocol match {
+          case "CITE image URL" => {
+            println(s"For ${coll}, implement IMG URL"); None
+          }
+          case s => {println(s"Defer ${s} to jvm method"); None}
+          //case "CITE image string" =>
+          //case "local jpeg" =>
+        }
+      }
+    }
+    if (binarySourceMap.size > 0) {
+      Some(ImageExtensions(binarySourceMap))
+    } else {
+      None
+    }
   }
 }

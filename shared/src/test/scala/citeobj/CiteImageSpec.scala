@@ -16,11 +16,11 @@ class CiteImageSpec extends FlatSpec {
 #!imagedata
 
 # Lines are structured as:
-# collection#protocol#base URL#rights property
+# collection#protocol#image source initializier#rights property
 
-urn:cite2:hmt:vaimg.v1:#CITE image#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#IIIF#http://www.homermultitext.org/image2/context.json#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local file#file://./images#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#CITE image URL#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#local jpeg#file://./images#urn:cite2:hmt:msA.v1.rights:
 """
 
 
@@ -35,5 +35,7 @@ urn:cite2:hmt:vaimg.v1:#local file#file://./images#urn:cite2:hmt:msA.v1.rights:
     assert(citeImages.binaryImageSource(img) == expectedString)
   }
 
-  
+  "The ImageExtensions object" should "construct ImageExtensions from a CEX source" in {
+    val imgExtensions = ImageExtensions(cexSrc)
+  }
 }
