@@ -26,7 +26,7 @@ abstract class BinaryImageSource[+T] {
 *
 * @param baseUrl Base URL for a CITE Image service.
 */
-case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
+@JSExport case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
   def protocol = "AJAX request for CITE Image service"
 
   def binaryImageSource(u: Cite2Urn): String = {
@@ -39,7 +39,7 @@ case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
 *
 * @param baseRef Root directory for local jpeg files.
 */
-case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
+@JSExport case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
   def protocol = "Local file string"
 
   def binaryImageSource(u: Cite2Urn): String = {
@@ -54,7 +54,7 @@ case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
 
 /** Class mapping CITE Collections
 */
-case class ImageExtensions(protocolMap: Map[Cite2Urn,BinaryImageSource[Any]])
+@JSExport case class ImageExtensions(protocolMap: Map[Cite2Urn,BinaryImageSource[Any]])
 
 
 /** Factory for making ImageExtensions from CEX source.
@@ -88,9 +88,14 @@ object ImageExtensions {
             val ajax = CiteImageAjax(initializer)
             binarySourceMap += (collectionUrn -> ajax)
           }
-          case s => {println(s"Defer ${s} to jvm method")}
-          //case "CITE image URL" =>
-          //case "local jpeg" =>
+          case "CITE image URL" => {
+            println("CITE image URL cannot be directly instatiated from CiteImage.\nPlease use one of the classes in this library's JVM subproject to load.")
+          }
+          case "local jpeg" => {
+              println("Local file protocols cannot be directly instatiated from CiteImage.\nPlease use one of the classes in this library's JVM subproject to load.")
+          }
+          case s: String => {println(s"Unrecognized protocol: ${s}.")}
+
         }
       }
     }
