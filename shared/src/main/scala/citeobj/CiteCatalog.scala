@@ -3,7 +3,6 @@ package edu.holycross.shot.citeobj
 import edu.holycross.shot.cite._
 
 import scala.collection.mutable.ArrayBuffer
-
 import scala.scalajs.js
 import js.annotation.JSExport
 

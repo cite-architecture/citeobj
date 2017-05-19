@@ -42,7 +42,7 @@ import js.annotation.JSExport
   *
   * @param obj URN uniquely identifying a single object.
   * @param labelPropertyUrn URN of property to elevate to required label of
-  * a [[CitableObject]].
+  * a [[CiteObject]].
   */
   def citableObject(objUrn: Cite2Urn, labelPropertyUrn : Cite2Urn): CiteObject = {
 
