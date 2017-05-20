@@ -34,13 +34,12 @@ abstract class BinaryImageSource[+T] {
   }
 }
 
-
 /** Implement [[BinaryImageSource]] trait for jpeg files in a local file system.
 *
 * @param baseRef Root directory for local jpeg files.
 */
 @JSExport case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
-  def protocol = "Local file string"
+  def protocol = "Local jpeg string"
 
   def binaryImageSource(u: Cite2Urn): String = {
     pathString(u, "jpg")
@@ -48,61 +47,5 @@ abstract class BinaryImageSource[+T] {
 
   def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
     baseRef + u.collection + "/" + u.objectComponent + "." + fileExtension
-  }
-}
-
-
-/** Class mapping CITE Collections
-*/
-@JSExport case class ImageExtensions(protocolMap: Map[Cite2Urn,BinaryImageSource[Any]])
-
-
-/** Factory for making ImageExtensions from CEX source.
-*/
-object ImageExtensions {
-
-  /* Create ImageExtensions map from CEX source.
-  *
-  * @param cexSrc A String in CEX format including one or more
-  * `imagedata` blocks.
-  */
-  def apply(cexSrc: String, separator: String = "#") : Option[ImageExtensions] = {
-
-    var binarySourceMap = Map[Cite2Urn,BinaryImageSource[Any]]()
-    val cex = CexParser(cexSrc)
-    val imageBlocks = cex.block("imagedata")
-    if (imageBlocks.size == 0 ) {
-      None
-    } else {
-
-      val rows = imageBlocks.mkString("\n").split("\n").filter(_.nonEmpty).toVector
-
-      val columnsByRow = rows.map(_.split(separator).toVector)
-      for (columns <- columnsByRow) {
-        val collectionUrn  = Cite2Urn(columns(0))
-        val protocol = columns(1)
-        val initializer = columns(2)
-        val rights = columns(3)
-        protocol match {
-          case "CITE image string" => {
-            val ajax = CiteImageAjax(initializer)
-            binarySourceMap += (collectionUrn -> ajax)
-          }
-          case "CITE image URL" => {
-            println("CITE image URL cannot be directly instatiated from CiteImage.\nPlease use one of the classes in this library's JVM subproject to load.")
-          }
-          case "local jpeg" => {
-              println("Local file protocols cannot be directly instatiated from CiteImage.\nPlease use one of the classes in this library's JVM subproject to load.")
-          }
-          case s: String => {println(s"Unrecognized protocol: ${s}.")}
-
-        }
-      }
-    }
-    if (binarySourceMap.size > 0) {
-      Some(ImageExtensions(binarySourceMap))
-    } else {
-      None
-    }
   }
 }

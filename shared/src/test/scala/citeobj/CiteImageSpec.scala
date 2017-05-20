@@ -44,13 +44,5 @@ urn:cite2:hmt:vaimg.v1:#local file string#./#urn:cite2:hmt:msA.v1.rights:
     assert(jpegSource.binaryImageSource(img) == expectedPath)
   }
 
-  "The ImageExtensions object" should "construct ImageExtensions from a CEX source" in {
-    val imgExtensions = ImageExtensions(cexSrc).get
-    assert(imgExtensions.protocolMap.size == 1)
-    val mappedExample = imgExtensions.protocolMap.toSeq(0)
-    assert(mappedExample._1 == Cite2Urn("urn:cite2:hmt:vaimg.v1:"))
-    val binarySource = mappedExample._2
-    val expected = "http://www.homermultitext.org/hmtdigital/images?request=GetBinaryImage&urn=urn:cite2:hmt:vaimg:VA012RN_0013"
-    assert(binarySource.binaryImageSource(img) == expected)
-  }
+  
 }
