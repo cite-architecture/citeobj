@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**1.3.1**:  Fixes bugs in parsing CEX of image extensions. and of catalogs of Cite Collections.
+
 **1.3.0**:  Add `ImageExtensions`.
 
 **1.2.1**:  Better merge of working branches.
