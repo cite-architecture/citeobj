@@ -182,6 +182,7 @@ object CiteCatalog {
     } else {
       s.toLowerCase match {
         case "cite2urn" => Cite2UrnType
+        case "ctsurn" => CtsUrnType
         case "number" => NumericType
         case "string" => StringType
         case _ => throw CiteException("Unrecognized attribute value for string: " + s)

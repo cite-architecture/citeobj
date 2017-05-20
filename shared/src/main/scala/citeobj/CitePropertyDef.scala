@@ -15,7 +15,10 @@ import js.annotation.JSExport
 * for this property.  Note that the list can only be non-empty if the [[CitePropertyType]]
 * for this property is `StringType`.
 */
-@JSExport  case class CitePropertyDef(urn: Cite2Urn, label: String, propertyType: CitePropertyType, vocabularyList: Vector[String] = Vector.empty) {
+@JSExport  case class CitePropertyDef(urn: Cite2Urn,
+  label: String,
+  propertyType: CitePropertyType,
+  vocabularyList: Vector[String] = Vector.empty) {
 
   propertyType match {
     case ControlledVocabType => assert (vocabularyList.nonEmpty)

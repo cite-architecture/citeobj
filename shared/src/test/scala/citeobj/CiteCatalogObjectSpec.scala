@@ -103,5 +103,21 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
+  it should "recognize CtsUrn types in cex source" in {
+
+    val cexWithCts =  """#!citecatalog
+collection#urn:cite2:hmt:persName.v1:#People in the Iliad#urn:cite2:hmt:persName.v1.label:##CC-attribution-share-alike
+
+property#urn:cite2:hmt:persName.v1.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:persName.v1.label:#Label#String#
+property#urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
+"""
+    val cat = CiteCatalog(cexWithCts, "#", ",")
+    assert (cat.size == 1)
+    val props = cat.collections(0).propertyDefs
+    val psg = props.filter(_.urn == Cite2Urn("urn:cite2:hmt:persName.v1.psg:"))
+    assert(psg(0).propertyType == CtsUrnType)
+
+  }
   it should "correctly handle ordered collections" in pending
 }
