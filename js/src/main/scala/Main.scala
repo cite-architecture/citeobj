@@ -50,8 +50,8 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
 urn:cite2:hmt:vaimg.v1:#CITE image URL#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local jpeg#file://./images#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local file string#./#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#local jpeg string#./images#urn:cite2:hmt:msA.v1.rights:
 """
 
 
@@ -83,10 +83,15 @@ urn:cite2:hmt:vaimg.v1:#local file string#./#urn:cite2:hmt:msA.v1.rights:
             val mapPair = imgs.get.protocolMap.toSeq(0)
 
             val collection = mapPair._1
-            val binarySource = mapPair._2
+            val sourceVector = mapPair._2
 
             val img = Cite2Urn("urn:cite2:hmt:vaimg:VA012RN_0013")
-            println(s"On collection ${collection}, mapped image ${img} to ${binarySource.binaryImageSource(img)}")
+            println(s"On collection ${collection}, found ${sourceVector.size} image extensions.")
+            println(s"For image ${img}, they produce:")
+            for (s <- sourceVector) {
+              println(s"${s.binaryImageSource(img)}  (${s.protocol})")
+            }
+          
           }
           case _ => println("Failed to make image extensions option")
         }
