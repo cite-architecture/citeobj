@@ -27,8 +27,8 @@ abstract class BinaryImageSource[+T] {
 * @param baseUrl Base URL for a CITE Image service.
 */
 @JSExport case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
-  def protocol = "AJAX request for CITE Image service"
-
+  def protocol = "CITE image string"
+  def label = "AJAX request for CITE Image service"
   def binaryImageSource(u: Cite2Urn): String = {
     baseUrl +  s"request=GetBinaryImage&urn=${u}"
   }

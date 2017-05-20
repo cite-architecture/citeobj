@@ -32,7 +32,7 @@ urn:cite2:hmt:vaimg.v1:#local file string#./#urn:cite2:hmt:msA.v1.rights:
 
     val expectedString = "http://www.homermultitext.org/hmt-digital/images?request=GetBinaryImage&urn=urn:cite2:hmt:vaimg:VA012RN_0013"
 
-    assert(citeImages.protocol == "AJAX request for CITE Image service")
+    assert(citeImages.protocol.toLowerCase == "cite image string")
     assert(citeImages.binaryImageSource(img) == expectedString)
   }
 

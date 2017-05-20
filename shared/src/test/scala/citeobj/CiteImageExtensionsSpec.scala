@@ -50,6 +50,7 @@ urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
     assert(answersVector.toSet == expected)
   }
 
+
   it should "find configured extensions by collection" in {
     val imgExtensions = ImageExtensions(cexSrc).get
     val extensions = imgExtensions.extensions(collection)

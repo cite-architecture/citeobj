@@ -15,7 +15,7 @@ import js.annotation.JSExport
 ) {
 
 
-  /** Find Vector configured image extensions for a given collection.
+  /** Find a Vector of configured image extensions for a given collection.
   * If none found, return an empty Vector.
   *
   * @param collection Collection-level URN identifying a collection.
@@ -26,7 +26,26 @@ import js.annotation.JSExport
     } catch {
       case e: Throwable => Vector[BinaryImageSource[Any]]()
     }
+  }
 
+
+  /** Create a new [[ImageExtensions]] object limited to
+  * mappings for a given protocol.
+  *
+  * @param protocol String identifying the protocol used.
+  */
+  def forProtocol(protocol: String): ImageExtensions = {
+    //ImageExtensions(protocolMap.filter(_._2.protocol == protocol))
+    var filteredMap = Map[Cite2Urn,Vector[BinaryImageSource[Any]]]()
+    for ( (coll, vect) <- protocolMap) {
+      val filteredSources = vect.filter(_.protocol.toLowerCase == protocol.toLowerCase)
+      if (filteredSources.size > 0) {
+        filteredMap += (coll -> filteredSources)
+      }  else {
+        //println(s"No matches for " + )
+      }
+    }
+    ImageExtensions(filteredMap)
   }
 
   /** True if the given collection has one or more image extensions.

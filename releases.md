@@ -1,5 +1,8 @@
 # `citeobj`: release notes
 
+
+**1.4.0**: Adds functionality to `ImageExtensions` to select extensions by protocol, or for individual collections.
+
 **1.3.1**:  Fixes bugs in parsing CEX of image extensions. and of catalogs of Cite Collections.
 
 **1.3.0**:  Add `ImageExtensions`.
