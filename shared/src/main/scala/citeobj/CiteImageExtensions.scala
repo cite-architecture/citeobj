@@ -15,15 +15,21 @@ import js.annotation.JSExport
 ) {
 
 
-  /** Find configured image extensions for a given collection.
+  /** Find Vector configured image extensions for a given collection.
+  * If none found, return an empty Vector.
   *
   * @param collection Collection-level URN identifying a collection.
   */
   def extensions(collection: Cite2Urn): Vector[BinaryImageSource[Any]] = {
-    protocolMap(collection)
+    try {
+      protocolMap(collection)
+    } catch {
+      case e: Throwable => Vector[BinaryImageSource[Any]]()
+    }
+
   }
 
-  /** True is the given collection has one or more image extensions.
+  /** True if the given collection has one or more image extensions.
   *
   * @param collection Collection-level URN identifying a collection.
   */
