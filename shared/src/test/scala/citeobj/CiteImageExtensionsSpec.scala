@@ -35,11 +35,10 @@ urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
     assert(sourceVector.size == 2)
 
     val expected1 = "http://www.homermultitext.org/hmtdigital/images?request=GetBinaryImage&urn=urn:cite2:hmt:vaimg:VA012RN_0013"
-    val expected2 = ""
+    val expected2 = "./images/vaimg/VA012RN_0013.jpg"
 
-    for (s <- sourceVector) {
-      println(s.binaryImageSource(img))
-    }
-    //assert(binarySource.binaryImageSource(img) == expected)
+    val expected = Set(expected1, expected2)
+    val answersVector = sourceVector.map(_.binaryImageSource(img))
+    assert(answersVector.toSet == expected)
   }
 }
