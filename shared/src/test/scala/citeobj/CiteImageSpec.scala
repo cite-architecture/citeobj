@@ -40,9 +40,9 @@ urn:cite2:hmt:vaimg.v1:#local file string#./#urn:cite2:hmt:msA.v1.rights:
     val directoryRoot = "./"
     val expectedPath = "./vaimg/VA012RN_0013.jpg"
     val jpegSource = LocalJpegString(directoryRoot)
-    assert(jpegSource.protocol == "Local file string")
+    assert(jpegSource.protocol == "Local jpeg string")
     assert(jpegSource.binaryImageSource(img) == expectedPath)
   }
 
-  
+
 }
