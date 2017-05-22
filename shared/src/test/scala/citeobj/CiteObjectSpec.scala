@@ -31,7 +31,12 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
     val labelPropertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.label:")
     val citableObj = repo.citableObject(objectUrn,labelPropertyUrn)
-    println(citableObj)
+
+    citableObj match {
+      case co : CiteObject => assert(true)
+      case _ => fail("Should have created a CiteObject")
+    }
+
 
   }
 

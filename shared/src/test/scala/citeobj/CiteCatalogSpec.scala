@@ -69,4 +69,12 @@ class CiteCatalogSpec extends FlatSpec {
   it should "stringify to CEX format" in pending
 
 
+  it should "find the definition for a given property" in {
+    val catalog = CiteCatalog(Vector(ccDef))
+    val singleValue = Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:pers1")
+    val pdef = catalog.propertyDefinition(singleValue)
+    assert(pdef.get.propertyType == Cite2UrnType)
+    assert(pdef.get.label == "Speaker")
+  }
+
 }

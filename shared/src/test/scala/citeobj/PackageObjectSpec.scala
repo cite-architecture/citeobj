@@ -19,4 +19,15 @@ r2a,r2b,r2c
     assert(r1("C3") == "r1c")
   }
 
+  it should "determine if a value is valid for a CtsUrn property definition" in {
+    val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),"Text passage", CtsUrnType)
+    assert(validValue(CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.7"), propDef))
+    assert(validValue("urn:cts:greekLit:tlg0012.tlg001:1.7", propDef) == false)
+  }
+  it should "determine if a value is valid for a Cite2Urn property definition" in pending
+  it should "determine if a value is valid for a Numeric property definition" in pending
+  it should "determine if a value is valid for a Boolean property definition" in pending
+  it should "determine if a value is valid for a String property definition" in pending
+  it should "determine if a value is valid for a controlled vocabulary property definition" in pending
+
 }

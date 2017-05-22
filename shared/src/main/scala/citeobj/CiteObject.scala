@@ -20,7 +20,7 @@ trait BaseCitable {
   /** Vector of any further [[CitePropertyValue]]s belonging to this object.
   * Note that the Vector may be empty.
   */
-  def propertyList: Vector[CitePropertyValue]
+  def propertyList: Vector[CitePropertyImplementation]
 }
 
 
@@ -39,5 +39,5 @@ trait BaseCitable {
 @JSExport  case class CiteObject(
   urn: Cite2Urn,
   label: String,
-  propertyList: Vector[CitePropertyValue]) extends BaseCitable {
+  propertyList: Vector[CitePropertyImplementation]) extends BaseCitable {
 }
