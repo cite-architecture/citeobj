@@ -154,8 +154,8 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     try {
       val repo = CiteCollectionRepository(badData, catalogInfo)
     } catch {
-      case e: java.lang.AssertionError => assert(true)
-      case _ : Throwable => fail("Expected an assertion error")
+      case iae: IllegalArgumentException => assert(true)
+      case t : Throwable => fail("Expected an assertion error but got" + t)
     }
   }
 
@@ -164,7 +164,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
 
   it should "throw an exception if constraints of controlled vocab lists are violated" in pending
-  
+
   it should "be able to construct a repository from CEX source" in {
 
 
