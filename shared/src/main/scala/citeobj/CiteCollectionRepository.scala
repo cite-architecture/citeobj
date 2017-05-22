@@ -38,6 +38,24 @@ import js.annotation.JSExport
     true
   }
 
+  def rangeFilter (filterUrn: Cite2Urn): Vector[CiteObject] = {
+    if (catalog.isOrdered(filterUrn.dropSelector)) {
+      Vector[CiteObject]()
+    } else {
+      throw CiteObjectException(s"Range expression not valid unless collection is ordered: ${filterUrn}")
+    }
+
+  }
+
+  /**
+  */
+  def ~~ (filterUrn: Cite2Urn): Vector[CiteObject] = {
+    if (filterUrn.isObject) {
+      citableObjects.filter(_.urn ~~ filterUrn)
+    } else {
+      rangeFilter(filterUrn)
+    }
+  }
 
   /** Construct a citable object for an identifying URN.
   *
