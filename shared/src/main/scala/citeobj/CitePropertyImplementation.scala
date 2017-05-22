@@ -16,7 +16,7 @@ import js.annotation.JSExport
 * for this property is `StringType`.
 */
 @JSExport  case class CitePropertyImplementation(urn: Cite2Urn,
-  label: String,
+  //label: String,
   propertyDef: CitePropertyDef,
   propertyValue: Any
 ) {

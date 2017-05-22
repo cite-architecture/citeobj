@@ -59,15 +59,17 @@ import js.annotation.JSExport
     val labelProperty = labeller.data(0)
     val remainingProps = dropUrnProperty -- labeller
 
-    println("REAMINING PROPS " + remainingProps)
-    for (p <- remainingProps.data) {
-      // this is the CitePropetyValue:
-      println(s"\t${p}")
-      // get cite property def:
-      println("collection " + p.urn.dropSelector)
+    val propertyImplementations = for (p <- remainingProps.data) yield {
+      // p is the CitePropertyValue, so get the corresponding
+      // CitePropertyDef, and construct an implementation:
+      val pdef = catalog.propertyDefinition(p.urn)
+      val propertyImpl = CitePropertyImplementation(p.urn,pdef.get, p.propertyValue)
+      propertyImpl
     }
-    val v = Vector[CitePropertyImplementation]()
-    CiteObject(objUrn, labelProperty.propertyValue.toString,v )
+    CiteObject(
+      objUrn,
+      labelProperty.propertyValue.toString,
+      propertyImplementations )
   }
 
   /** Construct a citable object for an identifying URN.
