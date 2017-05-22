@@ -60,6 +60,19 @@ import js.annotation.JSExport
   }
 
 
+  /** Find property definition for a given property.
+  *
+  * @param propertyUrn Property to find definition for.
+  */
+  def propertyDefinition(propertyUrn: Cite2Urn): Option[CitePropertyDef] = {
+    val propertyUrns = collections.flatMap(_.propertyDefs.filter(_.urn == propertyUrn.dropSelector))
+    propertyUrns.size match {
+      case 0 => None
+      case 1 => Some(propertyUrns(0))
+      case 2 => throw CiteException(s"Property reference in ${propertyUrn} ambiguous: found ${propertyUrns.size} matches.")
+    }
+  }
+
   /** Create a new catalog composed of entries
   * matching a given URN.
   *

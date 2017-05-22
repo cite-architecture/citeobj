@@ -38,6 +38,7 @@ import js.annotation.JSExport
     true
   }
 
+
   /** Construct a citable object for an identifying URN.
   *
   * @param obj URN uniquely identifying a single object.
@@ -50,7 +51,7 @@ import js.annotation.JSExport
 
     val urnProperty = objUrn.addProperty("urn")
     val identifier = objectData ~~ urnProperty
-    assert(identifier.data.size == 1, s"For ${urnProperty}, found ${identifier.data.size} matches")
+    require(identifier.data.size == 1, s"For ${urnProperty}, found ${identifier.data.size} matches")
     val dropUrnProperty = objectData -- identifier
 
     val labeller = objectData ~~ labelPropertyUrn
@@ -58,7 +59,15 @@ import js.annotation.JSExport
     val labelProperty = labeller.data(0)
     val remainingProps = dropUrnProperty -- labeller
 
-    CiteObject(objUrn, labelProperty.propertyValue.toString,remainingProps.data )
+    println("REAMINING PROPS " + remainingProps)
+    for (p <- remainingProps.data) {
+      // this is the CitePropetyValue:
+      println(s"\t${p}")
+      // get cite property def:
+      println("collection " + p.urn.dropSelector)
+    }
+    val v = Vector[CitePropertyImplementation]()
+    CiteObject(objUrn, labelProperty.propertyValue.toString,v )
   }
 
   /** Construct a citable object for an identifying URN.
