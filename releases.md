@@ -1,6 +1,8 @@
 # `citeobj`: release notes
 
 
+**2.1.0**:  Adds the `~~` function on `CiteCollectionRepository`s.
+
 **2.0.0**: Introduces the `CitePropertyImplementation`.
 
 **1.4.0**: Adds functionality to `ImageExtensions` to select extensions by protocol, or for individual collections.
