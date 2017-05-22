@@ -38,16 +38,34 @@ import js.annotation.JSExport
     true
   }
 
-  def rangeFilter (filterUrn: Cite2Urn): Vector[CiteObject] = {
-    if (catalog.isOrdered(filterUrn.dropSelector)) {
-      Vector[CiteObject]()
-    } else {
-      throw CiteObjectException(s"Range expression not valid unless collection is ordered: ${filterUrn}")
-    }
 
+  /** Find Vector of [[CiteObject]]s matching a given range URN.
+  *
+  * @param filterUrn URN to match.
+  */
+  def rangeFilter (filterUrn: Cite2Urn): Vector[CiteObject] = {
+    if (filterUrn.isRange) {
+      val baseUrn = filterUrn.dropSelector
+      if (catalog.isOrdered(baseUrn)) {
+
+        val obj1 = citableObject(filterUrn.rangeBeginUrn)
+        val obj2 = citableObject(filterUrn.rangeEndUrn)
+        val idx1 = indexOf(obj1)
+        val idx2 = indexOf(obj2) + 1 // "until" value
+        println(s"Slice ${idx1}-${idx2}")
+        citableObjects(baseUrn).slice(idx1 , idx2)
+
+      } else {
+        throw CiteObjectException(s"Range expression not valid unless collection is ordered: ${filterUrn}")
+      }
+    } else {
+      throw  CiteObjectException(s"Function rangeFilter only applicable to range expressions: ${filterUrn}")
+    }
   }
 
-  /**
+  /** Find Vector of [[CiteObject]]s matching a given URN.
+  *
+  * @param filterUrn URN to match.
   */
   def ~~ (filterUrn: Cite2Urn): Vector[CiteObject] = {
     if (filterUrn.isObject) {

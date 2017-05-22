@@ -20,8 +20,8 @@ property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
 #!citedata
 siglum#sequence#urn#rv#label#codex
-msA#4#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2 recto#urn:cite2:hmt:codex:msA
-msA#3#urn:cite2:hmt:msA.v1:2v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2 verso#urn:cite2:hmt:codex:msA
+msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2 recto#urn:cite2:hmt:codex:msA
+msA#4#urn:cite2:hmt:msA.v1:2v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2 verso#urn:cite2:hmt:codex:msA
 msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
 msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
 msA#5#urn:cite2:hmt:msA.v1:3r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 3 recto#urn:cite2:hmt:codex:msA
@@ -48,9 +48,26 @@ msA#6#urn:cite2:hmt:msA.v1:3v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(selection.size == 1)
   }
 
-  it should "match an object-level URN on a range" in pending
+  it should "match a single-object URN with extension" in pending
+
+  it should "match an object-level URN on a range" in {
+    val rangeUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v-3r")
+    val selection = repo ~~ rangeUrn
+    assert(selection.size == 4)
+
+    val expectedUrns = Vector(
+      Cite2Urn("urn:cite2:hmt:msA.v1:1v"),
+      Cite2Urn("urn:cite2:hmt:msA.v1:2r"),
+      Cite2Urn("urn:cite2:hmt:msA.v1:2v"),
+      Cite2Urn("urn:cite2:hmt:msA.v1:3r")
+    )
+
+    assert (selection.map(_.urn) == expectedUrns)
+  }
   it should "match a version-level URN on a range" in pending
   it should "match a property-level URN on a range" in pending
+
+  it should "match a range URN with extension" in pending
 
   it should "throw an exception if matching a range URN on an unordered collection" in pending
 
