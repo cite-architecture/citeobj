@@ -9,10 +9,18 @@ import edu.holycross.shot.cite._
 class CiteRepositorySourceSpec extends FlatSpec {
 
 
-  "A data reader" should "read cataloged delimited data from a CEX file" in {
+  "A CiteRepositorySource" should "created a CiteCollectionRepository from a file in CEx format" in pending /*{
     val  f = "jvm/src/test/resources/p12r.cex"
-    
-  } /* {
+    val repo = CiteRepositorySource.fromFile(f)
+    repo match {
+      case ccr: CiteCollectionRepository => assert(true)
+      case _ => fail("Should have made CiteCollectionRepository")
+    }*/
+
+
+/* 
+
+  } {
     val cat = CiteCatalogSource.fromFile("jvm/src/test/resources/collections.xml")
     val collDef = cat.collection(Cite2Urn("urn:cite2:hmt:msA.v1:")).get
     val fName = "jvm/src/test/resources/venetusA-v1.tsv"
