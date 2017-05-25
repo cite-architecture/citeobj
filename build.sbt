@@ -30,7 +30,7 @@ lazy val crossed = crossProject.in(file(".")).
       )
     ).
     jvmSettings(
-      libraryDependencies += "com.github.tototoshi" %% "scala-csv" % "1.3.4"
+    
     ).
     jsSettings(
       skip in packageJSDependencies := false,
