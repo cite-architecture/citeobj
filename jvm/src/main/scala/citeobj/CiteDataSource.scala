@@ -4,13 +4,15 @@ import edu.holycross.shot.cite._
 import scala.io.Source
 import java.io._
 
-import com.github.tototoshi.csv._
+//import com.github.tototoshi.csv._
 
 import scala.collection.mutable.ArrayBuffer
 
 object CiteDataSource {
   // write api docs for these objects...
   //
+
+  /*
   implicit object PoundFormat extends DefaultCSVFormat {
     override val delimiter = '#'
   }
@@ -22,6 +24,7 @@ object CiteDataSource {
     override val delimiter = '\t'
   }
 
+*/
 
 
 
@@ -36,11 +39,14 @@ object CiteDataSource {
   */
   def fromFile(f: String, collectionDefinition: CiteCollectionDef, delimiter: Char = '#') : CiteCollectionData  = {
 
+    val lns = Source.fromFile(f).getLines.toVector
+    CiteCollectionData(lns.mkString("\n"))
+/*
     delimiter match {
       case '#' => {
         val reader = CSVReader.open(f) (PoundFormat)
         val vectorList = for (propertyMap <- reader.allWithHeaders() ) yield {
-          
+
           CiteCollectionData.propertiesForMappedText(propertyMap, collectionDefinition)
         }
         CiteCollectionData(vectorList.flatMap( v => v).toVector)
@@ -64,6 +70,6 @@ object CiteDataSource {
         //collectionForMappedText(reader.allWithHeaders().toVector, collectionDefinition)
       }
     }
+*/
   }
-
 }
