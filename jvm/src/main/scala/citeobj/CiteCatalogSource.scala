@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
 /** Factory for creating CITE collection catalogs
 * from various sources.
 */
-object CiteCatalogSource {
+  @deprecated ("XML catalogs deprecated in favor of CEX format", "2.1.0")   object CiteCatalogSource {
 
   /** Create a CITE collection catalog from a file.
   *
@@ -27,7 +27,7 @@ object CiteCatalogSource {
   *
   * @param xml String of XML validating against CITE Catalog schema.
   */
-  @deprecated ("XML catalogs deprecated in favor of CEX format", "2.1.0")  def fromXmlString(xml: String): CiteCatalog = {
+@deprecated ("XML catalogs deprecated in favor of CEX format", "2.1.0")   def fromXmlString(xml: String): CiteCatalog = {
     fromNodeSeq(XML.loadString(xml))
   }
 

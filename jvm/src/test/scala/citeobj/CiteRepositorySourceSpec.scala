@@ -6,7 +6,7 @@ import edu.holycross.shot.cite._
 
 /**
 */
-class CiteDataSourceSpec extends FlatSpec {
+class CiteRepositorySourceSpec extends FlatSpec {
 
 
   "A data reader" should "read cataloged delimited data from a CEX file" in {
