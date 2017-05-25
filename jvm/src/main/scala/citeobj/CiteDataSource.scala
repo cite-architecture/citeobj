@@ -1,15 +1,15 @@
 package edu.holycross.shot.citeobj
 
-//import edu.holycross.shot.cite._
-import scala.io.Source
-//import java.io._
 
-//import scala.collection.mutable.ArrayBuffer
+import scala.io.Source
+
+
+
 
 
 /** Factory for creating [[CiteCollectionData]].
 */
-object CiteDataSource {
+  @deprecated ("CiteDataSource deprecated in favor of CiteRepositorySource", "3.0.0")  object CiteDataSource {
 
   /** Create [[CiteCollectionData]] from a delimited text file.
   *
@@ -17,7 +17,7 @@ object CiteDataSource {
   * @param collectionDefinition [[CiteCollectionDef]] for this collection.
   * @param delimiter Character used as column delimiter.
   */
-  def fromFile(f: String, collectionDefinition: CiteCollectionDef, delimiter: Char = '#') : CiteCollectionData  = {
+    @deprecated ("CiteDataSource deprecated in favor of CiteRepositorySource", "3.0.0")  def fromFile(f: String, collectionDefinition: CiteCollectionDef, delimiter: Char = '#') : CiteCollectionData  = {
     val lns = Source.fromFile(f).getLines.toVector
     CiteCollectionData(lns.mkString("\n"))
   }

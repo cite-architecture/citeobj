@@ -4,14 +4,13 @@ import edu.holycross.shot.cite._
 
 
 
-/**
-*/
+
 class CiteDataSourceSpec extends FlatSpec {
 
 
   "A data reader" should "read cataloged delimited data from a CEX file" in {
     val  f = "jvm/src/test/resources/p12r.cex"
-    
+
   } /* {
     val cat = CiteCatalogSource.fromFile("jvm/src/test/resources/collections.xml")
     val collDef = cat.collection(Cite2Urn("urn:cite2:hmt:msA.v1:")).get
