@@ -26,7 +26,7 @@ lazy val crossed = crossProject.in(file(".")).
 
         "edu.holycross.shot.cite" %%% "xcite" % "2.4.0",
         "edu.holycross.shot" %%% "orca" % "3.0.0",
-        "edu.holycross.shot" %%% "cex" % "3.0.0"
+        "edu.holycross.shot" %%% "cex" % "4.1.0"
       )
     ).
     jvmSettings(

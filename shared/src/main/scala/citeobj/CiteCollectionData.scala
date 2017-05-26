@@ -112,10 +112,10 @@ object CiteCollectionData {
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionData = {
     val cex = CexParser(cexSource)
 
-    val catalogSrcString = cex.block("citecatalog").filter(_.nonEmpty).mkString("\n")
+    val catalogSrcString = cex.blockString("citecatalog")
     val catalog = CiteCatalog(catalogSrcString, delimiter, delimiter2)
     //println("catalog properties = " + catalog.properties)
-    val dataSets = cex.block("citedata")
+    val dataSets = cex.blockVector("citedata")
     //println("data block " + dataSets)
     val propBuffer = ArrayBuffer[CitePropertyValue]()
     for (ds <- dataSets){
@@ -157,7 +157,7 @@ object CiteCollectionData {
 
     } else {
       val lcHeader = dataLines(0).split(delimiter).toVector.map(_.trim).map(_.toLowerCase)
-      if (lcHeader.size < 0) {
+      if (lcHeader.size < 1) {
         throw CiteObjectException("No header found for required property 'urn'")
       } else {
         val columnIdx = lcHeader.indexOf("urn")
