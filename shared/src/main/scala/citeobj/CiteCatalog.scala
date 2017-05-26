@@ -40,9 +40,15 @@ import js.annotation.JSExport
   * @param coll Collection to test.
   */
   def isOrdered(urn : Cite2Urn) : Boolean = {
-    collection(urn).get.orderingProperty match {
-      case None => false
-      case seqProp : Option[Cite2Urn] => true
+
+    collection(urn.dropProperty) match {
+      case None => throw CiteObjectException(s"No collection ${urn} cataloged.")
+      case u: Option[edu.holycross.shot.citeobj.CiteCollectionDef] => {
+        u.get.orderingProperty match {
+          case None => false
+          case seqProp : Option[Cite2Urn] => true
+        }
+      }
     }
   }
 

@@ -46,13 +46,14 @@ import js.annotation.JSExport
   def rangeFilter (filterUrn: Cite2Urn): Vector[CiteObject] = {
     if (filterUrn.isRange) {
       val baseUrn = filterUrn.dropSelector
+      val simpleObjectUrn = filterUrn.dropExtensions
       if (catalog.isOrdered(baseUrn)) {
 
-        val obj1 = citableObject(filterUrn.rangeBeginUrn)
-        val obj2 = citableObject(filterUrn.rangeEndUrn)
+        val obj1 = citableObject(simpleObjectUrn.rangeBeginUrn.dropProperty)
+        val obj2 = citableObject(simpleObjectUrn.rangeEndUrn.dropProperty)
+
         val idx1 = indexOf(obj1)
         val idx2 = indexOf(obj2) + 1 // "until" value
-        println(s"Slice ${idx1}-${idx2}")
         citableObjects(baseUrn).slice(idx1 , idx2)
 
       } else {
