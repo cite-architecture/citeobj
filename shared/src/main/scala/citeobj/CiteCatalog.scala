@@ -75,7 +75,7 @@ import js.annotation.JSExport
     propertyUrns.size match {
       case 0 => None
       case 1 => Some(propertyUrns(0))
-      case 2 => throw CiteException(s"Property reference in ${propertyUrn} ambiguous: found ${propertyUrns.size} matches.")
+      case 2 => throw CiteObjectException(s"Property reference in ${propertyUrn} ambiguous: found ${propertyUrns.size} matches.")
     }
   }
 
@@ -195,7 +195,7 @@ object CiteCatalog {
     if (vocabList) {
       s.toLowerCase match {
         case "string" => ControlledVocabType
-        case _ => throw CiteException("Controlled vocabulary lists only allowed with string type data.")
+        case _ => throw CiteObjectException("Controlled vocabulary lists only allowed with string type data.")
       }
 
     } else {
@@ -204,7 +204,7 @@ object CiteCatalog {
         case "ctsurn" => CtsUrnType
         case "number" => NumericType
         case "string" => StringType
-        case _ => throw CiteException("Unrecognized attribute value for string: " + s)
+        case _ => throw CiteObjectException("Unrecognized attribute value for string: " + s)
       }
     }
   }

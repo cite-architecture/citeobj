@@ -84,6 +84,9 @@ import js.annotation.JSExport
   */
   def citableObject(objUrn: Cite2Urn, labelPropertyUrn : Cite2Urn): CiteObject = {
 
+    require(objUrn.version != "", s"Cannot make citable object from urn without version identifier: ${objUrn}")
+
+
     val objectData = data ~~ objUrn
 
     val urnProperty = objUrn.addProperty("urn")
@@ -114,6 +117,9 @@ import js.annotation.JSExport
   * @param obj URN uniquely identifying a single object.
   */
   def citableObject(objUrn: Cite2Urn) : CiteObject = {
+    
+    require(objUrn.version != "", s"Cannot make citable object from urn without version identifier: ${objUrn}")
+
     val collectionDef = collectionDefinition(objUrn.dropSelector)
     collectionDef match {
       case None => throw CiteObjectException(s"Could not find collection definition for ${objUrn}")
@@ -275,7 +281,7 @@ import js.annotation.JSExport
   */
   def first(coll: Cite2Urn) : CiteObject = {
     if (! isOrdered(coll)) {
-      throw CiteException(s"${coll} is not an ordered collection.")
+      throw CiteObjectException(s"${coll} is not an ordered collection.")
     } else {
       val v = citableObjects(coll)
       v(0)
@@ -288,7 +294,7 @@ import js.annotation.JSExport
   */
   def last(coll: Cite2Urn) : CiteObject = {
     if (! isOrdered(coll)) {
-      throw CiteException(s"${coll} is not an ordered collection.")
+      throw CiteObjectException(s"${coll} is not an ordered collection.")
     } else {
       val v = citableObjects(coll)
       v.last
