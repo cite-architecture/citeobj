@@ -65,6 +65,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   it should "throw an AssertionError if the catalog is empty" in {
     try {
       val repo = CiteCollectionRepository(dataCollection, CiteCatalog(Vector.empty))
+      fail("Should not have created repository")
     } catch {
       case emptyErr: java.lang.AssertionError => assert(true)
       case er: Throwable => fail("Expected assertion error")
@@ -83,6 +84,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   it should "throw an AssertionError if the data set is empty" in {
     try {
       val repo = CiteCollectionRepository(CiteCollectionData(Vector.empty), catalogInfo)
+      fail("Should not have created repository")
     } catch {
       case emptyErr: java.lang.AssertionError => assert(true)
       case er: Throwable => fail("Expected assertion error")
@@ -96,6 +98,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
     try {
       val repo = CiteCollectionRepository(CiteCollectionData(shortData), catalogInfo)
+      fail("Should not have created repository")
     } catch {
       case emptyErr: java.lang.AssertionError => assert(true)
       case er: Throwable => fail("Expected assertion error")
@@ -133,6 +136,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val badData = CiteCollectionData(shortData)
     try {
       val repo = CiteCollectionRepository(badData, catalogInfo)
+      fail("Should not have created repository")
     } catch {
       case e: java.lang.AssertionError => assert(true)
       case _ : Throwable => fail("Expected an assertion error")
@@ -153,23 +157,70 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val badData = CiteCollectionData(badDataType)
     try {
       val repo = CiteCollectionRepository(badData, catalogInfo)
+      fail("Should not have created repository")
     } catch {
       case iae: IllegalArgumentException => assert(true)
       case t : Throwable => fail("Expected an assertion error but got" + t)
     }
   }
 
-  it should "validate controlled vocab lists" in pending
+  it should "throw an exception if constraints of controlled vocab lists are violated" in {
+
+    val badVocab =  """#!citecatalog
+collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
+property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:msA.v1.label:#Label#String#
+property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citedata
+siglum#sequence#urn#rv#label#codex
+msA#1#urn:cite2:hmt:msA.v1:1r#rectorated#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
+"""
+    try {
+      val repo = CiteCollectionRepository(badVocab,"#",",")
+      fail("Should not have created repository")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Value rectorated is not in controlled vocabulary recto, verso")
+      case t: Throwable => fail(s"Should have thrown CiteObjectException, but threw ${t}")
+    }
+  }
 
 
 
-  it should "throw an exception if constraints of controlled vocab lists are violated" in pending
+
+
+
+      it should "validate controlled vocab lists" in {
+        val goodVocab =  """#!citecatalog
+collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
+property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:msA.v1.label:#Label#String#
+property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citedata
+siglum#sequence#urn#rv#label#codex
+msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
+"""
+
+    val repo = CiteCollectionRepository(goodVocab,"#",",")
+    val obj = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
+    assert(obj.propertyList.filter(_.urn == Cite2Urn("urn:cite2:hmt:msA.v1.rv:1r"))(0).propertyValue == "recto")
+  }
 
   it should "be able to construct a repository from CEX source" in {
-
-
-
     val repo = CiteCollectionRepository(cex,"#",",")
+    repo match {
+      case ccr: CiteCollectionRepository => assert(true)
+      case _ => fail("Should have created CiteCollectionRepository")
+    }
   }
 
 
