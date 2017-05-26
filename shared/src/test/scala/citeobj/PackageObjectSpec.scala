@@ -24,10 +24,31 @@ r2a,r2b,r2c
     assert(validValue(CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.7"), propDef))
     assert(validValue("urn:cts:greekLit:tlg0012.tlg001:1.7", propDef) == false)
   }
-  it should "determine if a value is valid for a Cite2Urn property definition" in pending
-  it should "determine if a value is valid for a Numeric property definition" in pending
-  it should "determine if a value is valid for a Boolean property definition" in pending
-  it should "determine if a value is valid for a String property definition" in pending
-  it should "determine if a value is valid for a controlled vocabulary property definition" in pending
+  it should "determine if a value is valid for a Cite2Urn property definition" in {
+    val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.speech:"),"Speech", Cite2UrnType)
+    val okUrn = Cite2Urn("urn:cite2:hmt:speeches.v1.speech:s1")
+    assert(validValue(okUrn, propDef))
+    assert(validValue("urn:cite2:hmt:speeches.v1.speech:", propDef) == false)
+  }
+  it should "determine if a value is valid for a Numeric property definition" in {
+    val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.seq:"),"Sequence", NumericType)
+    assert(validValue(3,propDef))
+    assert(validValue("3",propDef) == false)
+  }
+  it should "determine if a value is valid for a Boolean property definition" in {
+    val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.paragraphed:"),"Marked by paragraphos", BooleanType)
+    assert(validValue(true,propDef))
+    assert(validValue("true", propDef) == false)
+  }
+  it should "determine if a value is valid for a String property definition" in {
+    val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.label:"),"Label", StringType)
+    assert(validValue("3",propDef))
+    assert(validValue(true,propDef) == false)
+  }
+  it should "determine if a value is valid for a controlled vocabulary property definition" in {
+    val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.type:"),"Type of speech",ControlledVocabType, Vector("battle", "council"))
+    assert(validValue("battle",propDef))
+    assert(validValue("Battle",propDef) == false)
+  }
 
 }
