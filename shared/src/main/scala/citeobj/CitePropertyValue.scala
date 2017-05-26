@@ -14,7 +14,10 @@ import js.annotation.JSExport
 * be valid for the property type cataloged for the property of which
 * this is an instance.
 */
-@JSExport  case class CitePropertyValue(urn: Cite2Urn, propertyValue: Any)
+@JSExport  case class CitePropertyValue(urn: Cite2Urn, propertyValue: Any) {
+  require(urn.property != "", s"${urn} must include property component")
+  require(urn.objectComponent != "", s"${urn} must include property component")
+}
 
 
 /** Factory for creating values from string serializations.
