@@ -45,7 +45,7 @@ trait BaseCitable {
     *
     * @param propertyUrn Property to find value for.
     */
-    def getValue(propertyUrn: Cite2Urn): Any = {
+    def propertyValue(propertyUrn: Cite2Urn): Any = {
       val matches = propertyList.filter(_.urn == propertyUrn)
       require(matches.size == 1, s"Exception: found s${matches.size} match(es) for ${propertyUrn}")
       matches(0).propertyValue

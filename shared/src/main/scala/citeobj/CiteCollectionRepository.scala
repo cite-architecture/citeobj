@@ -117,7 +117,7 @@ import js.annotation.JSExport
   * @param obj URN uniquely identifying a single object.
   */
   def citableObject(objUrn: Cite2Urn) : CiteObject = {
-    
+
     require(objUrn.version != "", s"Cannot make citable object from urn without version identifier: ${objUrn}")
 
     val collectionDef = collectionDefinition(objUrn.dropSelector)
@@ -347,6 +347,14 @@ import js.annotation.JSExport
   */
   def properties = {
     data.properties
+  }
+
+  /** Find value of a given property.
+  *
+  * @param propertyUrn Property to find value for.
+  */
+  def propertyValue(propertyUrn: Cite2Urn): Any = {
+    data.propertyValue(propertyUrn)
   }
 }
 

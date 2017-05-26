@@ -88,7 +88,7 @@ import js.annotation.JSExport
   def propertyValue(propUrn: Cite2Urn) = {
     val selectProperty  = this  ~~ propUrn
     selectProperty.size match {
-      case 1 =>
+      case 1 => selectProperty.data(0).propertyValue
       case 0 => throw CiteObjectException("No property value found matching " + propUrn)
       case _ => throw CiteObjectException("Too general URN: found " + selectProperty.size + " matches.")
     }
