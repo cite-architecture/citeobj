@@ -223,5 +223,7 @@ msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
   }
 
+  it should "find the value of a property identified by URN" in pending
+
 
 }

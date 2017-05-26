@@ -65,9 +65,18 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
     val citableObj = repo.citableObject(objectUrn)
     assert(citableObj.label.size > 0)
-    println(citableObj.label)
+    assert(citableObj.label == "Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v")
 
   }
 
+
+  it should "find the value of a given property" in {
+
+    val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
+    val propertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.rv:1v")
+    val citableObj = repo.citableObject(objectUrn)
+
+    assert(citableObj.getValue(propertyUrn) == "verso")
+  }
 
 }
