@@ -374,7 +374,6 @@ object CiteCollectionRepository {
   * if any.
   */
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionRepository = {
-    //data: CiteCollectionData, catalog: CiteCatalog
     val data = CiteCollectionData(cexSource,delimiter,delimiter2)
     val catalog = CiteCatalog(cexSource,delimiter,delimiter2)
     CiteCollectionRepository(data,catalog)
