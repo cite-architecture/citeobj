@@ -178,6 +178,5 @@ property#urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
     def collDef = cat.collection(imgColl)
     assert(collDef.get.license == "CC-attribution-share-alike")
   }
-  it should "throw an exception if URNs are not correctly  formatted" in pending
-
+  
 }
