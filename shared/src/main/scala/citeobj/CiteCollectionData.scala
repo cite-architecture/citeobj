@@ -111,9 +111,7 @@ object CiteCollectionData {
   */
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionData = {
     val cex = CexParser(cexSource)
-
-    val catalogSrcString = cex.blockString("citecatalog")
-    val catalog = CiteCatalog(catalogSrcString, delimiter, delimiter2)
+    val catalog = CiteCatalog(cexSource, delimiter, delimiter2)
     //println("catalog properties = " + catalog.properties)
     val dataSets = cex.blockVector("citedata")
     //println("data block " + dataSets)

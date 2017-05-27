@@ -36,6 +36,4 @@ class CitePropertyValueSpec extends FlatSpec {
     }
   }
 
-
-
 }

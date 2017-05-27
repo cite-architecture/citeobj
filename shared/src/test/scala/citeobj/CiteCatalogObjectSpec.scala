@@ -86,7 +86,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
 
   it should "create a CiteCatalog from a CEX citecatalog block" in {
-    val cex = collectionLine + "\n" + property1Line + "\n"+ property2Line + "\n"
+    val cex = "#!citecatalog\n" + collectionLine + "\n" + property1Line + "\n"+ property2Line + "\n"
 
     val cat = CiteCatalog(cex, columnDelimiter = ",", listDelimiter = "#")
     assert (cat.size == 1)

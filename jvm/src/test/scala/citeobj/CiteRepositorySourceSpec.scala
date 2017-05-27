@@ -9,8 +9,13 @@ import edu.holycross.shot.cite._
 class CiteRepositorySourceSpec extends FlatSpec {
 
 
-  "A CiteRepositorySource" should "created a CiteCollectionRepository from a file in CEX format" in {
-    val f = ""
+  "A CiteRepositorySource" should "create a CiteCollectionRepository from a file in CEX format" in {
+    val f = "jvm/src/test/resources/p12r.cex"
+    val repo = CiteRepositorySource.fromFile(f)
+    repo match {
+      case ccr : CiteCollectionRepository => assert(true)
+      case _ => fail("Should have created a CiteCollectionRepository")
+    }
 
   } /*{
     val  f = "jvm/src/test/resources/p12r.cex"

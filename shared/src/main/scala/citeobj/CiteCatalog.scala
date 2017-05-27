@@ -6,6 +6,9 @@ import scala.collection.mutable.ArrayBuffer
 import scala.scalajs.js
 import js.annotation.JSExport
 
+
+import edu.holycross.shot.cex._
+
 /** Catalog defining structure of all collections in a repository.
 *
 * @param collections Defintions of structure of individual collections.
@@ -106,16 +109,17 @@ object CiteCatalog {
   */
   def apply(src: String, columnDelimiter: String = "#", listDelimiter: String = "," ) : CiteCatalog = {
     val buffer = ArrayBuffer[CiteCollectionDef]()
-    //println("Using delimiter " + columnDelimiter)
+    val cex  = CexParser(src)
+    val catalogBlock = cex.blockString("citecatalog")
 
-    val lines = src.split("\n").toVector.filter(_.nonEmpty)
+    val lines = catalogBlock.split("\n")
 
     //println("LILNES: " + lines)
     val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
     //println("COLS BY ROWS " + columnsByRows)
     val propertyEntries = columnsByRows.filter(_(0) == "property")
     //println("Work on prop Entries " + propertyEntries + " from " + columnsByRows)
-    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) )
+    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) ).toVector
 
     val collectionEntries = columnsByRows.filter(_(0) == "collection")
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
