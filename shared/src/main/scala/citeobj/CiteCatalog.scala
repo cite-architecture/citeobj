@@ -124,7 +124,6 @@ object CiteCatalog {
     val collectionEntries = columnsByRows.filter(_(0) == "collection")
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
 
-    //println(s"WROK ON PROP VECT ${propertyVector} and COLL TUPLES ${collectionTuples}")
     for (c <- collectionTuples)  {
       val urn = c._1
       val properties = propertyVector.filter(_.urn ~~ urn)
