@@ -63,8 +63,6 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
   }
 
-  it should "correctly parse delimited text when options are represented by null strings" in pending
-  it should "throw an exception if URNs are not correctly  formatted" in pending
 
   it should "convert a column of strings to a PropertyDefinition" in {
     val cols = property2Line.split(",").toVector.drop(1)
@@ -119,7 +117,7 @@ property#urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
     assert(psg(0).propertyType == CtsUrnType)
 
   }
-  it should "correctly handle ordered collections" in pending
+
 
   it should "work with p12 demo CEX" in {
     val p12catalog = """
@@ -168,4 +166,8 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017#Natural light photograph of Venetus 
       case _ => fail("Should have created a CiteCatalog")
     }
   }
+  it should "correctly handle ordered collections" in pending
+  it should "correctly parse delimited text when options are represented by null strings" in pending
+  it should "throw an exception if URNs are not correctly  formatted" in pending
+
 }

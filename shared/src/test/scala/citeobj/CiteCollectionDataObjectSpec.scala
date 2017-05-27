@@ -52,7 +52,6 @@ msA,2,urn:cite2:hmt:msA.v1:1v,verso,Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert (CiteCollectionData.collectionForDataBlock(dataBlock,delimiter = ",") == Cite2Urn("urn:cite2:hmt:msA.v1:"))
   }
 
-  it should "recognized case-insensitive match on required URN property " in pending
 
   it should "work with the p12 demo CEX set" in {
     val p12cex = """
@@ -102,4 +101,39 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017#Natural light photograph of Venetus 
     }
 
   }
+
+
+    it should "recognize case-insensitive match on required URN property " in {
+
+val dataBlocks = """#!citelibrary
+name#Demo of DSE structure: Venetus A manuscript, folio 12 recto
+urn#urn:cite2:dse:demo.2017a:va12r
+license#public domain
+#!citecatalog
+# Text-bearing surfaces:
+collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:msA.v1.label:#Label#String#
+property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+# Documentary images:
+collection#urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
+property#urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+property#urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+#!citedata
+#Data block for the collection of text-bearing surfaces.
+siglum#sequence#Urn#rv#label#codex
+msA#1#urn:cite2:hmt:msA.v1:12r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 12 recto#urn:cite2:hmt:codex:msA
+#!citedata
+# Data block for the collection of documentary images.
+Urn#caption#rights
+urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017#Natural light photograph of Venetus A: Marcianus Graecus Z. 454 (= 822), folio 12, recto#This image was derived from an original ©2007, Biblioteca Nazionale Marciana, Venezie, Italia. The derivative image is ©2010, Center for Hellenic Studies. Original and derivative are licensed under the Creative Commons Attribution-Noncommercial-Share Alike 3.0 License. The CHS/Marciana Imaging Project was directed by David Jacobs of the British Library.
+"""
+      val collData = CiteCollectionData(dataBlocks, delimiter = "#")
+      val expected = Set(Cite2Urn("urn:cite2:hmt:msA.v1:"), Cite2Urn("urn:cite2:hmt:vaimg.2017a:"))
+      assert (collData.collections == expected)
+    }
 }
