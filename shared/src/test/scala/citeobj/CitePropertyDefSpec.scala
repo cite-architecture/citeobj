@@ -4,8 +4,8 @@ import org.scalatest.FlatSpec
 import edu.holycross.shot.cite._
 
 
-/**
-*/
+
+
 class CitePropertyDefSpec extends FlatSpec {
 
   "A CITE property definition" should "have a property type" in {
@@ -21,6 +21,22 @@ class CitePropertyDefSpec extends FlatSpec {
     assert (citePropertyDef.label == "Text passage")
   }
 
-  it should "ensure that the property URN has no object selector" in pending
-  it should "ensure that the property URN has a collection component ith propert-level identifier" in pending
+  it should "ensure that the property URN has no object selector" in {
+    try {
+      val citePropertyDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:psg1"),"Text passage", CtsUrnType)
+      fail("Should not have created property definition")
+    } catch {
+      case iae: IllegalArgumentException => assert (iae.getMessage() == "requirement failed: Property definition cannot include object selector: urn:cite2:hmt:speeches.v1.passage:psg1")
+      case e: Throwable => fail("Should have created IllegalArgumentException: " + e)
+    }
+  }
+  it should "ensure that the property URN has a collection component 2ith propert-level identifier" in {
+    try {
+      val citePropertyDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1:"),"Text passage", CtsUrnType)
+      fail("Should not have created property definition")
+    } catch {
+      case iae: CiteObjectException => assert (iae.getMessage() == "URN must include property part: urn:cite2:hmt:speeches.v1:")
+      case e: Throwable => fail("Should have created CiteObjectException: " + e)
+    }
+  }
 }

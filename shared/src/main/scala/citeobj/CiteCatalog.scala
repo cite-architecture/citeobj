@@ -6,6 +6,9 @@ import scala.collection.mutable.ArrayBuffer
 import scala.scalajs.js
 import js.annotation.JSExport
 
+
+import edu.holycross.shot.cex._
+
 /** Catalog defining structure of all collections in a repository.
 *
 * @param collections Defintions of structure of individual collections.
@@ -40,9 +43,15 @@ import js.annotation.JSExport
   * @param coll Collection to test.
   */
   def isOrdered(urn : Cite2Urn) : Boolean = {
-    collection(urn).get.orderingProperty match {
-      case None => false
-      case seqProp : Option[Cite2Urn] => true
+
+    collection(urn.dropProperty) match {
+      case None => throw CiteObjectException(s"No collection ${urn} cataloged.")
+      case u: Option[edu.holycross.shot.citeobj.CiteCollectionDef] => {
+        u.get.orderingProperty match {
+          case None => false
+          case seqProp : Option[Cite2Urn] => true
+        }
+      }
     }
   }
 
@@ -69,7 +78,7 @@ import js.annotation.JSExport
     propertyUrns.size match {
       case 0 => None
       case 1 => Some(propertyUrns(0))
-      case 2 => throw CiteException(s"Property reference in ${propertyUrn} ambiguous: found ${propertyUrns.size} matches.")
+      case 2 => throw CiteObjectException(s"Property reference in ${propertyUrn} ambiguous: found ${propertyUrns.size} matches.")
     }
   }
 
@@ -100,21 +109,21 @@ object CiteCatalog {
   */
   def apply(src: String, columnDelimiter: String = "#", listDelimiter: String = "," ) : CiteCatalog = {
     val buffer = ArrayBuffer[CiteCollectionDef]()
-    //println("Using delimiter " + columnDelimiter)
+    val cex  = CexParser(src)
+    val catalogBlock = cex.blockString("citecatalog")
 
-    val lines = src.split("\n").toVector.filter(_.nonEmpty)
+    val lines = catalogBlock.split("\n")
 
     //println("LILNES: " + lines)
     val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
     //println("COLS BY ROWS " + columnsByRows)
     val propertyEntries = columnsByRows.filter(_(0) == "property")
     //println("Work on prop Entries " + propertyEntries + " from " + columnsByRows)
-    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) )
+    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) ).toVector
 
     val collectionEntries = columnsByRows.filter(_(0) == "collection")
     val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
 
-    //println(s"WROK ON PROP VECT ${propertyVector} and COLL TUPLES ${collectionTuples}")
     for (c <- collectionTuples)  {
       val urn = c._1
       val properties = propertyVector.filter(_.urn ~~ urn)
@@ -189,7 +198,7 @@ object CiteCatalog {
     if (vocabList) {
       s.toLowerCase match {
         case "string" => ControlledVocabType
-        case _ => throw CiteException("Controlled vocabulary lists only allowed with string type data.")
+        case _ => throw CiteObjectException("Controlled vocabulary lists only allowed with string type data.")
       }
 
     } else {
@@ -198,7 +207,7 @@ object CiteCatalog {
         case "ctsurn" => CtsUrnType
         case "number" => NumericType
         case "string" => StringType
-        case _ => throw CiteException("Unrecognized attribute value for string: " + s)
+        case _ => throw CiteObjectException("Unrecognized attribute value for string: " + s)
       }
     }
   }

@@ -1,6 +1,8 @@
 # `citeobj`: release notes
 
 
+**3.0.0**:  Adds the `~~` function on `CiteCollectionRepository`s.  API-breaking changes in the JVM subproject remove dependency on CSV reader library, and simplify construction of `CiteCollectionRepository`s from file sources.  APIs in shared and JS subprojects are unaltered.
+
 **2.0.0**: Introduces the `CitePropertyImplementation`.
 
 **1.4.0**: Adds functionality to `ImageExtensions` to select extensions by protocol, or for individual collections.

@@ -7,7 +7,17 @@ import edu.holycross.shot.cite._
 */
 class CiteCatalogSpec extends FlatSpec {
 
+  val imageColl = """
+#!citecatalog
 
+collection#urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
+
+property#urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+property#urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+property#urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+"""
+
+  val imageCollUrn = Cite2Urn("urn:cite2:hmt:vaimg.2017a:")
 
   val propsVector: Vector[CitePropertyDef] = Vector(
     CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),"Text passage",CtsUrnType),
@@ -64,9 +74,27 @@ class CiteCatalogSpec extends FlatSpec {
     val catalog = CiteCatalog(Vector(ccDef))
     assert(catalog.isOrdered(Cite2Urn("urn:cite2:hmt:speeches.v1:")))
   }
-  it should "report false for unordered collection" in pending
-  it should "do something appropriate if asked for ordering on a non-existent urn but I don't know what yet" in pending
-  it should "stringify to CEX format" in pending
+
+
+  it should "report false for unordered collection" in {
+
+    val cat = CiteCatalog(imageColl)
+    assert(cat.isOrdered(imageCollUrn) == false)
+  }
+
+  it should "do throw a CiteObjectException if asked for ordering on a non-existent urn" in {
+    val unCataloged = Cite2Urn("urn:cite2:hmt:NOCOLLECTION.2017a:")
+    val cat = CiteCatalog(imageColl)
+    try {
+      val ordering = cat.isOrdered(unCataloged)
+      fail("Should not have tolerated request")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "No collection urn:cite2:hmt:NOCOLLECTION.2017a: cataloged.")
+      case _ : Throwable => fail("Should have thrown CiteObjectException")
+
+    }
+  }
+
 
 
   it should "find the definition for a given property" in {

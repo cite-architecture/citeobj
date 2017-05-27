@@ -10,14 +10,14 @@ import scala.collection.mutable.ArrayBuffer
 /** Factory for creating CITE collection catalogs
 * from various sources.
 */
-object CiteCatalogSource {
+  @deprecated ("XML catalogs deprecated in favor of CEX format", "3.0.0")   object CiteCatalogSource {
 
   /** Create a CITE collection catalog from a file.
   *
   * @param f Name of file with XML catalog data
   * validating against the CITE collection schema.
   */
-  def fromFile(f: String) : CiteCatalog = {
+  @deprecated ("XML catalogs deprecated in favor of CEX format", "3.0.0")  def fromFile(f: String) : CiteCatalog = {
     val root = XML.loadFile(f)
     fromNodeSeq(root)
   }
@@ -27,7 +27,7 @@ object CiteCatalogSource {
   *
   * @param xml String of XML validating against CITE Catalog schema.
   */
-  def fromXmlString(xml: String): CiteCatalog = {
+@deprecated ("XML catalogs deprecated in favor of CEX format", "3.0.0")   def fromXmlString(xml: String): CiteCatalog = {
     fromNodeSeq(XML.loadString(xml))
   }
 
@@ -36,7 +36,7 @@ object CiteCatalogSource {
   *
   * @param root Root node of a CiteCatalog.
   */
-  def fromNodeSeq(root: NodeSeq): CiteCatalog = {
+  @deprecated ("XML catalogs deprecated in favor of CEX format", "3.0.0")  def fromNodeSeq(root: NodeSeq): CiteCatalog = {
     var collectionDefs = ArrayBuffer[CiteCollectionDef]()
 
     val collectionNodes = root \\ "citeCollection"
@@ -54,7 +54,7 @@ object CiteCatalogSource {
   *
   * @param collectionNode Root node  of a CITE Collection in the CITE Catalog schema (element `citeCollection`).
   */
-  def collectionDefFromXml(collectionNode: scala.xml.Node) : CiteCollectionDef  = {
+  @deprecated ("XML catalogs deprecated in favor of CEX format", "3.0.0")  def collectionDefFromXml(collectionNode: scala.xml.Node) : CiteCollectionDef  = {
     val urnNode = collectionNode \  "@urn"
     val urn = Cite2Urn(urnNode.text)
 
@@ -94,7 +94,7 @@ object CiteCatalogSource {
   * @param collectionNode Root node  of a CITE property in the CITE Catalog schema (element `citeProperty`).
   * @param urnBase String value of the collection's URN, used to form explicit URNs for properties.
   */
-  def propDefFromXml(propertyNode: NodeSeq, baseUrn: Cite2Urn): CitePropertyDef = {
+  @deprecated ("XML catalogs deprecated in favor of CEX format", "3.0.0")  def propDefFromXml(propertyNode: NodeSeq, baseUrn: Cite2Urn): CitePropertyDef = {
     var vocabList = ArrayBuffer[String]()
     val vocabNodes = propertyNode \\ "value"
     for (vocabItem <- vocabNodes) {

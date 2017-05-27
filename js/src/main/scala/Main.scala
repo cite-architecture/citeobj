@@ -56,14 +56,10 @@ urn:cite2:hmt:vaimg.v1:#local jpeg string#./images#urn:cite2:hmt:msA.v1.rights:
 
 
         val cex = CexParser(cexSrc)
-        println("Parsed a long cex string into " + cex.blocks.size + " blocks.")
-        val catSrc = cex.block("citecatalog")
+        println("Parsed a long cex string into " + cex.blockLabels.size + " blocks.")
+        val catSrc = cex.blockString("citecatalog")
+        val cat = CiteCatalog(cexSrc,"#",",")
 
-        // This is awkward, and should be changed in an upgrade to CiteCatalog.
-        // (Issue filed.) Fortunately, that's not terribly important, since the
-        // expectation is that you will build a full repository and access its
-        // catalog from the repository object, as below.
-        val cat = CiteCatalog(catSrc(0),"#",",")
         assert (cat.size == 1, "Wrong number of collections in catalog! (${cat.size})")
         println(s"Made an individual catalog with ${cat.size} collection(s)." )
 
@@ -91,7 +87,7 @@ urn:cite2:hmt:vaimg.v1:#local jpeg string#./images#urn:cite2:hmt:msA.v1.rights:
             for (s <- sourceVector) {
               println(s"${s.binaryImageSource(img)}  (${s.protocol})")
             }
-          
+
           }
           case _ => println("Failed to make image extensions option")
         }

@@ -39,6 +39,43 @@ import js.annotation.JSExport
   }
 
 
+  /** Find Vector of [[CiteObject]]s matching a given range URN.
+  *
+  * @param filterUrn URN to match.
+  */
+  def rangeFilter (filterUrn: Cite2Urn): Vector[CiteObject] = {
+    if (filterUrn.isRange) {
+      val baseUrn = filterUrn.dropSelector
+      val simpleObjectUrn = filterUrn.dropExtensions
+      if (catalog.isOrdered(baseUrn)) {
+
+        val obj1 = citableObject(simpleObjectUrn.rangeBeginUrn.dropProperty)
+        val obj2 = citableObject(simpleObjectUrn.rangeEndUrn.dropProperty)
+
+        val idx1 = indexOf(obj1)
+        val idx2 = indexOf(obj2) + 1 // "until" value
+        citableObjects(baseUrn).slice(idx1 , idx2)
+
+      } else {
+        throw CiteObjectException(s"Range expression not valid unless collection is ordered: ${filterUrn}")
+      }
+    } else {
+      throw  CiteObjectException(s"Function rangeFilter only applicable to range expressions: ${filterUrn}")
+    }
+  }
+
+  /** Find Vector of [[CiteObject]]s matching a given URN.
+  *
+  * @param filterUrn URN to match.
+  */
+  def ~~ (filterUrn: Cite2Urn): Vector[CiteObject] = {
+    if (filterUrn.isObject) {
+      citableObjects.filter(_.urn ~~ filterUrn)
+    } else {
+      rangeFilter(filterUrn)
+    }
+  }
+
   /** Construct a citable object for an identifying URN.
   *
   * @param obj URN uniquely identifying a single object.
@@ -46,6 +83,9 @@ import js.annotation.JSExport
   * a [[CiteObject]].
   */
   def citableObject(objUrn: Cite2Urn, labelPropertyUrn : Cite2Urn): CiteObject = {
+
+    require(objUrn.version != "", s"Cannot make citable object from urn without version identifier: ${objUrn}")
+
 
     val objectData = data ~~ objUrn
 
@@ -77,6 +117,9 @@ import js.annotation.JSExport
   * @param obj URN uniquely identifying a single object.
   */
   def citableObject(objUrn: Cite2Urn) : CiteObject = {
+
+    require(objUrn.version != "", s"Cannot make citable object from urn without version identifier: ${objUrn}")
+
     val collectionDef = collectionDefinition(objUrn.dropSelector)
     collectionDef match {
       case None => throw CiteObjectException(s"Could not find collection definition for ${objUrn}")
@@ -238,7 +281,7 @@ import js.annotation.JSExport
   */
   def first(coll: Cite2Urn) : CiteObject = {
     if (! isOrdered(coll)) {
-      throw CiteException(s"${coll} is not an ordered collection.")
+      throw CiteObjectException(s"${coll} is not an ordered collection.")
     } else {
       val v = citableObjects(coll)
       v(0)
@@ -251,7 +294,7 @@ import js.annotation.JSExport
   */
   def last(coll: Cite2Urn) : CiteObject = {
     if (! isOrdered(coll)) {
-      throw CiteException(s"${coll} is not an ordered collection.")
+      throw CiteObjectException(s"${coll} is not an ordered collection.")
     } else {
       val v = citableObjects(coll)
       v.last
@@ -305,6 +348,14 @@ import js.annotation.JSExport
   def properties = {
     data.properties
   }
+
+  /** Find value of a given property.
+  *
+  * @param propertyUrn Property to find value for.
+  */
+  def propertyValue(propertyUrn: Cite2Urn): Any = {
+    data.propertyValue(propertyUrn)
+  }
 }
 
 
@@ -323,7 +374,6 @@ object CiteCollectionRepository {
   * if any.
   */
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionRepository = {
-    //data: CiteCollectionData, catalog: CiteCatalog
     val data = CiteCollectionData(cexSource,delimiter,delimiter2)
     val catalog = CiteCatalog(cexSource,delimiter,delimiter2)
     CiteCollectionRepository(data,catalog)

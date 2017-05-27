@@ -88,7 +88,7 @@ import js.annotation.JSExport
   def propertyValue(propUrn: Cite2Urn) = {
     val selectProperty  = this  ~~ propUrn
     selectProperty.size match {
-      case 1 =>
+      case 1 => selectProperty.data(0).propertyValue
       case 0 => throw CiteObjectException("No property value found matching " + propUrn)
       case _ => throw CiteObjectException("Too general URN: found " + selectProperty.size + " matches.")
     }
@@ -111,11 +111,9 @@ object CiteCollectionData {
   */
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionData = {
     val cex = CexParser(cexSource)
-
-    val catalogSrcString = cex.block("citecatalog").filter(_.nonEmpty).mkString("\n")
-    val catalog = CiteCatalog(catalogSrcString, delimiter, delimiter2)
+    val catalog = CiteCatalog(cexSource, delimiter, delimiter2)
     //println("catalog properties = " + catalog.properties)
-    val dataSets = cex.block("citedata")
+    val dataSets = cex.blockVector("citedata")
     //println("data block " + dataSets)
     val propBuffer = ArrayBuffer[CitePropertyValue]()
     for (ds <- dataSets){
@@ -157,7 +155,7 @@ object CiteCollectionData {
 
     } else {
       val lcHeader = dataLines(0).split(delimiter).toVector.map(_.trim).map(_.toLowerCase)
-      if (lcHeader.size < 0) {
+      if (lcHeader.size < 1) {
         throw CiteObjectException("No header found for required property 'urn'")
       } else {
         val columnIdx = lcHeader.indexOf("urn")

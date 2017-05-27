@@ -21,8 +21,13 @@ import js.annotation.JSExport
   vocabularyList: Vector[String] = Vector.empty) {
 
   propertyType match {
-    case ControlledVocabType => assert (vocabularyList.nonEmpty)
-    case _ => assert(vocabularyList.isEmpty)
+    case ControlledVocabType => require (vocabularyList.nonEmpty, s"ControlledVocabType must include a vocabulary list: ${urn}")
+    case _ => require(vocabularyList.isEmpty, "Vocabulary lists only allowed with ControlledVocabType")
   }
 
+  require(urn == urn.dropSelector, "Property definition cannot include object selector: " + urn)
+  urn.propertyOption match {
+    case None => throw new CiteObjectException("URN must include property part: " + urn)
+    case _ => assert(true)
+  }
 }

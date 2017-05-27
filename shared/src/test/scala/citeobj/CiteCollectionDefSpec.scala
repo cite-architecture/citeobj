@@ -49,8 +49,6 @@ class CiteCollectionDefSpec extends FlatSpec {
     assert (ccDef.isOrdered)
   }
 
-  it should "default to assuming collections are not ordered" in pending
-
   it should "identify the ordering property in ordered collections" in {
     assert (ccDef.isOrdered)
     ccDef.orderingProperty match {

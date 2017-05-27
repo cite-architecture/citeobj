@@ -71,12 +71,12 @@ object ImageExtensions {
 
     var binarySourceMap = Map[Cite2Urn,Vector[BinaryImageSource[Any]]]()
     val cex = CexParser(cexSrc)
-    val imageBlocks = cex.block("imagedata")
-    if (imageBlocks.size == 0 ) {
+    val imageString = cex.blockString("imagedata")
+    if (imageString.size == 0 ) {
       None
     } else {
 
-      val rows = imageBlocks.mkString("\n").split("\n").filter(_.nonEmpty).toVector
+      val rows = imageString.split("\n").toVector
       val columnsByRow = rows.map(_.split(separator).toVector)
       for (columns <- columnsByRow) {
         val collectionUrn  = try {

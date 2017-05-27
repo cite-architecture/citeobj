@@ -40,4 +40,14 @@ trait BaseCitable {
   urn: Cite2Urn,
   label: String,
   propertyList: Vector[CitePropertyImplementation]) extends BaseCitable {
+
+    /** Find value of a given property.
+    *
+    * @param propertyUrn Property to find value for.
+    */
+    def propertyValue(propertyUrn: Cite2Urn): Any = {
+      val matches = propertyList.filter(_.urn == propertyUrn)
+      require(matches.size == 1, s"Exception: found s${matches.size} match(es) for ${propertyUrn}")
+      matches(0).propertyValue
+    }
 }
