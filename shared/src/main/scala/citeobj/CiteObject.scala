@@ -70,4 +70,84 @@ trait BaseCitable {
       val matching = numericValues.filter{ x  => BigDecimal(x.toString) < n }
       (matching.size > 0)
     }
+
+    /** True if any numeric property of the object is less than or equal to the given value.
+    *
+    * @param n Value to compare.
+    */
+    def numericLessThanOrEqual(n: BigDecimal): Boolean = {
+      val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
+      val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
+      val matching = numericValues.filter{ x  => BigDecimal(x.toString) <= n }
+      (matching.size > 0)
+    }
+
+
+    /** True if any numeric property of the object is greater than the given value.
+    *
+    * @param n Value to compare.
+    */
+    def numericGreaterThan(n: BigDecimal): Boolean = {
+      val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
+      val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
+      val matching = numericValues.filter{ x  => BigDecimal(x.toString) > n }
+      (matching.size > 0)
+    }
+
+    /** True if any numeric property of the object is greater than or equal to the given value.
+    *
+    * @param n Value to compare.
+    */
+    def numericGreaterThanOrEqual(n: BigDecimal): Boolean = {
+      val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
+      val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
+      val matching = numericValues.filter{ x  => BigDecimal(x.toString) >= n }
+      (matching.size > 0)
+    }
+
+    /** True if the value of any numeric property of the object falls with a range
+    * of two numeric values.
+    *
+    * @param n1 Lower bound,inclusive.
+    * @param n2j Upperbound, inclusive.
+    */
+    def numericWithin(n1: BigDecimal,n2:  BigDecimal): Boolean = {
+      val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
+      val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
+      val matching = numericValues.filter{ x  => (BigDecimal(x.toString) >= n1) && (BigDecimal(x.toString) <= n2) }
+      (matching.size > 0)
+    }
+
+    /** True if any string property of the object contains a given substring,
+    * optionally taking case into consideration.
+    *
+    * @param s Substring to compare.
+    * @param caseSensitive True if case should be considered in comparing strings.
+    */
+    def stringContains(s: String, caseSensitive: Boolean = true): Boolean = {
+      val stringProperties = propertyList.filter(p => (p.propertyDef.propertyType == StringType) || (p.propertyDef.propertyType) == ControlledVocabType )
+      val stringValues = stringProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
+      val matching = if (caseSensitive) {
+         stringValues.filter(_.toString.contains(s))
+       } else {
+         stringValues.filter(_.toString.toLowerCase.contains(s.toLowerCase))
+       }
+      (matching.size > 0)
+    }
+
+
+    /** True if any string property of the object matches the given
+    * regular expression.
+    *
+    * @param re String definition of a regular expression to test for.
+    */
+    def regexMatch(re: String): Boolean = {
+      val rePattern = re.toString.r
+
+      val stringProperties = propertyList.filter(p => (p.propertyDef.propertyType == StringType) || (p.propertyDef.propertyType) == ControlledVocabType )
+      val stringValues = stringProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
+      val matching = stringValues.filter(s => rePattern.findFirstIn(s.toString) != None)
+      (matching.size > 0)
+    }
+
 }

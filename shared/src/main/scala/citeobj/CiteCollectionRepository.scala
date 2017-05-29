@@ -22,8 +22,8 @@ import js.annotation.JSExport
   */
   def validateAll: Boolean = {
     // Mutual validation of data and catalog:
-    assert(data.isEmpty == false)
-    assert(catalog.isEmpty == false)
+    assert(data.isEmpty == false, "Empty data collection: cannot create repository.")
+    assert(catalog.isEmpty == false, "Empty catalog: cannot create repository.")
     // enforce 1<->1 relation of properties
     // (and therefore collections, too) between
     // catalog and data
