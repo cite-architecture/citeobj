@@ -41,6 +41,24 @@ trait BaseCitable {
   label: String,
   propertyList: Vector[CitePropertyImplementation]) extends BaseCitable {
 
+
+    /** Find property definition for a given property.
+    *
+    * @param propertyUrn Property for which to find definition.
+    */
+    def definitionForProperty(propertyUrn: Cite2Urn) = {//: CitePropertyDef = {
+      val matches = propertyList.filter(_.urn ~~ propertyUrn)
+      require(matches.size == 1, s"Exception: found ${matches.size} match(es) for ${propertyUrn}")
+      matches(0).propertyDef
+    }
+
+
+    /*
+    p1.propertyList(0).propertyDef.propertyType
+    */
+
+
+
     /** Find value of a given property.
     *
     * @param propertyUrn Property to find value for.
@@ -67,7 +85,14 @@ trait BaseCitable {
     * @param propertyUrn Property to test.
     */
     def valueEquals(propertyUrn : Cite2Urn, pValue: Any): Boolean = {
-      this.propertyValue(propertyUrn) == pValue
+      val propDef = definitionForProperty(propertyUrn)
+      if (CiteCollectionRepository.typesMatch(pValue, propDef.propertyType, propDef.vocabularyList)) {
+        this.propertyValue(propertyUrn) == pValue
+      } else {
+        throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${pValue}")
+      }
+
+
       //val matching = propertyList.filter(_.propertyValue == pValue)
       //(matching.size > 0)
       //false
