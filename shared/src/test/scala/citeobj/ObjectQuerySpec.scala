@@ -32,12 +32,16 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   val rvProperty = Cite2Urn("urn:cite2:hmt:msA.v1.rv:")
   val seqProperty = Cite2Urn("urn:cite2:hmt:msA.v1.sequence:")
+  val codexProperty = Cite2Urn("urn:cite2:hmt:msA.v1.codex:")
 
   "A CiteObject" should "report boolean result of matching any value"  in {
     assert(oneRecto.valueEquals("recto"))
     assert(oneRecto.valueEquals("verso") == false)
     assert(oneRecto.valueEquals(1))
     assert(oneRecto.valueEquals(2) == false)
+
+    val codex =Cite2Urn("urn:cite2:hmt:codex:msA")
+    assert(oneRecto.valueEquals(codex))
   }
 
   it should "report boolean result of numeric less than on any value" in {
@@ -203,6 +207,29 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case coe: CiteObjectException =>  assert(coe.message  == "Type NumericType did not match value for ^rect.*.")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
+  }
+
+  it should "report boolean result of URN match on on any value" in {
+    val codexCollection =Cite2Urn("urn:cite2:hmt:codex:")
+    assert(oneRecto.urnMatch(codexCollection))
+  }
+
+  it should "report boolean result of URN match on a specified property" in {
+    val codexCollection =Cite2Urn("urn:cite2:hmt:codex:")
+    assert(oneRecto.urnMatch(codexProperty,codexCollection))
+  }
+
+  it should "throw an exception if URN type and value do not agree" in {
+    val psg =CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.1")
+
+    try  {
+      val checkProp= oneRecto.urnMatch(codexProperty,psg)
+      fail("Should not have been able to check value")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type Cite2UrnType did not match value for urn:cts:greekLit:tlg0012.tlg001:1.1.")
+      case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
+    }
+
   }
 
 }

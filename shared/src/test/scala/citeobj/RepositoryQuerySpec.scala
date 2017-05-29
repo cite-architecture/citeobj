@@ -30,12 +30,14 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val rectos = repo.valueEquals("recto")
     assert(rectos.size == 2)
   }
+  it should "throw an exception types do not match..." in pending
 
   it should "find citable objects satisfying numeric less than on any value" in {
     val first3 = repo.numericLessThan(4)
     assert(first3.size== 3)
   }
   it should "find citable objects satisfying numeric less than or equal to on any value" in pending
+
   it should "find citable objects satisfying numeric greater than on any value" in pending
   it should "find citable objects satisfying numeric greater than or equal to on any value" in pending
   it should "find citable objects satisfying numeric range within on any value" in pending

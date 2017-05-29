@@ -294,4 +294,79 @@ trait BaseCitable {
       }
     }
 
+
+
+    /** True if any URN property of the object matches the given
+    * URN.
+    *
+    * @param u URN test for.
+    */
+    def urnMatch(u: Urn): Boolean = {
+      val urnProperties = propertyList.filter(p => (p.propertyDef.propertyType == CtsUrnType) || (p.propertyDef.propertyType) == Cite2UrnType )
+
+
+      u match {
+        case cts: CtsUrn => {
+          val urnValues = urnProperties.map{ p => CtsUrn(p.propertyValue.toString) }
+          val matching =  urnValues.filter(_ ~~ u)
+          (matching.size > 0)
+        }
+        case cite2: Cite2Urn => {
+          val urnValues = urnProperties.map{ p => Cite2Urn(p.propertyValue.toString) }
+          val matching =  urnValues.filter(_ ~~ u)
+          (matching.size > 0)
+        }
+      }
+    }
+
+
+
+    /** True if a given property matches the given URN.
+    *
+    * @param propertyUrn Property to test.
+    * @param u URN test for.
+    */
+    def urnMatch(propertyUrn: Cite2Urn, u: Urn): Boolean = {
+      val propDef = definitionForProperty(propertyUrn)
+
+      propDef.propertyType match {
+        case CtsUrnType => {
+          u match {
+            case cts: CtsUrn => {
+              val urn = CtsUrn( this.propertyValue(propertyUrn).toString)
+              cts ~~ urn
+            }
+            case _ =>   throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
+          }
+        }
+        case Cite2UrnType => {
+          u match {
+            case cite2: Cite2Urn => {
+              val urn = Cite2Urn( this.propertyValue(propertyUrn).toString)
+              cite2 ~~ urn
+            }
+            case _ =>   throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
+          }
+        }
+        case _ =>   throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
+      }
+/*
+      if ((propDef.propertyType == CtsUrnType) || (propDef.propertyType == Cite2UrnType)) {
+        u match {
+          case cts: CtsUrn => {
+            val urn = CtsUrn( this.propertyValue(propertyUrn).toString)
+            cts ~~ urn
+          }
+          case cite2: Cite2Urn => {
+            val urn = Cite2Urn( this.propertyValue(propertyUrn).toString)
+            cite2 ~~ urn
+          }
+        }
+      } else {
+        throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
+      }
+      */
+    }
+
+
 }
