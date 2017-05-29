@@ -78,14 +78,10 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
   it should "report boolean result of matching a specified property"  in {
-
     assert(oneRecto.valueEquals(rvProperty,"recto"))
-    /*
-    assert(oneRecto.valueEquals("verso") == false)
-    assert(oneRecto.valueEquals(1))
-    assert(oneRecto.valueEquals(2) == false)
-    */
+    assert(oneRecto.valueEquals(rvProperty,"verso") == false)
   }
+  it should "throw an exception if value and type do not match" in pending
   it should "report boolean result of numeric less than on a specified property" in pending
   it should "report boolean result of numeric less than or equal to on a specified property" in pending
   it should "report boolean result of numeric greater than on a specified property" in pending
