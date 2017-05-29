@@ -25,9 +25,10 @@ msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
 """
 
+  val repo = CiteCollectionRepository(cex,"#",",")
+  val citeObjects = repo.citableObjects
+
   "A CiteObject" should "report boolean result of matching any value"  in {
-    val repo = CiteCollectionRepository(cex,"#",",")
-    val citeObjects = repo.citableObjects
     val oneRecto = citeObjects(0)
     assert(oneRecto.valueEquals("recto"))
     assert(oneRecto.valueEquals("verso") == false)
@@ -37,7 +38,10 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-  it should "report boolean result of numeric less than on any value" in pending
+  it should "report boolean result of numeric less than on any value" in {
+    val oneRecto = citeObjects(0)
+    oneRecto.numericLessThan(10)
+  }
   it should "report boolean result of numeric less than or equal to on any value" in pending
   it should "report boolean result of numeric greater than on any value" in pending
   it should "report boolean result of numeric greater than or equal to on any value" in pending

@@ -357,23 +357,23 @@ import js.annotation.JSExport
     data.propertyValue(propertyUrn)
   }
 
-  /** Create a vector of [[CitableObject]]s for the
-  * unique URNs in a given list of properties.
+
+  /** Find all citable objects with a given property value.
   *
-  * @param pValues Property values defining set of
-  * objects to create.
-
-  def objectsForProperties(pValues: Vector[CitePropertyValue])
-*/
-
-
-
-
+  * @param pValue Value to search for.
+  */
   def valueEquals(pValue: Any): Vector[CiteObject] = {
-    //val propertyVector = data.data.filter(_.propertyValue == pValue)
+    citableObjects.filter(_.valueEquals(pValue))
+  }
 
-    Vector[CiteObject]()
 
+  /** Find all citable objects with a numeric property value
+  * less than a given value.
+  *
+  * @param pValue Value to compare.
+  */
+  def numericLessThan(pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThan(pValue))
   }
 }
 
