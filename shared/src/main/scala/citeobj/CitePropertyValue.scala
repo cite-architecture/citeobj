@@ -36,7 +36,12 @@ object CitePropertyValue {
 
       case CtsUrnType => CtsUrn(stringValue)
       case Cite2UrnType => Cite2Urn(stringValue)
-      case NumericType => stringValue.toDouble
+      case NumericType => try {
+          BigDecimal(stringValue)
+        } catch {
+          case t: Throwable => throw CiteObjectException("Invalid string for BigDecimal: " + stringValue)
+        }
+
       case BooleanType => stringValue.toBoolean
       case StringType => stringValue
       case ControlledVocabType => {

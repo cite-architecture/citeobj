@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**3.1.0**: Adds functions for querying data in a CITE Collection repository.
+
 
 **3.0.0**:  Adds the `~~` function on `CiteCollectionRepository`s.  API-breaking changes in the JVM subproject remove dependency on CSV reader library, and simplify construction of `CiteCollectionRepository`s from file sources.  APIs in shared and JS subprojects are unaltered.
 

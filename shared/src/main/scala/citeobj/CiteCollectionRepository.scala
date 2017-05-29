@@ -233,7 +233,7 @@ import js.annotation.JSExport
     objectMatchesCatalog(asCitableObject,collectionDefinition)
   }
 
-  /** Set of all collections in the repository,
+  /** Set of all cataloged collections in the repository,
   * identified by URN.
   */
   def collections = {
@@ -257,7 +257,7 @@ import js.annotation.JSExport
     val propVect = obj.propertyList.filter(_.urn ~~ propertyKey)
     require (propVect.size == 1, s"Wrong number of ordering properties (${propVect.size}) for ${propertyKey} in ${obj.propertyList}")
     propVect(0).propertyValue match {
-      case d: Double => d
+      case d: BigDecimal => d
       case _ => throw CiteObjectException(s"Did not find property value for ${propVect(0)}")
     }
   }
@@ -266,7 +266,7 @@ import js.annotation.JSExport
   *
   * @param obj Citable object.
   */
-  def sortValue(obj: CiteObject): Double = {
+  def sortValue(obj: CiteObject): BigDecimal = {
     // find its orderingKey:
     val collectionDef = collectionDefinition(obj.urn.dropSelector)
     collectionDef match {
@@ -355,6 +355,25 @@ import js.annotation.JSExport
   */
   def propertyValue(propertyUrn: Cite2Urn): Any = {
     data.propertyValue(propertyUrn)
+  }
+
+  /** Create a vector of [[CitableObject]]s for the
+  * unique URNs in a given list of properties.
+  *
+  * @param pValues Property values defining set of
+  * objects to create.
+
+  def objectsForProperties(pValues: Vector[CitePropertyValue])
+*/
+
+
+
+
+  def valueEquals(pValue: Any): Vector[CiteObject] = {
+    //val propertyVector = data.data.filter(_.propertyValue == pValue)
+
+    Vector[CiteObject]()
+
   }
 }
 

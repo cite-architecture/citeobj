@@ -50,4 +50,14 @@ trait BaseCitable {
       require(matches.size == 1, s"Exception: found s${matches.size} match(es) for ${propertyUrn}")
       matches(0).propertyValue
     }
+
+
+    /** True if any property of the object matches the given value.
+    *
+    * @param pValue Value to test for.
+    */
+    def valueEquals(pValue: Any): Boolean = {
+      val matching = propertyList.filter(_.propertyValue == pValue)
+      (matching.size > 0)
+    }
 }
