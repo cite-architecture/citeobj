@@ -259,13 +259,6 @@ trait BaseCitable {
       } else {
         throw CiteObjectException(s"Type ${propDef.propertyType} did not match value ${s}." )
       }
-
-/*  if (CiteCollectionRepository.typesMatch(pValue, propDef.propertyType, propDef.vocabularyList)) {
-    this.propertyValue(propertyUrn) == pValue
-  } else {
-    throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${pValue}")
-  }
-*/
     }
 
 
@@ -276,11 +269,29 @@ trait BaseCitable {
     */
     def regexMatch(re: String): Boolean = {
       val rePattern = re.toString.r
-
       val stringProperties = propertyList.filter(p => (p.propertyDef.propertyType == StringType) || (p.propertyDef.propertyType) == ControlledVocabType )
       val stringValues = stringProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
       val matching = stringValues.filter(s => rePattern.findFirstIn(s.toString) != None)
       (matching.size > 0)
+    }
+
+
+    /** True if the value of a given property matches the given
+    * regular expression.
+    *
+    * @param propertyUrn Property to test.
+    * @param re String definition of a regular expression to test for.
+    */
+    def regexMatch(propertyUrn : Cite2Urn, re: String): Boolean = {
+      val propDef = definitionForProperty(propertyUrn)
+      if ((propDef.propertyType == StringType) || (propDef.propertyType == ControlledVocabType)) {
+        val rePattern = re.toString.r
+        val s = this.propertyValue(propertyUrn).toString
+        (rePattern.findFirstIn(s) != None)
+
+      } else {
+        throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${re}." )
+      }
     }
 
 }

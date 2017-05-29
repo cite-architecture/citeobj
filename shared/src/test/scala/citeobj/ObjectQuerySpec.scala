@@ -191,8 +191,19 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-  it should "report boolean result of RE match on a specified property" in pending
-  it should "throw an exception if value and type do not match in RE match" in pending
+  it should "report boolean result of RE match on a specified property" in {
+    assert(oneRecto.regexMatch(rvProperty,"^rect.*"))
+
+  }
+  it should "throw an exception if value and type do not match in RE match" in {
+    try {
+        val propCheck =   oneRecto.regexMatch(seqProperty,"^rect.*")
+        fail("Should not have been able to check value")
+    } catch {
+      case coe: CiteObjectException =>  assert(coe.message  == "Type NumericType did not match value for ^rect.*.")
+      case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
 
 }
 
