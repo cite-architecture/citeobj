@@ -46,8 +46,8 @@ trait BaseCitable {
     * @param propertyUrn Property to find value for.
     */
     def propertyValue(propertyUrn: Cite2Urn): Any = {
-      val matches = propertyList.filter(_.urn == propertyUrn)
-      require(matches.size == 1, s"Exception: found s${matches.size} match(es) for ${propertyUrn}")
+      val matches = propertyList.filter(_.urn ~~ propertyUrn)
+      require(matches.size == 1, s"Exception: found ${matches.size} match(es) for ${propertyUrn}")
       matches(0).propertyValue
     }
 
@@ -58,6 +58,19 @@ trait BaseCitable {
     def valueEquals(pValue: Any): Boolean = {
       val matching = propertyList.filter(_.propertyValue == pValue)
       (matching.size > 0)
+    }
+
+
+    /** True if the value of a given property matches a given value.
+    *
+    * @param pValue Value to test for.
+    * @param propertyUrn Property to test.
+    */
+    def valueEquals(propertyUrn : Cite2Urn, pValue: Any): Boolean = {
+      this.propertyValue(propertyUrn) == pValue
+      //val matching = propertyList.filter(_.propertyValue == pValue)
+      //(matching.size > 0)
+      //false
     }
 
     /** True if any numeric property of the object is less than the given value.

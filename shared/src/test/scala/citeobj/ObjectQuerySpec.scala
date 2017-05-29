@@ -30,6 +30,9 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   val oneRecto = citeObjects(0)
   val oneVerso = citeObjects(1)
 
+  val rvProperty = Cite2Urn("urn:cite2:hmt:msA.v1.rv:")
+  val seqProperty = Cite2Urn("urn:cite2:hmt:msA.v1.sequence:")
+
   "A CiteObject" should "report boolean result of matching any value"  in {
     assert(oneRecto.valueEquals("recto"))
     assert(oneRecto.valueEquals("verso") == false)
@@ -74,7 +77,15 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(oneRecto.regexMatch("^rect.*"))
   }
 
-  it should "report boolean result of matching a specified property"  in pending
+  it should "report boolean result of matching a specified property"  in {
+
+    assert(oneRecto.valueEquals(rvProperty,"recto"))
+    /*
+    assert(oneRecto.valueEquals("verso") == false)
+    assert(oneRecto.valueEquals(1))
+    assert(oneRecto.valueEquals(2) == false)
+    */
+  }
   it should "report boolean result of numeric less than on a specified property" in pending
   it should "report boolean result of numeric less than or equal to on a specified property" in pending
   it should "report boolean result of numeric greater than on a specified property" in pending
