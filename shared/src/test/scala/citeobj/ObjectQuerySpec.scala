@@ -84,9 +84,10 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   it should "report boolean result of matching a specified property"  in {
     assert(oneRecto.valueEquals(rvProperty,"recto"))
     assert(oneRecto.valueEquals(rvProperty,"verso") == false)
+    assert(oneRecto.valueEquals(seqProperty,1))
   }
 
-  it should "throw an exception if value and type do not match" in {
+  it should "throw an exception if value and type do not match in matching property" in {
     try {
         val propCheck = oneRecto.valueEquals(rvProperty,2)
         fail("Should not have been able to check value")
@@ -95,14 +96,51 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
-  it should "report boolean result of numeric less than on a specified property" in pending
-  it should "report boolean result of numeric less than or equal to on a specified property" in pending
-  it should "report boolean result of numeric greater than on a specified property" in pending
+  it should "report boolean result of numeric less than on a specified property" in {
+      assert(oneRecto.numericLessThan(seqProperty,2))
+      assert(oneRecto.numericLessThan(seqProperty,1.1))
+      assert(oneRecto.numericLessThan(seqProperty,1) == false)
+  }
+
+  it should "throw an exception if value and type do not match in less than comparison" in {
+    try {
+        val propCheck = oneRecto.numericLessThan(rvProperty,2)
+        fail("Should not have been able to check value")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2")
+      case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
+  it should "report boolean result of numeric less than or equal to on a specified property" in {
+    assert(oneRecto.numericLessThanOrEqual(seqProperty,1))
+    assert(oneRecto.numericLessThanOrEqual(seqProperty,1.5))
+    assert(oneRecto.numericLessThanOrEqual(seqProperty,0.9) == false)
+  }
+  it should "throw an exception if value and type do not match in less than or equal comparison" in {
+    try {
+        val propCheck = oneRecto.numericLessThanOrEqual(rvProperty,2)
+        fail("Should not have been able to check value")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2")
+      case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
+  it should "report boolean result of numeric greater than on a specified property" in {
+    assert(oneRecto.numericGreaterThanOrEqual(seqProperty,1))
+    assert(oneRecto.numericGreaterThanOrEqual(seqProperty,1.5) == false)
+    assert(oneRecto.numericGreaterThanOrEqual(seqProperty,0.9))
+  }
+  it should "throw an exception if value and type do not match in greater than comparison" in pending
   it should "report boolean result of numeric greater than or equal to on a specified property" in pending
+  it should "throw an exception if value and type do not match in greater than or equal comparison" in pending
   it should "report boolean result of numeric range within on a specified property" in pending
+  it should "throw an exception if value and type do not match in range comparison" in pending
   it should "report boolean result of substring match on a specified property" in pending
+  it should "throw an exception if value and type do not match in substring comparison" in pending
   it should "report boolean result of case-insensitive match on a specified property" in pending
+  it should "throw an exception if value and type do not match in case-insensitive comparison" in pending
   it should "report boolean result of RE match on a specified property" in pending
+  it should "throw an exception if value and type do not match in RE match" in pending
 
 }
 
