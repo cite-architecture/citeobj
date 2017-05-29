@@ -54,7 +54,16 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val first3 = repo.numericLessThan(seqProperty,4)
     assert(first3.size== 3)
   }
-  it should "throw an exception types do not match when matching numeric less" in pending
+
+  it should "throw an exception types do not match when matching numeric less" in {
+    try {
+      val badPairing = repo.numericLessThan(rvProperty,4)
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
 
 
   it should "find citable objects satisfying numeric less than or equal to on any value" in pending
