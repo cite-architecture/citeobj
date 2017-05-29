@@ -39,7 +39,7 @@ import js.annotation.JSExport
   }
 
 
-  /** Find Vector of [[CiteObject]]s matching a given range URN.
+  /** Find Vector of [[CiteObject]]s identified by URNs matching a given range URN.
   *
   * @param filterUrn URN to match.
   */
@@ -64,7 +64,7 @@ import js.annotation.JSExport
     }
   }
 
-  /** Find Vector of [[CiteObject]]s matching a given URN.
+  /** Find Vector of [[CiteObject]]s identified by URNs matching a given URN.
   *
   * @param filterUrn URN to match.
   */
@@ -357,7 +357,6 @@ import js.annotation.JSExport
     data.propertyValue(propertyUrn)
   }
 
-
   /** Find all citable objects with a given property value.
   *
   * @param pValue Value to search for.
@@ -366,7 +365,6 @@ import js.annotation.JSExport
     citableObjects.filter(_.valueEquals(pValue))
   }
 
-
   /** Find all citable objects with a numeric property value
   * less than a given value.
   *
@@ -374,6 +372,16 @@ import js.annotation.JSExport
   */
   def numericLessThan(pValue: BigDecimal): Vector[CiteObject] = {
     citableObjects.filter(_.numericLessThan(pValue))
+  }
+
+  /** Find citable objects with a given numeric property having a value
+  * less than a given value.
+  *
+  * @param propertyUrn
+  * @param pValue Value to compare.
+  */
+  def numericLessThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThan(propertyUrn,pValue))
   }
 }
 
