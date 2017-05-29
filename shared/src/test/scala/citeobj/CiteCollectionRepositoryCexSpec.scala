@@ -29,7 +29,8 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 """
 
     val repo = CiteCollectionRepository(cex,"#",",")
-    
+
   }
+  it should "ensure that all data are from cataloged collections" in pending
 
 }
