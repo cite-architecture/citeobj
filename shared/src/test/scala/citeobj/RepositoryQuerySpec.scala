@@ -40,7 +40,6 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val codex =Cite2Urn("urn:cite2:hmt:codex:msA")
     val codexA = repo.valueEquals(codex)
     assert(codexA.size == 3)
-
   }
   it should "find citable objects satisfying matching a specified property"  in {
     val rectos = repo.valueEquals(rvProperty,"recto")
@@ -53,10 +52,16 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val codexA = Cite2Urn("urn:cite2:hmt:codex:msA")
     val codexApages = repo.valueEquals(codexProperty, codexA)
     assert(codexApages.size == 3)
-
-
   }
-  it should "throw an exception types do not match when matching a specified property" in pending
+  it should "throw an exception if types do not match when matching a specified property" in {
+    try {
+      val badPairing = repo.valueEquals(rvProperty,4)
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
 
 
   it should "find citable objects satisfying numeric less than on any value" in {
@@ -67,8 +72,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val first3 = repo.numericLessThan(seqProperty,4)
     assert(first3.size== 3)
   }
-
-  it should "throw an exception types do not match when matching numeric less" in {
+  it should "throw an exception if types do not match when matching numeric less" in {
     try {
       val badPairing = repo.numericLessThan(rvProperty,4)
       fail("Should not have completed search.")
@@ -93,7 +97,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val firstdec = repo.numericLessThanOrEqual(seqProperty,3.1)
     assert(firstdec.size== 3)
   }
-  it should "throw an exception types do not match when matching numeric less than or equal to" in {
+  it should "throw an exception if types do not match when matching numeric less than or equal to" in {
     try {
       val badPairing = repo.numericLessThanOrEqual(rvProperty,4)
       fail("Should not have completed search.")
@@ -107,38 +111,74 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val match2 = repo.numericGreaterThan(1)
     assert(match2.size== 2)
   }
-  it should "find citable objects satisfying numeric greater than or equal to on any value" in pending
-  it should "find citable objects satisfying numeric range within on any value" in pending
+  it should "find citable objects satisfying numeric greater than on a specified property" in {
+    val match2 = repo.numericGreaterThan(seqProperty,1)
+    assert(match2.size== 2)
+  }
+  it should "throw an exception types do not match when matching numeric greater than to" in {
+    try {
+      val badPairing = repo.numericGreaterThan(rvProperty,4)
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
+
+
+  it should "find citable objects satisfying numeric greater than or equal to on any value" in {
+    val match2 = repo.numericGreaterThanOrEqual(2.0)
+    assert(match2.size== 2)
+  }
+  it should "find citable objects satisfying numeric greater than or equal to on a specified property" in {
+    val match2 = repo.numericGreaterThanOrEqual(seqProperty,2.0)
+    assert(match2.size== 2)
+  }
+  it should "throw an exception when types do not match when matching numeric greater than or equal to" in {
+    try {
+      val badPairing = repo.numericGreaterThanOrEqual(rvProperty,4)
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
+
+
+  it should "find citable objects satisfying numeric range within on any value" in {
+    val match2 = repo.numericWithin(2.0,5)
+    assert(match2.size== 2)
+  }
+  it should "find citable objects satisfying numeric range within on a specified property" in {
+    val match2 = repo.numericWithin(seqProperty,2.0,5)
+    assert(match2.size== 2)
+  }
+  it should "throw an exception when types do not match when matching numeric range" in {
+    try {
+      val badPairing = repo.numericWithin(rvProperty,2,4)
+      fail("Should not have completed search.")
+    } catch {
+      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Lower bound 2 did not match type ControlledVocabType")
+      case t: Throwable =>  fail("Should have thrown IllegalArgumentException but threw " + t)
+    }
+  }
+
   it should "find citable objects satisfying substring match on any value" in pending
-  it should "find citable objects satisfying case-insensitive match on any value" in pending
-  it should "find citable objects satisfying RE match on any value" in pending
-
-
-
-
-
-
-  it should "find citable objects satisfying numeric greater than on a specified property" in pending
-  it should "throw an exception types do not match when matching numeric greater than to" in pending
-
-  it should "find citable objects satisfying numeric greater than or equal to on a specified property" in pending
-  it should "throw an exception when types do not match when matching numeric greater than or equal to" in pending
-
-
-  it should "find citable objects satisfying numeric range within on a specified property" in pending
-  it should "throw an exception when types do not match when matching numeric range" in pending
-
-
   it should "find citable objects satisfying substring match on a specified property" in pending
   it should "throw an exception when types do not match when matching substring" in pending
 
 
+  it should "find citable objects satisfying case-insensitive match on any value" in pending
   it should "find citable objects satisfying case-insensitive match on a specified property" in pending
   it should "throw an exception when types do not match when matching case-insensitive substring" in pending
 
-
+  it should "find citable objects satisfying RE match on any value" in pending
   it should "find citable objects satisfying RE match on a specified property" in pending
   it should "throw an exception when types do not match when matching RE" in pending
 
+
+  it should "find citable objects satisfying URN match on any value"  in pending
+  it should "find citable objects satisfying URN match on a specified property" in pending
+  it should "throw an exception if types do not match when matching URN" in pending
 
 }

@@ -426,6 +426,59 @@ import js.annotation.JSExport
       citableObjects.filter(_.numericGreaterThan(pValue))
     }
 
+    /** Find all citable objects with a given property value
+    * greater than a given value.
+    *
+    * @param propertyUrn Property to examine.
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThan(propertyUrn,pValue))
+    }
+
+
+
+    /** Find all citable objects with a numeric property value
+    * greater or equal to than a given value.
+    *
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThanOrEqual(pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThanOrEqual(pValue))
+    }
+
+    /** Find all citable objects with a given property value
+    * greater than or equal to a given value.
+    *
+    * @param propertyUrn Property to examine.
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThanOrEqual(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThanOrEqual(propertyUrn,pValue))
+    }
+
+
+    /** Find all citable objects with a numeric property value
+    * within a given range.
+    *
+    * @param n1 Lower bound,inclusive.
+    * @param n2 Upperbound, inclusive.
+    */
+    def numericWithin(n1: BigDecimal, n2: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericWithin(n1,n2))
+    }
+
+    /** Find all citable objects with a given property value falling
+    * within a given range.
+    *
+    * @param propertyUrn Property to examine.
+    * @param n1 Lower bound,inclusive.
+    * @param n2 Upperbound, inclusive.
+    */
+    def numericWithin(propertyUrn: Cite2Urn, n1: BigDecimal, n2: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericWithin(propertyUrn,n1,n2))
+    }
+
 }
 
 
