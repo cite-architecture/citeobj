@@ -66,7 +66,14 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-  it should "find citable objects satisfying numeric less than or equal to on any value" in pending
+  it should "find citable objects satisfying numeric less than or equal to on any value" in {
+    val first3 = repo.numericLessThanOrEqual(3)
+    assert(first3.size== 3)
+
+    val firstdec = repo.numericLessThanOrEqual(3.1)
+    assert(firstdec.size== 3)
+
+  }
   it should "find citable objects satisfying numeric greater than on any value" in pending
   it should "find citable objects satisfying numeric greater than or equal to on any value" in pending
   it should "find citable objects satisfying numeric range within on any value" in pending

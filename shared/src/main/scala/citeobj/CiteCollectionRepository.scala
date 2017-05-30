@@ -383,6 +383,18 @@ import js.annotation.JSExport
   def numericLessThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
     citableObjects.filter(_.numericLessThan(propertyUrn,pValue))
   }
+
+
+  /** Find all citable objects with a numeric property value
+  * less than or equal to a given value.
+  *
+  * @param pValue Value to compare.
+  */
+  def numericLessThanOrEqual(pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThanOrEqual(pValue))
+  }
+
+  
 }
 
 
