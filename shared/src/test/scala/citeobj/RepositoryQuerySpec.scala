@@ -4,7 +4,7 @@ import edu.holycross.shot.cite._
 
 
 
-class RepositoryLanguageSpec extends FlatSpec {
+class RepositoryQuerySpec extends FlatSpec {
 
 
   val cex = """#!citecatalog
