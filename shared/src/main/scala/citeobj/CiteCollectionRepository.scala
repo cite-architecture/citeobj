@@ -500,6 +500,42 @@ import js.annotation.JSExport
     def stringContains(propertyUrn: Cite2Urn, s: String, caseSensitive: Boolean): Vector[CiteObject] = {
       citableObjects.filter(_.stringContains(propertyUrn, s, caseSensitive))
     }
+
+    /** Find all citable objects with a property matching a given regular expression.
+    *
+    * @param re Regular expression to match.
+    */
+    def regexMatch(re: String): Vector[CiteObject] = {
+      citableObjects.filter(_.regexMatch(re))
+    }
+
+    /** Find citable objects with a given property matching a given regular expression.
+    *
+    * @param propertyUrn Property to examine.
+    * @param re Regular expression to match.
+    */
+    def regexMatch(propertyUrn: Cite2Urn, re: String): Vector[CiteObject] = {
+      citableObjects.filter(_.regexMatch(propertyUrn, re))
+    }
+
+    /** Find all citable objects with a property matching a given URN.
+    *
+    * @param u URN to match.
+    */
+    def urnMatch(u: Urn): Vector[CiteObject] = {
+      citableObjects.filter(_.urnMatch(u))
+    }
+
+
+    /** Find citable objects with a given property matching a given regular expression.
+    *
+    * @param propertyUrn Property to examine.
+    * @param u URN to match.
+    */
+    def urnMatch(propertyUrn: Cite2Urn, u: Urn): Vector[CiteObject] = {
+      citableObjects.filter(_.urnMatch(propertyUrn, u))
+    }
+
 }
 
 

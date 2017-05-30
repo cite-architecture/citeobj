@@ -176,23 +176,61 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val badPairing = repo.stringContains(seqProperty,"rect",true)
       fail("Should not have completed search.")
     } catch {
-      case iae: CiteObjectException => assert(iae.getMessage() == "Type NumericType did not match value rect.")
+      case coe: CiteObjectException => assert(coe.message == "Type NumericType did not match value rect.")
       case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
 
 
-  it should "find citable objects satisfying case-insensitive match on any value" in pending
-  it should "find citable objects satisfying case-insensitive match on a specified property" in pending
-  it should "throw an exception when types do not match when matching case-insensitive substring" in pending
+  it should "find citable objects satisfying case-insensitive match on any value" in {
+    val rectos = repo.stringContains("RECt",false)
+    assert(rectos.size == 2)
+  }
+  it should "find citable objects satisfying case-insensitive match on a specified property" in {
+    val rectos = repo.stringContains(rvProperty,"RECT",false)
+    assert(rectos.size == 2)
+  }
 
-  it should "find citable objects satisfying RE match on any value" in pending
-  it should "find citable objects satisfying RE match on a specified property" in pending
-  it should "throw an exception when types do not match when matching RE" in pending
+
+  it should "find citable objects satisfying RE match on any value" in {
+    val rectos = repo.regexMatch("^rect.*")
+    assert(rectos.size == 2)
+  }
+  it should "find citable objects satisfying RE match on a specified property" in {
+    val rectos = repo.regexMatch(rvProperty,"^rect.*")
+    assert(rectos.size == 2)
+  }
+
+  it should "throw an exception when types do not match when matching RE" in {
+    try {
+      val badPairing = repo.regexMatch(seqProperty,"^rect.*")
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message ==  "Type NumericType did not match value for ^rect.*.")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
 
 
-  it should "find citable objects satisfying URN match on any value"  in pending
-  it should "find citable objects satisfying URN match on a specified property" in pending
-  it should "throw an exception if types do not match when matching URN" in pending
+  it should "find citable objects satisfying URN match on any value"  in {
+      val codexCollection =Cite2Urn("urn:cite2:hmt:codex:")
+      val codexPages = repo.urnMatch(codexCollection)
+      assert(codexPages.size == 3)
+  }
+  it should "find citable objects satisfying URN match on a specified property" in {
+    val codexCollection =Cite2Urn("urn:cite2:hmt:codex:")
+    val codexPages = repo.urnMatch(codexProperty,codexCollection)
+    assert(codexPages.size == 3)
+  }
+  it should "throw an exception if types do not match when matching URN" in {
+    val codexCollection =Cite2Urn("urn:cite2:hmt:codex:")
+    try {
+      val badPairing = repo.urnMatch(rvProperty,codexCollection)
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type ControlledVocabType did not match value for urn:cite2:hmt:codex:.")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
 
 }
