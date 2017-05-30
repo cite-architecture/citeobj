@@ -72,9 +72,28 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
     val firstdec = repo.numericLessThanOrEqual(3.1)
     assert(firstdec.size== 3)
-
   }
-  it should "find citable objects satisfying numeric greater than on any value" in pending
+  it should "find citable objects satisfying numeric less than or equal to on a specified property" in {
+    val first3 = repo.numericLessThanOrEqual(seqProperty,3)
+    assert(first3.size== 3)
+
+    val firstdec = repo.numericLessThanOrEqual(seqProperty,3.1)
+    assert(firstdec.size== 3)
+  }
+  it should "throw an exception types do not match when matching numeric less than or equal to" in {
+    try {
+      val badPairing = repo.numericLessThanOrEqual(rvProperty,4)
+      fail("Should not have completed search.")
+    } catch {
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
+
+  it should "find citable objects satisfying numeric greater than on any value" in {
+    val match2 = repo.numericGreaterThan(1)
+    assert(match2.size== 2)
+  }
   it should "find citable objects satisfying numeric greater than or equal to on any value" in pending
   it should "find citable objects satisfying numeric range within on any value" in pending
   it should "find citable objects satisfying substring match on any value" in pending
@@ -84,8 +103,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
 
 
-  it should "find citable objects satisfying numeric less than or equal to on a specified property" in pending
-  it should "throw an exception types do not match when matching numeric less than or equal to" in pending
+
 
   it should "find citable objects satisfying numeric greater than on a specified property" in pending
   it should "throw an exception types do not match when matching numeric greater than to" in pending
