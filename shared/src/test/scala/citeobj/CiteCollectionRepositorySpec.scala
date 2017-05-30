@@ -81,17 +81,16 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-  it should "throw an AssertionError if the data set is empty" in {
-    try {
-      val repo = CiteCollectionRepository(CiteCollectionData(Vector.empty), catalogInfo)
-      fail("Should not have created repository")
-    } catch {
-      case emptyErr: java.lang.AssertionError => assert(true)
-      case er: Throwable => fail("Expected assertion error")
+  it should "allow an empty data set" in {
+    val repo = CiteCollectionRepository(CiteCollectionData(Vector.empty), catalogInfo)
+    repo.data match {
+      case dataSet: CiteCollectionData => assert(true)
+      case _ => fail("Could not find collection data.")
     }
   }
 
-  it should "throw an assertion errror if there is not a 1<->1 relation" in {
+  it should "throw an assertion errror if there is not a 1<->1 relation of properties from  instantiated collections to catalog " in pending
+  /* {
     val shortData : Vector[CitePropertyValue] = Vector(
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2Urn("urn:cite2:hmt:pers:pers1")))
@@ -103,7 +102,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case emptyErr: java.lang.AssertionError => assert(true)
       case er: Throwable => fail("Expected assertion error")
     }
-  }
+  }*/
 
   it should "identify all collections in the repository" in {
     val repo = CiteCollectionRepository(cex,"#",",")
@@ -125,7 +124,9 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert (repo.properties == expected, s"${repo.properties} did not match ${expected}")
   }
 
-  it should "throw an exception if any defined properties are missing for an object in a collection"  in {
+  it should "throw an exception if any defined properties are missing for an object in a collection"  in pending
+  /*
+  {
     val shortData : Vector[CitePropertyValue] = Vector(
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.label:speech1"),"Speech 1"),
@@ -143,7 +144,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
 
   }
-
+*/
   it should "throw an Exception if any values are not of the proper type"  in {
 
     val badDataType : Vector[CitePropertyValue] = Vector(

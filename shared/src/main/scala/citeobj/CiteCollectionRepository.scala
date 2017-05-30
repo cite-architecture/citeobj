@@ -22,12 +22,15 @@ import js.annotation.JSExport
   */
   def validateAll: Boolean = {
     // Mutual validation of data and catalog:
-    assert(data.isEmpty == false, "Empty data collection: cannot create repository.")
+    //assert(data.isEmpty == false, "Empty data collection: cannot create repository.")
     assert(catalog.isEmpty == false, "Empty catalog: cannot create repository.")
     // enforce 1<->1 relation of properties
     // (and therefore collections, too) between
     // catalog and data
-    assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
+
+    // This is a subtler question...
+    // 
+    //assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
 
     // Validate contents of all objects in the repository against their
     // catalog description.

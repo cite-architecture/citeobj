@@ -1,5 +1,8 @@
 # `citeobj`: release notes
 
+
+**3.1.1**: Corrects behavior of repository to allow catalog with empty data set.
+
 **3.1.0**: Adds functions for querying data in a CITE Collection repository.
 
 
