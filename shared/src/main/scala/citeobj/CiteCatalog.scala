@@ -207,6 +207,7 @@ object CiteCatalog {
         case "ctsurn" => CtsUrnType
         case "number" => NumericType
         case "string" => StringType
+        case "boolean" => BooleanType
         case _ => throw CiteObjectException("Unrecognized attribute value for string: " + s)
       }
     }

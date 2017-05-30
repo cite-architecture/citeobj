@@ -22,8 +22,8 @@ import js.annotation.JSExport
   */
   def validateAll: Boolean = {
     // Mutual validation of data and catalog:
-    assert(data.isEmpty == false)
-    assert(catalog.isEmpty == false)
+    assert(data.isEmpty == false, "Empty data collection: cannot create repository.")
+    assert(catalog.isEmpty == false, "Empty catalog: cannot create repository.")
     // enforce 1<->1 relation of properties
     // (and therefore collections, too) between
     // catalog and data
@@ -39,7 +39,7 @@ import js.annotation.JSExport
   }
 
 
-  /** Find Vector of [[CiteObject]]s matching a given range URN.
+  /** Find Vector of [[CiteObject]]s identified by URNs matching a given range URN.
   *
   * @param filterUrn URN to match.
   */
@@ -64,7 +64,7 @@ import js.annotation.JSExport
     }
   }
 
-  /** Find Vector of [[CiteObject]]s matching a given URN.
+  /** Find Vector of [[CiteObject]]s identified by URNs matching a given URN.
   *
   * @param filterUrn URN to match.
   */
@@ -233,7 +233,7 @@ import js.annotation.JSExport
     objectMatchesCatalog(asCitableObject,collectionDefinition)
   }
 
-  /** Set of all collections in the repository,
+  /** Set of all cataloged collections in the repository,
   * identified by URN.
   */
   def collections = {
@@ -257,7 +257,7 @@ import js.annotation.JSExport
     val propVect = obj.propertyList.filter(_.urn ~~ propertyKey)
     require (propVect.size == 1, s"Wrong number of ordering properties (${propVect.size}) for ${propertyKey} in ${obj.propertyList}")
     propVect(0).propertyValue match {
-      case d: Double => d
+      case d: BigDecimal => d
       case _ => throw CiteObjectException(s"Did not find property value for ${propVect(0)}")
     }
   }
@@ -266,7 +266,7 @@ import js.annotation.JSExport
   *
   * @param obj Citable object.
   */
-  def sortValue(obj: CiteObject): Double = {
+  def sortValue(obj: CiteObject): BigDecimal = {
     // find its orderingKey:
     val collectionDef = collectionDefinition(obj.urn.dropSelector)
     collectionDef match {
@@ -356,6 +356,186 @@ import js.annotation.JSExport
   def propertyValue(propertyUrn: Cite2Urn): Any = {
     data.propertyValue(propertyUrn)
   }
+
+  /** Find all citable objects with a given property value.
+  *
+  * @param pValue Value to search for.
+  */
+  def valueEquals(pValue: Any): Vector[CiteObject] = {
+    citableObjects.filter(_.valueEquals(pValue))
+  }
+
+  /* Find objects with a given value for a given property.
+  *
+  * @param propertyUrn Property to examine.
+  * @param pValue Value to search for.
+  */
+  def valueEquals(propertyUrn: Cite2Urn, pValue: Any): Vector[CiteObject] = {
+    citableObjects.filter(_.valueEquals(propertyUrn,pValue))
+  }
+
+  /** Find all citable objects with a numeric property value
+  * less than a given value.
+  *
+  * @param pValue Value to compare.
+  */
+  def numericLessThan(pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThan(pValue))
+  }
+
+  /** Find citable objects with a given numeric property having a value
+  * less than a given value.
+  *
+  * @param propertyUrn Property to examine.
+  * @param pValue Value to compare.
+  */
+  def numericLessThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThan(propertyUrn,pValue))
+  }
+
+
+  /** Find all citable objects with a numeric property value
+  * less than or equal to a given value.
+  *
+  * @param pValue Value to compare.
+  */
+  def numericLessThanOrEqual(pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThanOrEqual(pValue))
+  }
+
+
+  /** Find all citable objects with a numeric property value
+  * less than or equal to a given value.
+  *
+  * @param propertyUrn Property to examine.
+  * @param pValue Value to compare.
+  */
+  def numericLessThanOrEqual(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+    citableObjects.filter(_.numericLessThanOrEqual(propertyUrn,pValue))
+  }
+
+
+
+
+    /** Find all citable objects with a numeric property value
+    * greater than a given value.
+    *
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThan(pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThan(pValue))
+    }
+
+    /** Find all citable objects with a given property value
+    * greater than a given value.
+    *
+    * @param propertyUrn Property to examine.
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThan(propertyUrn,pValue))
+    }
+
+
+
+    /** Find all citable objects with a numeric property value
+    * greater or equal to than a given value.
+    *
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThanOrEqual(pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThanOrEqual(pValue))
+    }
+
+    /** Find all citable objects with a given property value
+    * greater than or equal to a given value.
+    *
+    * @param propertyUrn Property to examine.
+    * @param pValue Value to compare.
+    */
+    def numericGreaterThanOrEqual(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericGreaterThanOrEqual(propertyUrn,pValue))
+    }
+
+
+    /** Find all citable objects with a numeric property value
+    * within a given range.
+    *
+    * @param n1 Lower bound,inclusive.
+    * @param n2 Upperbound, inclusive.
+    */
+    def numericWithin(n1: BigDecimal, n2: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericWithin(n1,n2))
+    }
+
+    /** Find all citable objects with a given property value falling
+    * within a given range.
+    *
+    * @param propertyUrn Property to examine.
+    * @param n1 Lower bound,inclusive.
+    * @param n2 Upperbound, inclusive.
+    */
+    def numericWithin(propertyUrn: Cite2Urn, n1: BigDecimal, n2: BigDecimal): Vector[CiteObject] = {
+      citableObjects.filter(_.numericWithin(propertyUrn,n1,n2))
+    }
+
+
+    /** Find all citable objects with a property containing a given substring,
+    * optionally taking case into consideration.
+    *
+    * @param s Value to search for.
+    * @param caseSensitive True if case should be considered in comparing strings.
+    */
+    def stringContains(s: String, caseSensitive: Boolean = true ): Vector[CiteObject] = {
+      citableObjects.filter(_.stringContains(s, caseSensitive))
+    }
+
+    /** Find citable objects with a given property containing a given substring,
+    * optionally taking case into consideration.
+    *
+    * @param propertyUrn Property to examine.
+    * @param s Value to search for.
+    * @param caseSensitive True if case should be considered in comparing strings.
+    */
+    def stringContains(propertyUrn: Cite2Urn, s: String, caseSensitive: Boolean): Vector[CiteObject] = {
+      citableObjects.filter(_.stringContains(propertyUrn, s, caseSensitive))
+    }
+
+    /** Find all citable objects with a property matching a given regular expression.
+    *
+    * @param re Regular expression to match.
+    */
+    def regexMatch(re: String): Vector[CiteObject] = {
+      citableObjects.filter(_.regexMatch(re))
+    }
+
+    /** Find citable objects with a given property matching a given regular expression.
+    *
+    * @param propertyUrn Property to examine.
+    * @param re Regular expression to match.
+    */
+    def regexMatch(propertyUrn: Cite2Urn, re: String): Vector[CiteObject] = {
+      citableObjects.filter(_.regexMatch(propertyUrn, re))
+    }
+
+    /** Find all citable objects with a property matching a given URN.
+    *
+    * @param u URN to match.
+    */
+    def urnMatch(u: Urn): Vector[CiteObject] = {
+      citableObjects.filter(_.urnMatch(u))
+    }
+
+
+    /** Find citable objects with a given property matching a given regular expression.
+    *
+    * @param propertyUrn Property to examine.
+    * @param u URN to match.
+    */
+    def urnMatch(propertyUrn: Cite2Urn, u: Urn): Vector[CiteObject] = {
+      citableObjects.filter(_.urnMatch(propertyUrn, u))
+    }
+
 }
 
 
