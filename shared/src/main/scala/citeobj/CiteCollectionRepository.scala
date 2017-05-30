@@ -479,6 +479,27 @@ import js.annotation.JSExport
       citableObjects.filter(_.numericWithin(propertyUrn,n1,n2))
     }
 
+
+    /** Find all citable objects with a property containing a given substring,
+    * optionally taking case into consideration.
+    *
+    * @param s Value to search for.
+    * @param caseSensitive True if case should be considered in comparing strings.
+    */
+    def stringContains(s: String, caseSensitive: Boolean = true ): Vector[CiteObject] = {
+      citableObjects.filter(_.stringContains(s, caseSensitive))
+    }
+
+    /** Find citable objects with a given property containing a given substring,
+    * optionally taking case into consideration.
+    *
+    * @param propertyUrn Property to examine.
+    * @param s Value to search for.
+    * @param caseSensitive True if case should be considered in comparing strings.
+    */
+    def stringContains(propertyUrn: Cite2Urn, s: String, caseSensitive: Boolean): Vector[CiteObject] = {
+      citableObjects.filter(_.stringContains(propertyUrn, s, caseSensitive))
+    }
 }
 
 

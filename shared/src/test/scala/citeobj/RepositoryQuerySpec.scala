@@ -163,9 +163,23 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
   }
 
-  it should "find citable objects satisfying substring match on any value" in pending
-  it should "find citable objects satisfying substring match on a specified property" in pending
-  it should "throw an exception when types do not match when matching substring" in pending
+  it should "find citable objects satisfying substring match on any value" in {
+    val rectos = repo.stringContains("rect")
+    assert(rectos.size == 2)
+  }
+  it should "find citable objects satisfying substring match on a specified property" in {
+    val rectos = repo.stringContains(rvProperty,"rect",true)
+    assert(rectos.size == 2)
+  }
+  it should "throw an exception when types do not match when matching substring" in {
+    try {
+      val badPairing = repo.stringContains(seqProperty,"rect",true)
+      fail("Should not have completed search.")
+    } catch {
+      case iae: CiteObjectException => assert(iae.getMessage() == "Type NumericType did not match value rect.")
+      case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
+    }
+  }
 
 
   it should "find citable objects satisfying case-insensitive match on any value" in pending
