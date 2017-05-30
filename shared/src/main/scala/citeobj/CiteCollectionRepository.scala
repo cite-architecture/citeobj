@@ -365,6 +365,15 @@ import js.annotation.JSExport
     citableObjects.filter(_.valueEquals(pValue))
   }
 
+  /* Find objects with a given value for a given property.
+  *
+  * @param propertyUrn Property to examine.
+  * @param pValue Value to search for.
+  */
+  def valueEquals(propertyUrn: Cite2Urn, pValue: Any): Vector[CiteObject] = {
+    citableObjects.filter(_.valueEquals(propertyUrn,pValue))
+  }
+
   /** Find all citable objects with a numeric property value
   * less than a given value.
   *

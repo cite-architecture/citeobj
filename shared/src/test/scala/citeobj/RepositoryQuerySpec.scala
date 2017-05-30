@@ -42,7 +42,20 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(codexA.size == 3)
 
   }
-  it should "find citable objects satisfying matching a specified property"  in pending
+  it should "find citable objects satisfying matching a specified property"  in {
+    val rectos = repo.valueEquals(rvProperty,"recto")
+    assert(rectos.size == 2)
+
+
+    val seq3 = repo.valueEquals(seqProperty,3)
+    assert(seq3.size == 1)
+
+    val codexA = Cite2Urn("urn:cite2:hmt:codex:msA")
+    val codexApages = repo.valueEquals(codexProperty, codexA)
+    assert(codexApages.size == 3)
+
+
+  }
   it should "throw an exception types do not match when matching a specified property" in pending
 
 
