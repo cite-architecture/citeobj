@@ -273,6 +273,10 @@ urn:cite2:hmt:clausereading.v1:clause11#urn:cts:greekLit:tlg0012.tlg001.fuPers:2
 
   it should "match URNs in properties" in {
     val orcaRepo = CiteCollectionRepository(orcacex,"#",",")
+    val orcaObjects = orcaRepo.citableObjects
+    val orca1 = orcaObjects(0)
+    val iliad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
+    println("matches Iliad? " + orca1.urnMatch(iliad))
   }
 
 

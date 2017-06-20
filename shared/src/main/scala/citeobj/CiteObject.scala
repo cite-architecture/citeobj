@@ -350,17 +350,18 @@ trait BaseCitable {
     * @param u URN test for.
     */
     def urnMatch(u: Urn): Boolean = {
-      val urnProperties = propertyList.filter(p => (p.propertyDef.propertyType == CtsUrnType) || (p.propertyDef.propertyType) == Cite2UrnType )
+      val ctsProperties = propertyList.filter(p => (p.propertyDef.propertyType == CtsUrnType))
+      val citeProperties = propertyList.filter( p => p.propertyDef.propertyType == Cite2UrnType )
 
 
       u match {
         case cts: CtsUrn => {
-          val urnValues = urnProperties.map{ p => CtsUrn(p.propertyValue.toString) }
+          val urnValues = ctsProperties.map{ p => CtsUrn(p.propertyValue.toString) }
           val matching =  urnValues.filter(_ ~~ u)
           (matching.size > 0)
         }
         case cite2: Cite2Urn => {
-          val urnValues = urnProperties.map{ p => Cite2Urn(p.propertyValue.toString) }
+          val urnValues = citeProperties.map{ p => Cite2Urn(p.propertyValue.toString) }
           val matching =  urnValues.filter(_ ~~ u)
           (matching.size > 0)
         }

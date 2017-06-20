@@ -1,7 +1,7 @@
 
 #!citecatalog
 
-collection#urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:#CC-attribution-share-alike
+collection#urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:##CC-attribution-share-alike
 
 property#urn:cite2:hmt:clausereading.v1.urn:#ORCA URN#Cite2Urn#
 property#urn:cite2:hmt:clausereading.v1.passage:#Passage analyzed#CtsUrn#
