@@ -46,10 +46,14 @@ trait BaseCitable {
     *
     * @param propertyUrn Property for which to find definition.
     */
-    def definitionForProperty(propertyUrn: Cite2Urn) = {//: CitePropertyDef = {
+    def definitionForProperty(propertyUrn: Cite2Urn): Option[CitePropertyDef] = {
       val matches = propertyList.filter(_.urn ~~ propertyUrn)
-      require(matches.size == 1, s"Exception: found ${matches.size} match(es) for ${propertyUrn}")
-      matches(0).propertyDef
+      //require(matches.size == 1, s"Exception: found ${matches.size} match(es) for ${propertyUrn}")
+      if (matches.size == 1) {
+        Some(matches(0).propertyDef)
+      } else {
+        None
+      }
     }
 
 
@@ -85,11 +89,16 @@ trait BaseCitable {
     * @param propertyUrn Property to test.
     */
     def valueEquals(propertyUrn : Cite2Urn, pValue: Any): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if (CiteCollectionRepository.typesMatch(pValue, propDef.propertyType, propDef.vocabularyList)) {
-        this.propertyValue(propertyUrn) == pValue
-      } else {
-        throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${pValue}")
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] =>
+
+        if (CiteCollectionRepository.typesMatch(pValue, propDef.get.propertyType, propDef.get.vocabularyList)) {
+          this.propertyValue(propertyUrn) == pValue
+        } else {
+          throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${pValue}")
+        }
       }
     }
 
@@ -111,12 +120,17 @@ trait BaseCitable {
     * @param n Value to compare.
     */
     def numericLessThan(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if (CiteCollectionRepository.typesMatch(n, propDef.propertyType, propDef.vocabularyList)) {
-        BigDecimal(this.propertyValue(propertyUrn).toString) < n
-      } else {
-        throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${n}")
-      }
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] =>
+
+          if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
+            BigDecimal(this.propertyValue(propertyUrn).toString) < n
+          } else {
+            throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
+          }
+        }
     }
 
     /** True if any numeric property of the object is less than or equal to the given value.
@@ -137,12 +151,17 @@ trait BaseCitable {
     * @param n Value to compare.
     */
     def numericLessThanOrEqual(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if (CiteCollectionRepository.typesMatch(n, propDef.propertyType, propDef.vocabularyList)) {
-        BigDecimal(this.propertyValue(propertyUrn).toString) <= n
-      } else {
-        throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${n}")
-      }
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] =>
+
+          if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
+            BigDecimal(this.propertyValue(propertyUrn).toString) <= n
+          } else {
+            throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
+          }
+        }
     }
 
     /** True if any numeric property of the object is greater than the given value.
@@ -163,12 +182,16 @@ trait BaseCitable {
     * @param n Value to compare.
     */
     def numericGreaterThan(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if (CiteCollectionRepository.typesMatch(n, propDef.propertyType, propDef.vocabularyList)) {
-        BigDecimal(this.propertyValue(propertyUrn).toString) > n
-      } else {
-        throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${n}")
-      }
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] =>
+          if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
+            BigDecimal(this.propertyValue(propertyUrn).toString) > n
+          } else {
+            throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
+          }
+        }
     }
 
     /** True if any numeric property of the object is greater than or equal to the given value.
@@ -188,12 +211,16 @@ trait BaseCitable {
     * @param n Value to compare.
     */
     def numericGreaterThanOrEqual(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if (CiteCollectionRepository.typesMatch(n, propDef.propertyType, propDef.vocabularyList)) {
-        BigDecimal(this.propertyValue(propertyUrn).toString) >= n
-      } else {
-        throw CiteObjectException(s"Type fails: ${propDef.propertyType} does not match value ${n}")
-      }
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] =>
+          if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
+            BigDecimal(this.propertyValue(propertyUrn).toString) >= n
+          } else {
+            throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
+          }
+        }
     }
 
     /** True if the value of any numeric property of the object falls within a range
@@ -217,10 +244,15 @@ trait BaseCitable {
     * @param n2 Upperbound, inclusive.
     */
     def numericWithin(propertyUrn : Cite2Urn, n1: BigDecimal, n2: BigDecimal): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      require(CiteCollectionRepository.typesMatch(n1, propDef.propertyType, propDef.vocabularyList), s"Lower bound ${n1} did not match type ${propDef.propertyType}")
-      require(CiteCollectionRepository.typesMatch(n2, propDef.propertyType, propDef.vocabularyList), s"Upper bound ${n2} did not match type ${propDef.propertyType}")
-      (BigDecimal(this.propertyValue(propertyUrn).toString) >= n1) &&     (BigDecimal(this.propertyValue(propertyUrn).toString) <= n2)
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] => {
+          require(CiteCollectionRepository.typesMatch(n1, propDef.get.propertyType, propDef.get.vocabularyList), s"Lower bound ${n1} did not match type ${propDef.get.propertyType}")
+          require(CiteCollectionRepository.typesMatch(n2, propDef.get.propertyType, propDef.get.vocabularyList), s"Upper bound ${n2} did not match type ${propDef.get.propertyType}")
+          (BigDecimal(this.propertyValue(propertyUrn).toString) >= n1) &&     (BigDecimal(this.propertyValue(propertyUrn).toString) <= n2)
+        }
+      }
     }
 
     /** True if any string property of the object contains a given substring,
@@ -232,12 +264,17 @@ trait BaseCitable {
     def stringContains(s: String, caseSensitive: Boolean = true): Boolean = {
       val stringProperties = propertyList.filter(p => (p.propertyDef.propertyType == StringType) || (p.propertyDef.propertyType) == ControlledVocabType )
       val stringValues = stringProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
-      val matching = if (caseSensitive) {
-         stringValues.filter(_.toString.contains(s))
+      if (caseSensitive) {
+        val matching = stringValues.filter(_.toString.contains(s))
+        val propMatch = (matching.size > 0)
+        val labelMatch = label.contains(s)
+        (propMatch || labelMatch)
        } else {
-         stringValues.filter(_.toString.toLowerCase.contains(s.toLowerCase))
+         val matching = stringValues.filter(_.toString.toLowerCase.contains(s.toLowerCase))
+         val propMatch = (matching.size > 0)
+         val labelMatch = label.toLowerCase.contains(s.toLowerCase)
+         (propMatch || labelMatch)
        }
-      (matching.size > 0)
     }
 
 
@@ -249,15 +286,21 @@ trait BaseCitable {
     * @param caseSensitive True if case should be considered in comparing strings.
     */
     def stringContains(propertyUrn : Cite2Urn, s: String, caseSensitive: Boolean): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if ((propDef.propertyType == StringType) || (propDef.propertyType == ControlledVocabType)) {
-        caseSensitive match {
-          case true => this.propertyValue(propertyUrn).toString.contains(s)
-          case false => this.propertyValue(propertyUrn).toString.toLowerCase.contains(s.toLowerCase)
-        }
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] => {
 
-      } else {
-        throw CiteObjectException(s"Type ${propDef.propertyType} did not match value ${s}." )
+          if ((propDef.get.propertyType == StringType) || (propDef.get.propertyType == ControlledVocabType)) {
+            caseSensitive match {
+              case true => this.propertyValue(propertyUrn).toString.contains(s)
+              case false => this.propertyValue(propertyUrn).toString.toLowerCase.contains(s.toLowerCase)
+            }
+
+          } else {
+            throw CiteObjectException(s"Type ${propDef.get.propertyType} did not match value ${s}." )
+          }
+        }
       }
     }
 
@@ -283,14 +326,19 @@ trait BaseCitable {
     * @param re String definition of a regular expression to test for.
     */
     def regexMatch(propertyUrn : Cite2Urn, re: String): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-      if ((propDef.propertyType == StringType) || (propDef.propertyType == ControlledVocabType)) {
-        val rePattern = re.toString.r
-        val s = this.propertyValue(propertyUrn).toString
-        (rePattern.findFirstIn(s) != None)
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] => {
+          if ((propDef.get.propertyType == StringType) || (propDef.get.propertyType == ControlledVocabType)) {
+            val rePattern = re.toString.r
+            val s = this.propertyValue(propertyUrn).toString
+            (rePattern.findFirstIn(s) != None)
 
-      } else {
-        throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${re}." )
+          } else {
+            throw CiteObjectException(s"Type ${propDef.get.propertyType} did not match value for ${re}." )
+          }
+        }
       }
     }
 
@@ -327,46 +375,32 @@ trait BaseCitable {
     * @param u URN test for.
     */
     def urnMatch(propertyUrn: Cite2Urn, u: Urn): Boolean = {
-      val propDef = definitionForProperty(propertyUrn)
-
-      propDef.propertyType match {
-        case CtsUrnType => {
-          u match {
-            case cts: CtsUrn => {
-              val urn = CtsUrn( this.propertyValue(propertyUrn).toString)
-              cts ~~ urn
+      val propertyDef = definitionForProperty(propertyUrn)
+      propertyDef match {
+        case None => false
+        case propDef: Some[CitePropertyDef] => {
+          propDef.get.propertyType match {
+            case CtsUrnType => {
+              u match {
+                case cts: CtsUrn => {
+                  val urn = CtsUrn( this.propertyValue(propertyUrn).toString)
+                  cts ~~ urn
+                }
+                case _ =>   throw CiteObjectException(s"Type ${propDef.get.propertyType} did not match value for ${u}." )
+              }
             }
-            case _ =>   throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
-          }
-        }
-        case Cite2UrnType => {
-          u match {
-            case cite2: Cite2Urn => {
-              val urn = Cite2Urn( this.propertyValue(propertyUrn).toString)
-              cite2 ~~ urn
+            case Cite2UrnType => {
+              u match {
+                case cite2: Cite2Urn => {
+                  val urn = Cite2Urn( this.propertyValue(propertyUrn).toString)
+                  cite2 ~~ urn
+                }
+                case _ =>   throw CiteObjectException(s"Type ${propDef.get.propertyType} did not match value for ${u}." )
+              }
             }
-            case _ =>   throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
+            case _ =>   throw CiteObjectException(s"Type ${propDef.get.propertyType} did not match value for ${u}." )
           }
         }
-        case _ =>   throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
       }
-/*
-      if ((propDef.propertyType == CtsUrnType) || (propDef.propertyType == Cite2UrnType)) {
-        u match {
-          case cts: CtsUrn => {
-            val urn = CtsUrn( this.propertyValue(propertyUrn).toString)
-            cts ~~ urn
-          }
-          case cite2: Cite2Urn => {
-            val urn = Cite2Urn( this.propertyValue(propertyUrn).toString)
-            cite2 ~~ urn
-          }
-        }
-      } else {
-        throw CiteObjectException(s"Type ${propDef.propertyType} did not match value for ${u}." )
-      }
-      */
     }
-
-
-}
+  }

@@ -230,8 +230,17 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case coe: CiteObjectException => assert(coe.message == "Type Cite2UrnType did not match value for urn:cts:greekLit:tlg0012.tlg001:1.1.")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
-
   }
+
+  it should "include label in unqualified string search" in {
+    assert(oneRecto.stringContains("Venetus"))
+    assert(oneRecto.stringContains("venetus") == false)
+  }
+
+  it should "respect case in searching label" in {
+    assert(oneRecto.stringContains("venetus", false))
+  }
+
 
 }
 

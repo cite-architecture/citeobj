@@ -84,7 +84,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val propertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.rv:1v")
     val citableObj = repo.citableObject(objectUrn)
     val propertyDef = citableObj.definitionForProperty(propertyUrn)
-    assert (propertyDef.propertyType == ControlledVocabType)
+    assert (propertyDef.get.propertyType == ControlledVocabType)
   }
 
 }
