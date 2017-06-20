@@ -242,6 +242,39 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-}
+  val orcacex = """
+#!citecatalog
 
-// ADD URN MATCH!
+
+collection#urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:##CC-attribution-share-alike
+
+
+property#urn:cite2:hmt:clausereading.v1.urn:#ORCA URN#Cite2Urn#
+property#urn:cite2:hmt:clausereading.v1.passage:#Passage analyzed#CtsUrn#
+property#urn:cite2:hmt:clausereading.v1.analysis:#Analysis#Cite2Urn#
+property#urn:cite2:hmt:clausereading.v1.deformation:#Text deformation#String#
+
+#!citedata
+
+
+urn#passage#analysis#deformation
+urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.1-1.2@ν[2]#urn:cite2:hmt:iliadicClauses.v1:imperative#Μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην
+urn:cite2:hmt:clausereading.v1:clause2#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2@ἣ[1]-1.2@ε[2]#urn:cite2:hmt:iliadicClauses.v1:indicative#ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε
+urn:cite2:hmt:clausereading.v1:clause3#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]-1.4@ν[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων
+urn:cite2:hmt:clausereading.v1:clause4#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.4@α[1]-1.5@ι[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν οἰωνοῖσί τε πᾶσ
+urn:cite2:hmt:clausereading.v1:clause5#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.5@Δ[1]-1.5@ή[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#Διὸς δ᾽ ἐτελείετο βουλή
+urn:cite2:hmt:clausereading.v1:clause6#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.6-1.7#urn:cite2:hmt:iliadicClauses.v1:subordinate#ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.
+urn:cite2:hmt:clauseclausereading.v1:clause7#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8#urn:cite2:hmt:iliadicClauses.v1:interrogative#Τίς τάρ σφωε θεῶν ἔριδι ξυνέηκε μάχεσθαι;
+urn:cite2:hmt:clausereading.v1:clause8#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9@Λ[1]-1.9@ς[3]#urn:cite2:hmt:iliadicClauses.v1:indicative#Λητοῦς καὶ Διὸς υἱός [ξυνέηκε]
+urn:cite2:hmt:clausereading.v1:clause9#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9@ὃ[1]-1.10@ν[5]#urn:cite2:hmt:iliadicClauses.v1:indicative#ὃ γὰρ βασιλῆϊ χολωθεὶς νοῦσον ἀνὰ στρατὸν ὄρσε κακήν
+urn:cite2:hmt:clausereading.v1:clause10#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.10@ὀ[1]-1.10@ί[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#ὀλέκοντο δὲ λαοί
+urn:cite2:hmt:clausereading.v1:clause11#urn:cts:greekLit:tlg0012.tlg001.fuPers:2.1@οὐδέ[1]-2.1@ἐΐσης[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#οὐδέ τι θυμὸς ἐδεύετο δαιτὸς ἐΐσης
+"""
+
+  it should "match URNs in properties" in {
+    val orcaRepo = CiteCollectionRepository(orcacex,"#",",")
+  }
+
+
+
+}
