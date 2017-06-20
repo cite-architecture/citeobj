@@ -233,4 +233,8 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
   }
 
+  it should "search for specific properties in a repository with multiple collections" in pending
+
+  it should "search for a URN in a collection with both CTS and CITE2 URN properties" in pending
+
 }
