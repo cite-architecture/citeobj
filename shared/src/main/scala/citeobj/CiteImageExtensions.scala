@@ -38,6 +38,7 @@ import js.annotation.JSExport
     //ImageExtensions(protocolMap.filter(_._2.protocol == protocol))
     var filteredMap = Map[Cite2Urn,Vector[BinaryImageSource[Any]]]()
     for ( (coll, vect) <- protocolMap) {
+      println(s"Compare ${vect.map(_.protocol)}")
       val filteredSources = vect.filter(_.protocol.toLowerCase == protocol.toLowerCase)
       if (filteredSources.size > 0) {
         filteredMap += (coll -> filteredSources)
@@ -96,9 +97,7 @@ object ImageExtensions {
 
 
         protocol match {
-          case "" => {
 
-          }
 
           case "CITE image string" => {
             val ajax = CiteImageAjax(initializer)

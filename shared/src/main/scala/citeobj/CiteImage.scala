@@ -41,7 +41,7 @@ abstract class BinaryImageSource[+T] {
 * @param baseRef Root directory for local jpeg files.
 */
 @JSExport case class IipImageString(baseRef: String)  extends BinaryImageSource[String] {
-  def protocol = "IIP Image server"
+  def protocol = "iipImageString"
 
   def binaryImageSource(u: Cite2Urn): String = {
     pathString(u)
@@ -58,7 +58,7 @@ abstract class BinaryImageSource[+T] {
 * @param baseRef Root directory for local jpeg files.
 */
 @JSExport case class LocalDzString(baseRef: String)  extends BinaryImageSource[String] {
-  def protocol = "Local Deep Zoom string"
+  def protocol = "localDzString"
 
   def binaryImageSource(u: Cite2Urn): String = {
     pathString(u)
@@ -77,7 +77,7 @@ abstract class BinaryImageSource[+T] {
 * @param baseRef Root directory for local jpeg files.
 */
 @JSExport case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
-  def protocol = "Local jpeg string"
+  def protocol = "localJpegString"
 
   def binaryImageSource(u: Cite2Urn): String = {
     pathString(u, "jpg")

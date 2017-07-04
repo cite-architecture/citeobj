@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**4.1.0**: Adds  implementations of `BinaryImageSource`.
+
 **4.0.1**: Corrects bad data in unit test.
 
 **4.0.0**:  API-breaking changes to upgrade to CEX specificadtion 3.0.

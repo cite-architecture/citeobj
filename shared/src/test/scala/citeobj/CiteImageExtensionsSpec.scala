@@ -7,7 +7,7 @@ import java.io.File
 */
 class CiteImageExtensionsSpec extends FlatSpec {
 
-  val img = Cite2Urn("urn:cite2:hmt:vaimg:VA012RN_0013")
+  val img = Cite2Urn("urn:cite2:hmt:vaimg.v1:VA012RN_0013")
   val collection = Cite2Urn("urn:cite2:hmt:vaimg.v1:")
 
   val cexSrc = """
@@ -19,7 +19,7 @@ class CiteImageExtensionsSpec extends FlatSpec {
 
 urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#CITE image URL#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local jpeg string#./images/#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#locaJpegString#./images/#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
 """
 
