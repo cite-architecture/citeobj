@@ -34,6 +34,44 @@ abstract class BinaryImageSource[+T] {
   }
 }
 
+
+
+/** Implement [[BinaryImageSource]] trait for jpeg files in a local file system.
+*
+* @param baseRef Root directory for local jpeg files.
+*/
+@JSExport case class IipImageString(baseRef: String)  extends BinaryImageSource[String] {
+  def protocol = "IIP Image server"
+
+  def binaryImageSource(u: Cite2Urn): String = {
+    pathString(u)
+  }
+
+  def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
+    baseRef + u.namespace + "/" + u.collection + "/" + u.version + "/" + u.objectComponent + ".tif.dzi"
+  }
+}
+
+
+/** Implement [[BinaryImageSource]] trait for
+*
+* @param baseRef Root directory for local jpeg files.
+*/
+@JSExport case class LocalDzString(baseRef: String)  extends BinaryImageSource[String] {
+  def protocol = "Local Deep Zoom string"
+
+  def binaryImageSource(u: Cite2Urn): String = {
+    pathString(u)
+  }
+
+  def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
+    baseRef + u.namespace + "/" + u.collection + "/" + u.version + "/" + u.objectComponent + "." + "dzi"
+  }
+}
+
+
+
+
 /** Implement [[BinaryImageSource]] trait for jpeg files in a local file system.
 *
 * @param baseRef Root directory for local jpeg files.
@@ -46,6 +84,6 @@ abstract class BinaryImageSource[+T] {
   }
 
   def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
-    baseRef + u.collection + "/" + u.objectComponent + "." + fileExtension
+    baseRef + u.namespace + "/" + u.collection + "/" + u.version + "/" + u.objectComponent + "." + fileExtension
   }
 }

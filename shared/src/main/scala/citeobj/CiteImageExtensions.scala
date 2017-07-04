@@ -96,14 +96,28 @@ object ImageExtensions {
 
 
         protocol match {
+          case "" => {
+
+          }
+
           case "CITE image string" => {
             val ajax = CiteImageAjax(initializer)
             val newMap = Vector(ajax) ++ prevMap
             binarySourceMap += (collectionUrn -> newMap)
           }
-          case "local jpeg string" => {
+          case "iipImageString" => {
+            val jpeg = IipImageString(initializer)
+            val newMap = Vector(jpeg) ++ prevMap
+            binarySourceMap += (collectionUrn -> newMap)
+          }
+          case "localJpegString" => {
             val jpeg = LocalJpegString(initializer)
             val newMap = Vector(jpeg) ++ prevMap
+            binarySourceMap += (collectionUrn -> newMap)
+          }
+          case "localDzString" => {
+            val dzi = LocalDzString(initializer)
+            val newMap = Vector(dzi) ++ prevMap
             binarySourceMap += (collectionUrn -> newMap)
           }
           case "CITE image URL" => {
