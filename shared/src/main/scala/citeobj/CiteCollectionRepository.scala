@@ -29,7 +29,7 @@ import js.annotation.JSExport
     // catalog and data
 
     // This is a subtler question...
-    // 
+    //
     //assert(data.properties == catalog.properties, s"failed when comparing ${data.properties.size} data properties to ${catalog.properties.size} catalog properties.  Data properties: \n${data.properties}\n vs catalog properties: \n${catalog.properties}")
 
     // Validate contents of all objects in the repository against their
@@ -86,7 +86,6 @@ import js.annotation.JSExport
   * a [[CiteObject]].
   */
   def citableObject(objUrn: Cite2Urn, labelPropertyUrn : Cite2Urn): CiteObject = {
-
     require(objUrn.version != "", s"Cannot make citable object from urn without version identifier: ${objUrn}")
 
 

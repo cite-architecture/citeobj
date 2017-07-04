@@ -100,6 +100,21 @@ import edu.holycross.shot.cex._
 */
 object CiteCatalog {
 
+
+  /** Create a Vector of [[CitePropertyDef]]s from a Vector of Vectors,
+  * where each of the innermost vectors is a Vector of strings.
+  *
+  * @param colsByRows Vector of String Vectors representing a Vector of property definitions.
+  * @param listDelimiter String value to use in delimiting controlled vocabulary lists.
+  */
+  def propDefsFromVofV(colsByRows : Vector[Vector[String]], listDelimiter: String = ","): Vector[CitePropertyDef] = {
+    val hasContent = colsByRows.filter( v => v(0).size > 0)
+    val propDefList =  for (p <- hasContent) yield {
+      propertyDefinition(p,listDelimiter)
+    }
+    propDefList
+  }
+
   /** Create catalog object from a String in cex format.
   *
   * @param src String of cex-format catalog description.
@@ -108,34 +123,31 @@ object CiteCatalog {
   * list.
   */
   def apply(src: String, columnDelimiter: String = "#", listDelimiter: String = "," ) : CiteCatalog = {
+
     val buffer = ArrayBuffer[CiteCollectionDef]()
     val cex  = CexParser(src)
-    val catalogBlock = cex.blockString("citecatalog")
 
-    val lines = catalogBlock.split("\n")
-
-    //println("LILNES: " + lines)
+    val catalogBlock = cex.blockString("citecollections")
+    val lines = catalogBlock.split("\n").toVector
     val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
-    //println("COLS BY ROWS " + columnsByRows)
-    val propertyEntries = columnsByRows.filter(_(0) == "property")
-    //println("Work on prop Entries " + propertyEntries + " from " + columnsByRows)
-    val propertyVector = propertyEntries.map(arr => propertyDefinition(arr.drop(1), listDelimiter) ).toVector
+    val collectionTuples = columnsByRows.map(arr => collectionTuple(arr) )
 
-    val collectionEntries = columnsByRows.filter(_(0) == "collection")
-    val collectionTuples = collectionEntries.map(arr => collectionTuple(arr.drop(1)) )
+    val propertyLines = cex.blockString("citeproperties").split("\n").toVector
+    val propColsByRows = propertyLines.map(_.split(columnDelimiter).toVector)
+    val propDefList = propDefsFromVofV(propColsByRows)
+
 
     for (c <- collectionTuples)  {
       val urn = c._1
-      val properties = propertyVector.filter(_.urn ~~ urn)
+      val applicable = propDefList.filter(_.urn ~~ urn)
       buffer += CiteCollectionDef(
         urn = c._1,
         collectionLabel = c._2,
         labellingProperty = c._3,
         orderingProperty= c._4,
         license= c._5,
-        propertyDefs = properties )
+        propertyDefs = applicable )
     }
-
     CiteCatalog(buffer.toVector)
   }
 
@@ -165,7 +177,9 @@ object CiteCatalog {
         }
       }
       val rights = columns(4)
-      (urn,collectionLabel,labelProperty,orderingProperty,rights)
+
+      val tup = (urn,collectionLabel,labelProperty,orderingProperty,rights)
+      tup
     }
 
     /** Convert string content of a property line in

@@ -8,13 +8,13 @@ import edu.holycross.shot.cite._
 class CiteCatalogSpec extends FlatSpec {
 
   val imageColl = """
-#!citecatalog
+#!citecollections
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
 
-collection#urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
-
-property#urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
-property#urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+#!citeproperties
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
 """
 
   val imageCollUrn = Cite2Urn("urn:cite2:hmt:vaimg.2017a:")

@@ -18,7 +18,7 @@ class CiteRepositorySourceSpec extends FlatSpec {
     }
 
   }
-
+/*
   it should "accept explicit naming of principal delimiter" in {
     val f = "jvm/src/test/resources/p12r.tsv"
     val repo = CiteRepositorySource.fromFile(f, "\t",",")
@@ -26,7 +26,8 @@ class CiteRepositorySourceSpec extends FlatSpec {
       case ccr : CiteCollectionRepository => assert(true)
       case _ => fail("Should have created a CiteCollectionRepository")
     }
-  }
+  }*/
+  
 
 
 

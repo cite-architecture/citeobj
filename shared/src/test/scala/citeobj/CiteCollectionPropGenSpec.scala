@@ -5,7 +5,7 @@ import edu.holycross.shot.cite._
 
 /**
 */
-class CiteCollectionRepositorySpec extends FlatSpec {
+class CiteCollectionPropGenSpec extends FlatSpec {
 
   val cex = """#!citecollections
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
@@ -15,7 +15,8 @@ urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
 urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+//urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#
 urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
 #!citedata
@@ -61,8 +62,9 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case _ => fail("Could not find collection catalog.")
     }
   }
+}
 
-
+/*
   it should "throw an AssertionError if the catalog is empty" in {
     try {
       val repo = CiteCollectionRepository(dataCollection, CiteCatalog(Vector.empty))
@@ -91,7 +93,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
   it should "throw an assertion errror if there is not a 1<->1 relation of properties from  instantiated collections to catalog " in pending
-  /* {
+{
     val shortData : Vector[CitePropertyValue] = Vector(
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2Urn("urn:cite2:hmt:pers:pers1")))
@@ -103,7 +105,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case emptyErr: java.lang.AssertionError => assert(true)
       case er: Throwable => fail("Expected assertion error")
     }
-  }*/
+  }
 
   it should "identify all collections in the repository" in {
     val repo = CiteCollectionRepository(cex,"#",",")
@@ -125,8 +127,9 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert (repo.properties == expected, s"${repo.properties} did not match ${expected}")
   }
 
-  it should "throw an exception if any defined properties are missing for an object in a collection"  in pending
-  /*
+  it should "throw an exception if any defined properties are missing for an
+  object in a collection"  in pending
+
   {
     val shortData : Vector[CitePropertyValue] = Vector(
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
@@ -145,7 +148,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
 
   }
-*/
+
   it should "throw an Exception if any values are not of the proper type"  in {
 
     val badDataType : Vector[CitePropertyValue] = Vector(
@@ -235,4 +238,4 @@ msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-}
+*/

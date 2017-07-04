@@ -13,50 +13,51 @@ name#Demo of DSE structure: Venetus A manuscript, folio 12 recto
 urn#urn:cite2:dse:demo.2017a:va12r
 license#public domain
 
-#!citecatalog
+#!citecollections
 
-# Text-bearing surfaces:
-collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+// Text-bearing surfaces:
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+// Documentary images:
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
 
-property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:msA.v1.label:#Label#String#
-property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
-property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
-property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
-# Documentary images:
-collection#urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
+#!citeproperties
+// Text-bearing surfaces:
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
-property#urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
-property#urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+// Documentary images:
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
 
 
 #!citedata
-#Data block for the collection of text-bearing surfaces.
-
+// Data block for the collection of text-bearing surfaces.
 siglum#sequence#urn#rv#label#codex
 msA#1#urn:cite2:hmt:msA.v1:12r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 12 recto#urn:cite2:hmt:codex:msA
 
 #!citedata
-# Data block for the collection of documentary images.
-
-
+// Data block for the collection of documentary images.
 urn#caption#rights
 urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017#Natural light photograph of Venetus A: Marcianus Graecus Z. 454 (= 822), folio 12, recto#This image was derived from an original ©2007, Biblioteca Nazionale Marciana, Venezie, Italia. The derivative image is ©2010, Center for Hellenic Studies. Original and derivative are licensed under the Creative Commons Attribution-Noncommercial-Share Alike 3.0 License. The CHS/Marciana Imaging Project was directed by David Jacobs of the British Library.
 
 """
 
-    val cexSrc = """#!citecatalog
-collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+    val cexSrc = """#!citecollections
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
-property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:msA.v1.label:#Label#String#
-property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
-property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
-property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+#!citeproperties
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
 #!citedata
 siglum#sequence#urn#rv#label#codex
@@ -66,14 +67,14 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 """
 
 
-  val collectionLine = "collection,urn:cite2:hmt:msA.v1:,Folios of the Venetus A manuscript,urn:cite2:hmt:msA.v1.label:,urn:cite2:hmt:msA.v1.sequence:,Public domain"
+  val collectionLine = "urn:cite2:hmt:msA.v1:,Folios of the Venetus A manuscript,urn:cite2:hmt:msA.v1.label:,urn:cite2:hmt:msA.v1.sequence:,Public domain"
 
-  val property1Line = "property,urn:cite2:hmt:msA.v1.rv:,Recto or verso,String,recto#verso"
+  val property1Line = "urn:cite2:hmt:msA.v1.rv:,Recto or verso,String,recto#verso"
 
-  val property2Line = "property,urn:cite2:hmt:msA.v1.sequence:,Page sequence,Number,"
+  val property2Line = "urn:cite2:hmt:msA.v1.sequence:,Page sequence,Number,"
 
   "The CiteCatalogObject" should "convert a column of strings to a collection tuple" in {
-    val cols = collectionLine.split(",").toVector.drop(1)
+    val cols = collectionLine.split(",").toVector
     val collectionTuple = CiteCatalog.collectionTuple(cols)
 
     collectionTuple._1 match {
@@ -103,17 +104,19 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
+
   it should "convert a column of strings to a PropertyDefinition" in {
-    val cols = property2Line.split(",").toVector.drop(1)
-    val propertyDefinition = CiteCatalog.propertyDefinition(cols)
+    val cols = property2Line.split(",").toVector
+    val propertyDefinition = CiteCatalog.propertyDefinition(cols,",")
     assert (propertyDefinition.urn == Cite2Urn("urn:cite2:hmt:msA.v1.sequence:"))
     assert(propertyDefinition.label == "Page sequence")
     assert(propertyDefinition.propertyType == NumericType)
     assert(propertyDefinition.vocabularyList.isEmpty)
   }
 
+
   it should "correctly handle controlled vocabulary lists when converting a column of strings to a PropertyDefinition" in {
-    val cols = property1Line.split(",").toVector.drop(1)
+    val cols = property1Line.split(",").toVector
     val propertyDefinition = CiteCatalog.propertyDefinition(cols,listDelimiter = "#")
     assert (propertyDefinition.urn == Cite2Urn("urn:cite2:hmt:msA.v1.rv:"))
     assert(propertyDefinition.label == "Recto or verso")
@@ -122,8 +125,10 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
-  it should "create a CiteCatalog from a CEX citecatalog block" in {
-    val cex = "#!citecatalog\n" + collectionLine + "\n" + property1Line + "\n"+ property2Line + "\n"
+  it should "create a CiteCatalog from a CEX citecollections and citeproperties blocks" in {
+    val cex = "#!citecollections\n" + collectionLine + "\n#!citeproperties\n" + property1Line + "\n"+ property2Line + "\n"
+
+
 
     val cat = CiteCatalog(cex, columnDelimiter = ",", listDelimiter = "#")
     assert (cat.size == 1)
@@ -131,6 +136,24 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert (coll.propertyDefs.size == 2)
 
   }
+
+
+  it should "create property defintions from strings" in {
+    val vector1 = Vector("urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#",
+      "urn:cite2:hmt:msA.v1.label:#Label#String#",
+      "urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#",
+      "urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#",
+      "urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso",
+      "urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#")
+    val vectorOfVectors = vector1.map(_.split("#").toVector)
+    val propDefsVector = CiteCatalog.propDefsFromVofV(vectorOfVectors,",")
+    assert(propDefsVector.size == 6)
+    val rv = propDefsVector(4)
+    val expected = Vector("recto", "verso")
+    assert(rv.vocabularyList == expected)
+
+  }
+
 
   it should "create a CiteCatalog from any valid CEX source" in {
     val cat = CiteCatalog(cexSrc, "#", ",")
@@ -142,12 +165,14 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   it should "recognize CtsUrn types in cex source" in {
 
-    val cexWithCts =  """#!citecatalog
-collection#urn:cite2:hmt:persName.v1:#People in the Iliad#urn:cite2:hmt:persName.v1.label:##CC-attribution-share-alike
+    val cexWithCts =  """#!citecollections
+urn:cite2:hmt:persName.v1:#People in the Iliad#urn:cite2:hmt:persName.v1.label:##CC-attribution-share-alike
 
-property#urn:cite2:hmt:persName.v1.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:persName.v1.label:#Label#String#
-property#urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
+
+#!citeproperties
+urn:cite2:hmt:persName.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:persName.v1.label:#Label#String#
+urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
 """
     val cat = CiteCatalog(cexWithCts, "#", ",")
     assert (cat.size == 1)
@@ -165,6 +190,7 @@ property#urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
       case _ => fail("Should have created a CiteCatalog")
     }
   }
+
   it should "correctly handle ordered collections" in {
     val cat = CiteCatalog(p12catalog, "#", ",")
     val orderedColl = Cite2Urn("urn:cite2:hmt:msA.v1:")
@@ -178,5 +204,5 @@ property#urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
     def collDef = cat.collection(imgColl)
     assert(collDef.get.license == "CC-attribution-share-alike")
   }
-  
+
 }

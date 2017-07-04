@@ -30,7 +30,7 @@ class CitePropertyDefSpec extends FlatSpec {
       case e: Throwable => fail("Should have created IllegalArgumentException: " + e)
     }
   }
-  it should "ensure that the property URN has a collection component 2ith propert-level identifier" in {
+  it should "ensure that the property URN has a collection component with propert-level identifier" in {
     try {
       val citePropertyDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1:"),"Text passage", CtsUrnType)
       fail("Should not have created property definition")

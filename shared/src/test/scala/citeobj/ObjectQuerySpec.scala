@@ -8,16 +8,16 @@ import edu.holycross.shot.cite._
 */
 class ObjectQuerySpec extends FlatSpec {
 
-  val cex = """#!citecatalog
-collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
-
-property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:msA.v1.label:#Label#String#
-property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
-property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
-property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
-property#urn:cite2:hmt:msA.v1.validated:#Passed Validation#Boolean#
+  val cex = """#!citecollections
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+#!citeproperties
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.validated:#Passed Validation#Boolean#
 
 #!citedata
 siglum#sequence#urn#rv#label#codex#validated
@@ -243,16 +243,16 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
 
   val orcacex = """
-#!citecatalog
+#!citecollections
 
 
-collection#urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:##CC-attribution-share-alike
+urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:##CC-attribution-share-alike
 
-
-property#urn:cite2:hmt:clausereading.v1.urn:#ORCA URN#Cite2Urn#
-property#urn:cite2:hmt:clausereading.v1.passage:#Passage analyzed#CtsUrn#
-property#urn:cite2:hmt:clausereading.v1.analysis:#Analysis#Cite2Urn#
-property#urn:cite2:hmt:clausereading.v1.deformation:#Text deformation#String#
+#!citeproperties
+urn:cite2:hmt:clausereading.v1.urn:#ORCA URN#Cite2Urn#
+urn:cite2:hmt:clausereading.v1.passage:#Passage analyzed#CtsUrn#
+urn:cite2:hmt:clausereading.v1.analysis:#Analysis#Cite2Urn#
+urn:cite2:hmt:clausereading.v1.deformation:#Text deformation#String#
 
 #!citedata
 

@@ -1,10 +1,10 @@
-##ABOUT THIS FILE##########################################################
-#
-# This file is in CEX format (https://github.com/cite-architecture/citedx).
-# It contains a complete DSE model of one line of the
-# *Iliad* in the Venetus A manuscript.
-#
-###########################################################################
+//ABOUT THIS FILE##########################################################
+//
+// This file is in CEX format (https://github.com/cite-architecture/citedx).
+// It contains a complete DSE model of one line of the
+// *Iliad* in the Venetus A manuscript.
+//
+//##########################################################################
 
 #!citelibrary
 name	Demo of DSE structure: Venetus A manuscript, folio 12 recto
@@ -13,13 +13,13 @@ license	public domain
 
 
 #!citecatalog
-#
-# There are two required collections in the DSE model:
-# 1. a collection of text-bearing surfaces
-# 2. a collection of documentary images
-#
+//
+// There are two required collections in the DSE model:
+// 1. a collection of text-bearing surfaces
+// 2. a collection of documentary images
+//
 
-# Text-bearing surfaces:
+// Text-bearing surfaces:
 collection	urn:cite2:hmt:msA.v1:	Pages of the Venetus A manuscriptscript	urn:cite2:hmt:msA.v1.label:	urn:cite2:hmt:msA.v1.sequence:	CC-attribution-share-alike
 
 property	urn:cite2:hmt:msA.v1.urn:	URN	Cite2Urn
@@ -29,7 +29,7 @@ property	urn:cite2:hmt:msA.v1.sequence:	Page sequence	Number
 property	urn:cite2:hmt:msA.v1.rv:	Recto or Verso	String	recto,verso
 property	urn:cite2:hmt:msA.v1.codex:	Codex URN	Cite2Urn
 
-# Documentary images:
+// Documentary images:
 collection	urn:cite2:hmt:vaimg.2017a:	Images of the Venetus A manuscriptscript	urn:cite2:hmt:vaimg.2017a.caption:		CC-attribution-share-alike
 
 property	urn:cite2:hmt:vaimg.2017a.urn:	URN	Cite2Urn
@@ -39,18 +39,18 @@ property	urn:cite2:hmt:vaimg.2017a.rights:	Rights	String
 
 
 #!citedata
-#
-#Data block for the collection of text-bearing surfaces.
-#This demo includes a single manuscript page.
-#
+//
+//Data block for the collection of text-bearing surfaces.
+//This demo includes a single manuscript page.
+//
 siglum	sequence	urn	rv	label	codex
 msA	1	urn:cite2:hmt:msA.v1:12r	recto	Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 12 recto	urn:cite2:hmt:codex:msA
 
 #!citedata
-#
-# Data block for the collection of documentary images.
-# This demo includes a single image documenting a single manuscript page.
-#
+//
+// Data block for the collection of documentary images.
+// This demo includes a single image documenting a single manuscript page.
+//
 
 urn	caption	rights
 urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017	Natural light photograph of Venetus A: Marcianus Graecus Z. 454 (= 822), folio 12, recto	This image was derived from an original ©2007, Biblioteca Nazionale Marciana, Venezie, Italia. The derivative image is ©2010, Center for Hellenic Studies. Original and derivative are licensed under the Creative Commons Attribution-Noncommercial-Share Alike 3.0 License. The CHS/Marciana Imaging Project was directed by David Jacobs of the British Library.

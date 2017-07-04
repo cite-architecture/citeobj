@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**4.0.0**:  API-breaking changes to upgrade to CEX specificadtion 3.0.
+
 **3.1.3**: Fixes a bug in URN matching on citable objects including both `CtsUrn` and `Cite2Urn` objects.
 
 **3.1.2**: Fixes bugs in searching properties of `CiteObject`s and `CiteCollectionRepository`s.
