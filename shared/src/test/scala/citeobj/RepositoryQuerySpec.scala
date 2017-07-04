@@ -7,15 +7,16 @@ import edu.holycross.shot.cite._
 class RepositoryQuerySpec extends FlatSpec {
 
 
-  val cex = """#!citecatalog
-collection#urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+  val cex = """#!citecollections
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
-property#urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:msA.v1.label:#Label#String#
-property#urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
-property#urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-property#urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
-property#urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+#!citeproperties
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
 
 #!citedata
 siglum#sequence#urn#rv#label#codex
