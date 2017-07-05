@@ -104,8 +104,13 @@ object ImageExtensions {
             val newMap = Vector(ajax) ++ prevMap
             binarySourceMap += (collectionUrn -> newMap)
           }
-          case "iipImageString" => {
-            val jpeg = IipImageString(initializer)
+          case "iipImageDzString" => {
+            val jpeg = IipImageDzString(initializer)
+            val newMap = Vector(jpeg) ++ prevMap
+            binarySourceMap += (collectionUrn -> newMap)
+          }
+          case "iipImageJpegString" => {
+            val jpeg = IipImageJpegString(initializer)
             val newMap = Vector(jpeg) ++ prevMap
             binarySourceMap += (collectionUrn -> newMap)
           }

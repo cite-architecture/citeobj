@@ -38,9 +38,9 @@ abstract class BinaryImageSource[+T] {
 
 /** Implement [[BinaryImageSource]] trait for jpeg files in a local file system.
 *
-* @param baseRef Root directory for local jpeg files.
+* @param baseRef Root directory for DeepZoom files expressed through IIPImage.
 */
-@JSExport case class IipImageString(baseRef: String)  extends BinaryImageSource[String] {
+@JSExport case class IipImageDzString(baseRef: String)  extends BinaryImageSource[String] {
   def protocol = "iipImageString"
 
   def binaryImageSource(u: Cite2Urn): String = {
@@ -49,6 +49,23 @@ abstract class BinaryImageSource[+T] {
 
   def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
     baseRef + u.namespace + "/" + u.collection + "/" + u.version + "/" + u.objectComponent + ".tif.dzi"
+  }
+}
+
+/** Implement [[BinaryImageSource]] trait for jpeg files delivered by the IIP Image protocol.
+*
+* @param baseRef Root directory for jpeg files delivered by the IIP Image protocol.
+*/
+@JSExport case class IipImageJpegString(baseRef: String)  extends BinaryImageSource[String] {
+  def protocol = "iipImageString"
+
+  def binaryImageSource(u: Cite2Urn): String = {
+    pathString(u)
+  }
+	//http://www.homermultitext.org/iipsrv?OBJ=IIP,1.0&FIF=/project/homer/pyramidal/deepzoom/hmt/vaimg/2017a/VA012RN_0013.tif&RGN=0.2339,0.2645,0.2640,0.09705&wID=250&CVT=JPEG
+	//http://www.homermultitext.org/iipsrv?OBJ=IIP,1.0&FIF=/project/homer/pyramidal/deepzoom/hmt/vaimg/2017a/VA012RN_0013.tif&CVT=JPEG
+  def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
+    baseRef + u.namespace + "/" + u.collection + "/" + u.version + "/" + u.objectComponent + ".tif&CVT=JPEG"
   }
 }
 
