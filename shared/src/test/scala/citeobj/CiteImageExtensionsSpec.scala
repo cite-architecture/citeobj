@@ -8,6 +8,7 @@ import java.io.File
 class CiteImageExtensionsSpec extends FlatSpec {
 
   val img = Cite2Urn("urn:cite2:hmt:vaimg.v1:VA012RN_0013")
+  val imgOther = Cite2Urn("urn:cite2:hmt:otherimg.v1:someImage")
   val collection = Cite2Urn("urn:cite2:hmt:vaimg.v1:")
 
   val cexSrc = """
@@ -17,12 +18,12 @@ class CiteImageExtensionsSpec extends FlatSpec {
 // Lines are structured as:
 // collection#protocol#image source initializier#rights property
 
-urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#CITE image URL#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#locaJpegString#./images/#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#localJpegString#./image_archive/#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#localDzString#./image_archive/#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:vaimg.v1:#iipImageString#http://www.homermultitext.org/iipsrv?DeepZoom=/project/homer/pyramidal/deepzoom/#urn:cite2:hmt:msA.v1.rights:
+urn:cite2:hmt:otherimg.v1:#localJpegString#./other_archive#urn:cite2:hmt:msA.v1.rights:
 """
-
+// [Log] http://www.homermultitext.org/iipsrv?DeepZoom=/project/homer/pyramidal/deepzoom/hmt/vaimg/2017a/VA012RN_0013.tif.dzi (ict2.js, line 132)
 
   "The ImageExtensions object" should "construct ImageExtensions from a CEX source" in {
     val imgExtensions = ImageExtensions(cexSrc).get
@@ -33,21 +34,21 @@ urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
   }
 
 
-/*
   it should "support multiple extensions for a single collection, and be able to generate sources from each" in {
     val imgExtensions = ImageExtensions(cexSrc).get
-    assert(imgExtensions.protocolMap.size == 1)
+    assert(imgExtensions.protocolMap.size == 2)
     val mappedExample = imgExtensions.protocolMap.toSeq(0)
     assert(mappedExample._1 == Cite2Urn("urn:cite2:hmt:vaimg.v1:"))
     val sourceVector = mappedExample._2
 
     // should accept 2 of the 4:
-    assert(sourceVector.size == 2)
+    assert(sourceVector.size == 3)
 
-    val expected1 = "http://www.homermultitext.org/hmtdigital/images?request=GetBinaryImage&urn=urn:cite2:hmt:vaimg:VA012RN_0013"
-    val expected2 = "./images/vaimg/VA012RN_0013.jpg"
+    val expected1 = "http://www.homermultitext.org/iipsrv?DeepZoom=/project/homer/pyramidal/deepzoom/hmt/vaimg/v1/VA012RN_0013.tif.dzi"
+    val expected2 = "./image_archive/hmt/vaimg/v1/VA012RN_0013.jpg"
+    val expected3 = "./image_archive/hmt/vaimg/v1/VA012RN_0013.dzi"
 
-    val expected = Set(expected1, expected2)
+    val expected = Set(expected1, expected2, expected3)
     val answersVector = sourceVector.map(_.binaryImageSource(img))
     assert(answersVector.toSet == expected)
   }
@@ -56,14 +57,13 @@ urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
   it should "find configured extensions by collection" in {
     val imgExtensions = ImageExtensions(cexSrc).get
     val extensions = imgExtensions.extensions(collection)
-    assert(extensions.size == 2)
-
+    assert(extensions.size == 3)
   }
+
   it should "return an empty Vector if no extensions are found for a collection" in {
     val imgExtensions = ImageExtensions(cexSrc).get
-    assert(imgExtensions.protocolMap.size == 1)
+    assert(imgExtensions.protocolMap.size == 2)
     val missing = Cite2Urn("urn:cite2:hmt:noimages.v1:")
     assert(imgExtensions.extensions(missing) == Vector.empty)
   }
-  */
 }
