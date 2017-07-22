@@ -17,7 +17,6 @@ Status:  in active development.  See [release notes](releases.md)
 
 `citeobj` is compiled for both the JVM and ScalaJS using scala versions 2.11 and 2.12.  Due to a dependency on `scala-xml`, the JVM builds cannot be used with Scala 2.10.  ScalaJS builds can be compiled for 2.10 as well as 2.11 and 2.12.
 
-
 Binaries for all platforms are available from jcenter.
 
 If you are using sbt, include Resolver.jcenterRepo in your list of resolvers
@@ -26,7 +25,7 @@ If you are using sbt, include Resolver.jcenterRepo in your list of resolvers
 
 and add this to your library dependencies:
 
-    "edu.holycross.shot.cite" %%% "xcite" % VERSION
+    "edu.holycross.shot" %%% "citeobj" % VERSION
 
 For maven, ivy or gradle equivalents, refer to https://bintray.com/neelsmith/maven/citeobj.
 
