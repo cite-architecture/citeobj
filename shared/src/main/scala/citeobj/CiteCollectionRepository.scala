@@ -549,7 +549,7 @@ object CiteCollectionRepository {
   /** Creates CITE Collection data from a CEX source.
   *
   * @param cexSource Text in CEX format.  Note that there must be  one `citedata` block per
-  * collection and at least one `citecatalog` block that may contain catalog data for
+  * collection and at least one `citecollections` and `citeproperties` block that may contain catalog data for
   * any number of collections.
   * @param delimiter String defining structural units of delimited text content.
   * @param delimiter2 Secondary delimiter used within controlled vocabulary lists,

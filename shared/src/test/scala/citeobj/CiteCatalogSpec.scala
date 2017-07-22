@@ -105,4 +105,35 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
     assert(pdef.get.label == "Speaker")
   }
 
+  it should "create a collection from a larger CEX source" in {
+    val noData = """#!citelibrary
+license#public domain
+name#Demo library
+urn#urn:cite2:cex:democex.2017a:test
+
+// Library has two collections:
+#!citecollections
+// 1. Text-bearing surfaces:
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+// 2. Documentary images:
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+
+#!citeproperties
+// pages
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+// images
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+"""
+  val cat = CiteCatalog(noData)
+  assert(cat.size == 2)
+  }
+
 }

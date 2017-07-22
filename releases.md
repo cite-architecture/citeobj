@@ -1,5 +1,9 @@
 # `citeobj`: release notes
 
+**4.2.0**: Full support for CEX 3.0 format.
+
+**4.1.1**: Minor bug fixes.
+
 **4.1.0**: Adds  implementations of `BinaryImageSource`.
 
 **4.0.1**: Corrects bad data in unit test.

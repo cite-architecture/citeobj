@@ -130,6 +130,10 @@ object CiteCatalog {
     val catalogBlock = cex.blockString("citecollections")
     val lines = catalogBlock.split("\n").toVector
     val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
+    for (col <- columnsByRows) {
+      require(col.size == 5, s"CiteCatalog: Did not find 5 columns in ${col}")
+    }
+
     val collectionTuples = columnsByRows.map(arr => collectionTuple(arr) )
 
     val propertyLines = cex.blockString("citeproperties").split("\n").toVector
@@ -161,7 +165,6 @@ object CiteCatalog {
     def collectionTuple(columns: Vector[String]) = {
       val urn = Cite2Urn(columns(0))
       val collectionLabel = columns(1)
-
       val labelProperty = {
         if (columns(2).isEmpty) {
           None
