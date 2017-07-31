@@ -5,7 +5,7 @@ import edu.holycross.shot.cite._
 import edu.holycross.shot.cex._
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 /** Trait for a source of binary image data.
 * Implementing classes must identify the protocol for access
@@ -26,7 +26,7 @@ abstract class BinaryImageSource[+T] {
 *
 * @param baseUrl Base URL for a CITE Image service.
 */
-@JSExport case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
+@JSExportAll case class CiteImageAjax(baseUrl: String)  extends BinaryImageSource[String] {
   def protocol = "CITE image string"
   def label = "AJAX request for CITE Image service"
   def binaryImageSource(u: Cite2Urn): String = {
@@ -40,7 +40,7 @@ abstract class BinaryImageSource[+T] {
 *
 * @param baseRef Root directory for DeepZoom files expressed through IIPImage.
 */
-@JSExport case class IipImageDzString(baseRef: String)  extends BinaryImageSource[String] {
+@JSExportAll case class IipImageDzString(baseRef: String)  extends BinaryImageSource[String] {
   def protocol = "iipImageString"
 
   def binaryImageSource(u: Cite2Urn): String = {
@@ -56,7 +56,7 @@ abstract class BinaryImageSource[+T] {
 *
 * @param baseRef Root directory for jpeg files delivered by the IIP Image protocol.
 */
-@JSExport case class IipImageJpegString(baseRef: String)  extends BinaryImageSource[String] {
+@JSExportAll case class IipImageJpegString(baseRef: String)  extends BinaryImageSource[String] {
   def protocol = "iipImageString"
 
   def binaryImageSource(u: Cite2Urn): String = {
@@ -74,7 +74,7 @@ abstract class BinaryImageSource[+T] {
 *
 * @param baseRef Root directory for local jpeg files.
 */
-@JSExport case class LocalDzString(baseRef: String)  extends BinaryImageSource[String] {
+@JSExportAll case class LocalDzString(baseRef: String)  extends BinaryImageSource[String] {
   def protocol = "localDzString"
 
   def binaryImageSource(u: Cite2Urn): String = {
@@ -93,7 +93,7 @@ abstract class BinaryImageSource[+T] {
 *
 * @param baseRef Root directory for local jpeg files.
 */
-@JSExport case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
+@JSExportAll case class LocalJpegString(baseRef: String)  extends BinaryImageSource[String] {
   def protocol = "localJpegString"
 
   def binaryImageSource(u: Cite2Urn): String = {

@@ -3,7 +3,7 @@ package edu.holycross.shot.citeobj
 import edu.holycross.shot.cite._
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 /** An instance of a property value.
 *
@@ -14,7 +14,7 @@ import js.annotation.JSExport
 * be valid for the property type cataloged for the property of which
 * this is an instance.
 */
-@JSExport  case class CitePropertyValue(urn: Cite2Urn, propertyValue: Any) {
+@JSExportAll  case class CitePropertyValue(urn: Cite2Urn, propertyValue: Any) {
   require(urn.property != "", s"${urn} must include property component")
   require(urn.objectComponent != "", s"${urn} must include property component")
 }

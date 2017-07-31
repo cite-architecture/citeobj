@@ -4,7 +4,7 @@ import edu.holycross.shot.cite._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 
 import edu.holycross.shot.cex._
@@ -13,7 +13,7 @@ import edu.holycross.shot.cex._
 *
 * @param collections Defintions of structure of individual collections.
 */
-@JSExport  case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
+@JSExportAll  case class CiteCatalog(collections: Vector[CiteCollectionDef]) {
 
   /** Number of collections in the repository.
   */

@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**4.3.0**: Updated dependency on ScalaJS allowing binary build using Scala 2.12.3.
+
 **4.2.0**: Full support for CEX 3.0 format.
 
 **4.1.1**: Minor bug fixes.

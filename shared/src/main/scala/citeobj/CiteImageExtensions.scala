@@ -5,12 +5,12 @@ import edu.holycross.shot.cite._
 import edu.holycross.shot.cex._
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 
 /** Class mapping CITE Collections
 */
-@JSExport case class ImageExtensions(
+@JSExportAll case class ImageExtensions(
   protocolMap: Map[Cite2Urn, Vector[BinaryImageSource[Any]]]
 ) {
 

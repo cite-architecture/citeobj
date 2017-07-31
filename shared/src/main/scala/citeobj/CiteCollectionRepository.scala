@@ -4,7 +4,7 @@ import edu.holycross.shot.cite._
 import scala.collection.mutable.ArrayBuffer
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 /** A cataloged collection of citable data.
 * In initialization, the constructor validates every
@@ -14,7 +14,7 @@ import js.annotation.JSExport
 * @param data Collection of data values.
 * @param catalog Documentation of the structure of each collection.
 */
-@JSExport  case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
+@JSExportAll  case class CiteCollectionRepository (data: CiteCollectionData, catalog: CiteCatalog) {
 
   assert (validateAll)
 
@@ -57,7 +57,7 @@ import js.annotation.JSExport
 
         val idx1 = indexOf(obj1)
         val idx2 = indexOf(obj2) + 1 // "until" value
-        citableObjects(baseUrn).slice(idx1 , idx2)
+        objectsForCollection(baseUrn).slice(idx1 , idx2)
 
       } else {
         throw CiteObjectException(s"Range expression not valid unless collection is ordered: ${filterUrn}")
@@ -151,13 +151,14 @@ import js.annotation.JSExport
     buffer.toVector
   }
 
+
   /** Make a Vector of [[CiteObject]]s for a collection.
   * If the collection is ordered, the resulting Vector will
   * be sorted by the collection's  ordering property.
   *
   * @param coll Collection URN.
   */
-  def citableObjects(coll: Cite2Urn) :  Vector[CiteObject]  = {
+  def objectsForCollection(coll: Cite2Urn) :  Vector[CiteObject]  = {
     val v = citableObjects.filter(_.urn ~~ coll)
     if (isOrdered(coll)) {
       v.sortWith(sortValue(_) < sortValue(_))
@@ -165,6 +166,7 @@ import js.annotation.JSExport
       v
     }
   }
+
 
   /** Find catalog entry for a given collection.
   *
@@ -285,7 +287,7 @@ import js.annotation.JSExport
     if (! isOrdered(coll)) {
       throw CiteObjectException(s"${coll} is not an ordered collection.")
     } else {
-      val v = citableObjects(coll)
+      val v = objectsForCollection(coll)
       v(0)
     }
   }
@@ -298,7 +300,7 @@ import js.annotation.JSExport
     if (! isOrdered(coll)) {
       throw CiteObjectException(s"${coll} is not an ordered collection.")
     } else {
-      val v = citableObjects(coll)
+      val v = objectsForCollection(coll)
       v.last
     }
   }
@@ -309,7 +311,7 @@ import js.annotation.JSExport
   * @param obj Find object following this.
   */
   def next(obj: CiteObject) : Option[CiteObject] = {
-    val objects = citableObjects(obj.urn.dropSelector)
+    val objects = objectsForCollection(obj.urn.dropSelector)
     val limit = objects.size - 2
     val idx = indexOf(obj)
     idx match {
@@ -325,7 +327,7 @@ import js.annotation.JSExport
   * @param obj Find object preceding this.
   */
   def prev(obj: CiteObject) : Option[CiteObject] = {
-    val objects = citableObjects(obj.urn.dropSelector)
+    val objects = objectsForCollection(obj.urn.dropSelector)
     val idx = indexOf(obj)
     idx match {
       case 0 => None
@@ -340,7 +342,7 @@ import js.annotation.JSExport
   * @param obj A citable object in an ordered collection.
   */
   def indexOf(obj: CiteObject) : Int = {
-    val v = citableObjects(obj.urn.dropSelector)
+    val v = objectsForCollection(obj.urn.dropSelector)
     v.indexOf(obj)
   }
 

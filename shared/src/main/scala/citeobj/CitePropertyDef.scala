@@ -3,7 +3,7 @@ package edu.holycross.shot.citeobj
 import edu.holycross.shot.cite._
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 /** Definition of the structure of single CITE property.
 *
@@ -15,7 +15,7 @@ import js.annotation.JSExport
 * for this property.  Note that the list can only be non-empty if the [[CitePropertyType]]
 * for this property is `StringType`.
 */
-@JSExport  case class CitePropertyDef(urn: Cite2Urn,
+@JSExportAll  case class CitePropertyDef(urn: Cite2Urn,
   label: String,
   propertyType: CitePropertyType,
   vocabularyList: Vector[String] = Vector.empty) {

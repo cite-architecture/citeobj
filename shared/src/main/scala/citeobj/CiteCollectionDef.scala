@@ -3,7 +3,7 @@ package edu.holycross.shot.citeobj
 import edu.holycross.shot.cite._
 
 import scala.scalajs.js
-import js.annotation.JSExport
+import scala.scalajs.js.annotation._
 
 /** Catalog entry defining a single CITE Collection.
 *
@@ -14,7 +14,7 @@ import js.annotation.JSExport
 * @param license Statement of licensing terms applying to the collection as a whole.
 * @param propertyDefs [[CitePropertyDef]]s for all properties appearing in the collection.
 */
-@JSExport  case class CiteCollectionDef(
+@JSExportAll  case class CiteCollectionDef(
   urn: Cite2Urn,
   collectionLabel: String,
   propertyDefs: Vector[CitePropertyDef],
