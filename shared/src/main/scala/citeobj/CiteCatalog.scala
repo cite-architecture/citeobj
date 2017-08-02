@@ -103,7 +103,7 @@ object CiteCatalog {
   /** Create a Vector of tuples from parsed CEX source.
   *  Each tuple has the core data for a catalog entry that will be
   * joined with individual property definitions to form a complete
-  * [[CatalogEntry]].
+  * [[CiteCollectionDef]].
   *
   * @param cex Parsed CEX source.
   * @param columnDelimiter String delimiter separating columns of CEX data.
@@ -114,21 +114,9 @@ object CiteCatalog {
     val catalogVector = cex.blockVector("citecollections")
     val stripped = catalogVector.flatMap(_.split("\n").drop(1).toVector)
     val columnsByRows = stripped.map(_.split("#").toVector)
-    /*
-
-    // drop header line from each block:
-    val lines = catalogVector.
-       map(_.split("\n").drop(1).mkString("\n"))
-
-    val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
-
-    for (col <- columnsByRows) {
-      require(col.size == 5, s"CiteCatalog: wrong number of columns (${col.size}) in \n" + col.mkString("\n") )
-    }
-    */
     val collectionTuples = columnsByRows.map(arr => collectionTuple(arr) )
     collectionTuples
-    
+
   }
 
 

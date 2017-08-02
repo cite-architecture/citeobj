@@ -1,9 +1,10 @@
-#!citecatalog
+#!citecollections
 
-collection#urn:cite2:dse:verbs.v1:#DSE data model#urn:cite2:dse:verbs.v1.label:#CC-attribution-share-alike
+urn:cite2:dse:verbs.v1:#DSE data model#urn:cite2:dse:verbs.v1.label:#CC-attribution-share-alike
 
-property#urn:cite2:dse:verbs.v1.urn:#URN#Cite2Urn#
-property#urn:cite2:hmt:msA.2017a.label:#Label#String#
+#!citeproperties
+urn:cite2:dse:verbs.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.2017a.label:#Label#String#
 
 #!citedata
 

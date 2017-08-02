@@ -116,7 +116,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         val propCheck = oneRecto.numericLessThan(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 2")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -132,7 +132,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         val propCheck = oneRecto.numericLessThanOrEqual(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 2")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -148,7 +148,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         val propCheck = oneRecto.numericGreaterThan(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 2")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
 
@@ -164,7 +164,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         val propCheck = oneRecto.numericGreaterThanOrEqual(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 2")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -180,7 +180,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         val propCheck = oneVerso.numericWithin(rvProperty,1,3)
         fail("Should not have been able to check value")
     } catch {
-      case iae:  IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Lower bound 1.0 did not match type ControlledVocabType")
+      case iae:  IllegalArgumentException => assert(iae.getMessage() contains "did not match type ControlledVocabType")
       case t: Throwable => fail("Should have thrown IllegalArgumentException but threw " + t)
     }
 

@@ -21,10 +21,14 @@ package object citeobj {
     for (r <- rows.drop(1)) {
       val headerToCell = scala.collection.mutable.Map[String, String]()
       val cols = r.split(delimiter).toVector
-      for (i <- 0 until cols.size) {
-        headerToCell += (header(i) -> cols(i))
+      if (cols.size == header.size) {
+        for (i <- 0 until cols.size) {
+          headerToCell += (header(i) -> cols(i))
+        }
+        rowMaps += headerToCell
+      } else {
+        throw new CiteObjectException(s"Could not map header with ${header.size} items onto data row with ${cols.size} items: ${cols}")
       }
-      rowMaps += headerToCell
     }
     rowMaps.toVector
   }

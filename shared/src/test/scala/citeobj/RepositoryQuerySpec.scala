@@ -80,7 +80,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val badPairing = repo.numericLessThan(rvProperty,4)
       fail("Should not have completed search.")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 4")
       case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -105,7 +105,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val badPairing = repo.numericLessThanOrEqual(rvProperty,4)
       fail("Should not have completed search.")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 4")
       case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -123,7 +123,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val badPairing = repo.numericGreaterThan(rvProperty,4)
       fail("Should not have completed search.")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 4")
       case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -142,7 +142,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val badPairing = repo.numericGreaterThanOrEqual(rvProperty,4)
       fail("Should not have completed search.")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 4.0")
+      case coe: CiteObjectException => assert(coe.message contains "Type fails: ControlledVocabType does not match value 4")
       case t: Throwable =>  fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -161,7 +161,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val badPairing = repo.numericWithin(rvProperty,2,4)
       fail("Should not have completed search.")
     } catch {
-      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Lower bound 2.0 did not match type ControlledVocabType")
+      case iae: IllegalArgumentException => assert(iae.getMessage() contains "did not match type ControlledVocabType")
       case t: Throwable =>  fail("Should have thrown IllegalArgumentException but threw " + t)
     }
   }

@@ -494,8 +494,11 @@ import scala.scalajs.js.annotation._
     * @param caseSensitive True if case should be considered in comparing strings.
     */
     def stringContains(s: String, caseSensitive: Boolean = true ): Vector[CiteObject] = {
+      println(s"Looking for ${s} in citable objects")
       citableObjects.filter(_.stringContains(s, caseSensitive) )
     }
+
+
 
     /** Find citable objects with a given property containing a given substring,
     * optionally taking case into consideration.

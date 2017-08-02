@@ -56,13 +56,6 @@ trait BaseCitable {
       }
     }
 
-
-    /*
-    p1.propertyList(0).propertyDef.propertyType
-    */
-
-
-
     /** Find value of a given property.
     *
     * @param propertyUrn Property to find value for.

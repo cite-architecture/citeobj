@@ -19,6 +19,21 @@ r2a,r2b,r2c
     assert(r1("C3") == "r1c")
   }
 
+  it should "throw and exception if row size is not equal to header size" in {
+    val src = """C1,C2,C3
+r1a,r1b,r1c
+r2a,r2b,r2c,error
+r3a,r3b,r3c
+"""
+    try {
+      val mapped = mapsForDelimited(src,",")
+      fail("Should not have created map")
+    } catch {
+      case coe: CiteObjectException => assert (coe.message == "Could not map header with 3 items onto data row with 4 items: Vector(r2a, r2b, r2c, error)")
+      case t: Throwable => fail("Should have thrown CiteObjectException, but threw " + t)
+    }
+  }
+
   it should "determine if a value is valid for a CtsUrn property definition" in {
     val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),"Text passage", CtsUrnType)
     assert(validValue(CtsUrn("urn:cts:greekLit:tlg0012.tlg001:1.7"), propDef))
