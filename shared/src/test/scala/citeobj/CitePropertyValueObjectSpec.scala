@@ -64,7 +64,7 @@ class CitePropertyValueObjectSpec extends FlatSpec {
       val propValue = CitePropertyValue.valueForString("malformed:urn:value:", propDef)
       fail ("Should not have formed property value")
     } catch {
-      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: wrong number of components in  malformed:urn:value: - 3")
+      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: wrong number of components in  'malformed:urn:value:' (3)")
       case e: Throwable => fail("Should have thrown a CiteObjectException: " + e)
     }
 
