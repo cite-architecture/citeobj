@@ -1,13 +1,12 @@
 package edu.holycross.shot.citeobj
-
-import scala.scalajs.js
+import org.scalatest.FlatSpec
 import edu.holycross.shot.cite._
-import edu.holycross.shot.cex._
 
-object Main extends js.JSApp {
-  def main(): Unit = {
 
-        val cexSrc = """#!citelibrary
+/** Test same data set used in JS export.
+*/
+class CiteImageExtensionsExportedSpec extends FlatSpec {
+  val cexSrc = """#!citelibrary
 name#demo
 urn#urn:cite2:cex:testcoll:hdt1node
 license#public domain
@@ -57,44 +56,7 @@ urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#local jpeg string#./images#urn:cite2:hmt:msA.v1.rights:
 """
 
-
-        val cex = CexParser(cexSrc)
-        println("Parsed a long cex string into " + cex.blockLabels.size + " blocks.")
-        val catSrc = cex.blockString("citecatalog")
-        val cat = CiteCatalog(cexSrc,"#",",")
-
-        assert (cat.size == 1, "Wrong number of collections in catalog! (${cat.size})")
-        println(s"Made an individual catalog with ${cat.size} collection(s)." )
-
-        val data = CiteCollectionData(cexSrc,"#",",")
-        assert(data.size == 18, "Wrong number of property values in data! (${data.size})")
-        println(s"Made an individual data set with ${data.size} property values.")
-
-        val repo = CiteCollectionRepository(cexSrc,"#",",")
-        assert (cat.size == 1, "Repository has wrong number of collections in catalog! (${cat.size})")
-        assert(data.size == 18, "Repository has wrong number of property values in data! (${data.size})")
-        println(s"Made a collection repository directly from CEX, with ${repo.catalog.size} cataloged collection and ${repo.data.size} property values.")
-
-
-
-        val imgOption = ImageExtensions(cexSrc)
-        imgOption match {
-          case imgs: Option[ImageExtensions] => {
-            println(s"Instantiated ${imgs.size} image extension")
-            val mapPair = imgs.get.protocolMap.toSeq(0)
-
-            val collection = mapPair._1
-            val sourceVector = mapPair._2
-
-            val img = Cite2Urn("urn:cite2:hmt:vaimg:VA012RN_0013")
-            println(s"On collection ${collection}, found ${sourceVector.size} image extensions.")
-            println(s"For image ${img}, they produce:")
-            for (s <- sourceVector) {
-              println(s"${s.binaryImageSource(img)}  (${s.protocol})")
-            }
-
-          }
-          case _ => println("Failed to make image extensions option")
-      }
+  "The ImageExtensions object" should "create an option for extensions from CEX source" in {
+      val imgOption = ImageExtensions(cexSrc)
   }
 }

@@ -7,8 +7,11 @@ class ExportTest extends FlatSpec {
 
 
   val cex = """#!citecollections
+URN#Description#Labelling Ordering License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
@@ -36,9 +39,11 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   "The citeobj library"  should "expose methods of CiteObject" in {
     val cex = """#!citecollections
+URN#Description#Labelling Ordering License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#

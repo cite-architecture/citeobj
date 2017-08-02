@@ -38,7 +38,7 @@ import scala.scalajs.js.annotation._
     //ImageExtensions(protocolMap.filter(_._2.protocol == protocol))
     var filteredMap = Map[Cite2Urn,Vector[BinaryImageSource[Any]]]()
     for ( (coll, vect) <- protocolMap) {
-      println(s"Compare ${vect.map(_.protocol)}")
+      //println(s"Compare ${vect.map(_.protocol)}")
       val filteredSources = vect.filter(_.protocol.toLowerCase == protocol.toLowerCase)
       if (filteredSources.size > 0) {
         filteredMap += (coll -> filteredSources)
@@ -77,7 +77,7 @@ object ImageExtensions {
       None
     } else {
 
-      val rows = imageString.split("\n").toVector
+      val rows = imageString.split("\n").toVector.filter(_.nonEmpty)
       val columnsByRow = rows.map(_.split(separator).toVector)
       for (columns <- columnsByRow) {
         val collectionUrn  = try {
