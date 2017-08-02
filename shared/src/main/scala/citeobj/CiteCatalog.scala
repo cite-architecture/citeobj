@@ -109,9 +109,7 @@ object CiteCatalog {
   */
   def propDefsFromVofV(colsByRows : Vector[Vector[String]], listDelimiter: String = ","): Vector[CitePropertyDef] = {
     val hasContent = colsByRows.filter( v => v(0).size > 0)
-    val propDefList =  for (p <- hasContent) yield {
-      propertyDefinition(p,listDelimiter)
-    }
+    val propDefList = hasContent.map(propertyDefinition(_, listDelimiter))
     propDefList
   }
 
@@ -127,19 +125,27 @@ object CiteCatalog {
     val buffer = ArrayBuffer[CiteCollectionDef]()
     val cex  = CexParser(src)
 
-    val catalogBlock = cex.blockString("citecollections")
-    val lines = catalogBlock.split("\n").toVector
+    val catalogVector = cex.blockVector("citecollections")
+    // drop header line from each block:
+    val lines = catalogVector.
+       map(_.split("\n").drop(1).mkString("\n"))
+
     val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
+
     for (col <- columnsByRows) {
       require(col.size == 5, s"CiteCatalog: Did not find 5 columns in ${col}")
     }
-
     val collectionTuples = columnsByRows.map(arr => collectionTuple(arr) )
 
-    val propertyLines = cex.blockString("citeproperties").split("\n").toVector
+
+    val propertyVector = cex.blockVector("citeproperties")
+     val vov = propertyVector.map(_.split("\n").drop(1).toVector)
+
+    // drop header line from each block:
+    val propertyLines = propertyVector.
+       flatMap(_.split("\n").drop(1))
     val propColsByRows = propertyLines.map(_.split(columnDelimiter).toVector)
     val propDefList = propDefsFromVofV(propColsByRows)
-
 
     for (c <- collectionTuples)  {
       val urn = c._1

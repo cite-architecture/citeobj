@@ -1,5 +1,8 @@
 # `citeobj`: release notes
 
+
+**4.3.2**: Corrects handling of header line in `citecollections` and `citeproperties` blocks of CEX to agree with CEX 3.0 specification.
+
 **4.3.1**: Incorporate bug fixes in library dependencies.
 
 **4.3.0**: Updated dependency on ScalaJS allowing binary build using Scala 2.12.3.
