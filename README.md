@@ -4,31 +4,10 @@
 
 `citeobj` is a cross-platform library for working with collections of citable objects.
 
-## Current version: 4.3.2
+## Current version: 4.3.3
 
 Status:  in active development.  See [release notes](releases.md)
 
-## Known limitations
-
-Boolean comparison of `CiteObject` numeric properties works correctly on the JVM.  When compiled to javascript, however, inherent defects in javascript cause comparison of integer and decimal values to fail.  Integer-to-integer comparisons work correctly.
-
-Example:  on the JVM, if `citeObject` is a `CiteObject` with a numeric property named `numericProperty` given a value of `1`, then the following all work as expected:
-
-    assert(citeObject.valueEquals(numericProperty,1))
-    assert(citeObject.numericGreaterThan(numericProperty,1) == false)
-    assert(citeObject.numericGreaterThan(numericProperty,1.5) == false)
-    assert(citeObject.numericGreaterThan(numericProperty,0.9) == true)
-    assert(citeObject.numericGreaterThan(numericProperty,0) == true)
-
-Compiled to javascript, the same code produces the following nonsensical results:
-
-    assert(citeObject.valueEquals(numericProperty,1))
-    assert(citeObject.numericGreaterThan(numericProperty,1) == false)
-    assert(citeObject.numericGreaterThan(numericProperty,1.5) == false)
-    assert(citeObject.numericGreaterThan(numericProperty,0.9) == false)
-    assert(citeObject.numericGreaterThan(numericProperty,0) == true)
-
-File this one on [https://github.com/denysdovhan/wtfjs](https://github.com/denysdovhan/wtfjs).
 
 ## License
 

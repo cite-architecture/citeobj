@@ -47,7 +47,6 @@ package object citeobj {
       case NumericType =>  propertyValue match {
         case i: Int => true
         case d: Double => true
-        case bg: BigDecimal => true
         case _ => false
       }
       case BooleanType =>   propertyValue match {

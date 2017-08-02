@@ -106,10 +106,10 @@ trait BaseCitable {
     *
     * @param n Value to compare.
     */
-    def numericLessThan(n: BigDecimal): Boolean = {
+    def numericLessThan(n: Double): Boolean = {
       val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
       val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
-      val matching = numericValues.filter{ x  => BigDecimal(x.toString) < n }
+      val matching = numericValues.filter{ x  => x.toString.toDouble < n }
       (matching.size > 0)
     }
 
@@ -119,14 +119,14 @@ trait BaseCitable {
     * @param propertyUrn Property to test.
     * @param n Value to compare.
     */
-    def numericLessThan(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
+    def numericLessThan(propertyUrn : Cite2Urn, n: Double): Boolean = {
       val propertyDef = definitionForProperty(propertyUrn)
       propertyDef match {
         case None => false
         case propDef: Some[CitePropertyDef] =>
 
           if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
-            BigDecimal(this.propertyValue(propertyUrn).toString) < n
+            this.propertyValue(propertyUrn).toString.toDouble < n
           } else {
             throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
           }
@@ -137,10 +137,10 @@ trait BaseCitable {
     *
     * @param n Value to compare.
     */
-    def numericLessThanOrEqual(n: BigDecimal): Boolean = {
+    def numericLessThanOrEqual(n: Double): Boolean = {
       val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
       val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
-      val matching = numericValues.filter{ x  => BigDecimal(x.toString) <= n }
+      val matching = numericValues.filter{ x  => x.toString.toDouble <= n }
       (matching.size > 0)
     }
 
@@ -150,14 +150,14 @@ trait BaseCitable {
     * @param propertyUrn Property to test.
     * @param n Value to compare.
     */
-    def numericLessThanOrEqual(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
+    def numericLessThanOrEqual(propertyUrn : Cite2Urn, n: Double): Boolean = {
       val propertyDef = definitionForProperty(propertyUrn)
       propertyDef match {
         case None => false
         case propDef: Some[CitePropertyDef] =>
 
           if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
-            BigDecimal(this.propertyValue(propertyUrn).toString) <= n
+            this.propertyValue(propertyUrn).toString.toDouble <= n
           } else {
             throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
           }
@@ -168,10 +168,10 @@ trait BaseCitable {
     *
     * @param n Value to compare.
     */
-    def numericGreaterThan(n: BigDecimal): Boolean = {
+    def numericGreaterThan(n: Double): Boolean = {
       val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
       val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
-      val matching = numericValues.filter{ x  => BigDecimal(x.toString) > n }
+      val matching = numericValues.filter{ x  => x.toString.toDouble > n }
       (matching.size > 0)
     }
 
@@ -181,13 +181,13 @@ trait BaseCitable {
     * @param propertyUrn Property to test.
     * @param n Value to compare.
     */
-    def numericGreaterThan(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
+    def numericGreaterThan(propertyUrn : Cite2Urn, n: Double): Boolean = {
       val propertyDef = definitionForProperty(propertyUrn)
       propertyDef match {
         case None => false
         case propDef: Some[CitePropertyDef] =>
           if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
-            BigDecimal(this.propertyValue(propertyUrn).toString) > n
+            this.propertyValue(propertyUrn).toString.toDouble > n
           } else {
             throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
           }
@@ -198,10 +198,10 @@ trait BaseCitable {
     *
     * @param n Value to compare.
     */
-    def numericGreaterThanOrEqual(n: BigDecimal): Boolean = {
+    def numericGreaterThanOrEqual(n: Double): Boolean = {
       val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
       val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
-      val matching = numericValues.filter{ x  => BigDecimal(x.toString) >= n }
+      val matching = numericValues.filter{ x  => x.toString.toDouble >= n }
       (matching.size > 0)
     }
 
@@ -210,13 +210,13 @@ trait BaseCitable {
     * @param propertyUrn Property to test.
     * @param n Value to compare.
     */
-    def numericGreaterThanOrEqual(propertyUrn : Cite2Urn, n: BigDecimal): Boolean = {
+    def numericGreaterThanOrEqual(propertyUrn : Cite2Urn, n: Double): Boolean = {
       val propertyDef = definitionForProperty(propertyUrn)
       propertyDef match {
         case None => false
         case propDef: Some[CitePropertyDef] =>
           if (CiteCollectionRepository.typesMatch(n, propDef.get.propertyType, propDef.get.vocabularyList)) {
-            BigDecimal(this.propertyValue(propertyUrn).toString) >= n
+            this.propertyValue(propertyUrn).toString.toDouble >= n
           } else {
             throw CiteObjectException(s"Type fails: ${propDef.get.propertyType} does not match value ${n}")
           }
@@ -229,10 +229,10 @@ trait BaseCitable {
     * @param n1 Lower bound,inclusive.
     * @param n2 Upperbound, inclusive.
     */
-    def numericWithin(n1: BigDecimal, n2:  BigDecimal): Boolean = {
+    def numericWithin(n1: Double, n2:  Double): Boolean = {
       val numericProperties = propertyList.filter(_.propertyDef.propertyType == NumericType)
       val numericValues = numericProperties.map{ p => CitePropertyValue.valueForString(p.propertyValue.toString,p.propertyDef)}
-      val matching = numericValues.filter{ x  => (BigDecimal(x.toString) >= n1) && (BigDecimal(x.toString) <= n2) }
+      val matching = numericValues.filter{ x  => (x.toString.toDouble >= n1) && (x.toString.toDouble <= n2) }
       (matching.size > 0)
     }
 
@@ -243,14 +243,14 @@ trait BaseCitable {
     * @param n1 Lower bound,inclusive.
     * @param n2 Upperbound, inclusive.
     */
-    def numericWithin(propertyUrn : Cite2Urn, n1: BigDecimal, n2: BigDecimal): Boolean = {
+    def numericWithin(propertyUrn : Cite2Urn, n1: Double, n2: Double): Boolean = {
       val propertyDef = definitionForProperty(propertyUrn)
       propertyDef match {
         case None => false
         case propDef: Some[CitePropertyDef] => {
           require(CiteCollectionRepository.typesMatch(n1, propDef.get.propertyType, propDef.get.vocabularyList), s"Lower bound ${n1} did not match type ${propDef.get.propertyType}")
           require(CiteCollectionRepository.typesMatch(n2, propDef.get.propertyType, propDef.get.vocabularyList), s"Upper bound ${n2} did not match type ${propDef.get.propertyType}")
-          (BigDecimal(this.propertyValue(propertyUrn).toString) >= n1) &&     (BigDecimal(this.propertyValue(propertyUrn).toString) <= n2)
+          (this.propertyValue(propertyUrn).toString.toDouble >= n1) &&     (this.propertyValue(propertyUrn).toString.toDouble <= n2)
         }
       }
     }

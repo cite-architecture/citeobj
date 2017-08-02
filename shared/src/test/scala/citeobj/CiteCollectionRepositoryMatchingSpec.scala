@@ -108,7 +108,12 @@ urn:cite2:hmt:vaImg.v1:imgC#Detailed image of a second page
 
   }
 
-
+  it should "match property-level URNs without object identifiers" in {
+    val propertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.siglum:")
+    val selection = repo ~~ propertyUrn
+    val expectedProperties = 6
+    assert(selection.size == expectedProperties)
+  }
 
 
 }

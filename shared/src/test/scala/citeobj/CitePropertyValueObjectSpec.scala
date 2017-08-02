@@ -69,7 +69,7 @@ class CitePropertyValueObjectSpec extends FlatSpec {
     }
 
   }
-  it should "form a BigDecimal for a NumericType" in {
+  it should "form a Double for a NumericType" in {
     val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:"),"Sequence",NumericType)
     val propValue = CitePropertyValue.valueForString("2", propDef)
     assert(propValue == 2)
@@ -81,7 +81,7 @@ class CitePropertyValueObjectSpec extends FlatSpec {
       val propValue = CitePropertyValue.valueForString("2a", propDef)
       fail ("Should not have formed property value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Invalid string for BigDecimal: 2a")
+      case coe: CiteObjectException => assert(coe.message == "Invalid string for Double: 2a")
       case e: Throwable => fail("Should not have thrown: " + e)
     }
   }

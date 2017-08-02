@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**4.3.3**: Numerous bug fixes.
+
 
 **4.3.2**: Corrects handling of header line in `citecollections` and `citeproperties` blocks of CEX to agree with CEX 3.0 specification.
 

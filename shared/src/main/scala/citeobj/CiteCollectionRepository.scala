@@ -72,11 +72,14 @@ import scala.scalajs.js.annotation._
   * @param filterUrn URN to match.
   */
   def ~~ (filterUrn: Cite2Urn): Vector[CiteObject] = {
-    if (filterUrn.isObject) {
-      citableObjects.filter(_.urn ~~ filterUrn)
-    } else {
-      rangeFilter(filterUrn)
-    }
+    filterUrn.objectComponentOption match {
+      case None =>   citableObjects.filter(_.urn ~~ filterUrn)
+      case _ =>  if (filterUrn.isObject) {
+          citableObjects.filter(_.urn ~~ filterUrn)
+        } else {
+          rangeFilter(filterUrn)
+        }
+      }
   }
 
   /** Construct a citable object for an identifying URN.
@@ -261,7 +264,7 @@ import scala.scalajs.js.annotation._
     val propVect = obj.propertyList.filter(_.urn ~~ propertyKey)
     require (propVect.size == 1, s"Wrong number of ordering properties (${propVect.size}) for ${propertyKey} in ${obj.propertyList}")
     propVect(0).propertyValue match {
-      case d: BigDecimal => d
+      case d: Double => d
       case _ => throw CiteObjectException(s"Did not find property value for ${propVect(0)}")
     }
   }
@@ -270,7 +273,7 @@ import scala.scalajs.js.annotation._
   *
   * @param obj Citable object.
   */
-  def sortValue(obj: CiteObject): BigDecimal = {
+  def sortValue(obj: CiteObject): Double = {
     // find its orderingKey:
     val collectionDef = collectionDefinition(obj.urn.dropSelector)
     collectionDef match {
@@ -383,7 +386,7 @@ import scala.scalajs.js.annotation._
   *
   * @param pValue Value to compare.
   */
-  def numericLessThan(pValue: BigDecimal): Vector[CiteObject] = {
+  def numericLessThan(pValue: Double): Vector[CiteObject] = {
     citableObjects.filter(_.numericLessThan(pValue))
   }
 
@@ -393,7 +396,7 @@ import scala.scalajs.js.annotation._
   * @param propertyUrn Property to examine.
   * @param pValue Value to compare.
   */
-  def numericLessThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+  def numericLessThan(propertyUrn: Cite2Urn, pValue: Double): Vector[CiteObject] = {
     citableObjects.filter(_.numericLessThan(propertyUrn,pValue))
   }
 
@@ -403,7 +406,7 @@ import scala.scalajs.js.annotation._
   *
   * @param pValue Value to compare.
   */
-  def numericLessThanOrEqual(pValue: BigDecimal): Vector[CiteObject] = {
+  def numericLessThanOrEqual(pValue: Double): Vector[CiteObject] = {
     citableObjects.filter(_.numericLessThanOrEqual(pValue))
   }
 
@@ -414,7 +417,7 @@ import scala.scalajs.js.annotation._
   * @param propertyUrn Property to examine.
   * @param pValue Value to compare.
   */
-  def numericLessThanOrEqual(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+  def numericLessThanOrEqual(propertyUrn: Cite2Urn, pValue: Double): Vector[CiteObject] = {
     citableObjects.filter(_.numericLessThanOrEqual(propertyUrn,pValue))
   }
 
@@ -426,7 +429,7 @@ import scala.scalajs.js.annotation._
     *
     * @param pValue Value to compare.
     */
-    def numericGreaterThan(pValue: BigDecimal): Vector[CiteObject] = {
+    def numericGreaterThan(pValue: Double): Vector[CiteObject] = {
       citableObjects.filter(_.numericGreaterThan(pValue))
     }
 
@@ -436,7 +439,7 @@ import scala.scalajs.js.annotation._
     * @param propertyUrn Property to examine.
     * @param pValue Value to compare.
     */
-    def numericGreaterThan(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+    def numericGreaterThan(propertyUrn: Cite2Urn, pValue: Double): Vector[CiteObject] = {
       citableObjects.filter(_.numericGreaterThan(propertyUrn,pValue))
     }
 
@@ -447,7 +450,7 @@ import scala.scalajs.js.annotation._
     *
     * @param pValue Value to compare.
     */
-    def numericGreaterThanOrEqual(pValue: BigDecimal): Vector[CiteObject] = {
+    def numericGreaterThanOrEqual(pValue: Double): Vector[CiteObject] = {
       citableObjects.filter(_.numericGreaterThanOrEqual(pValue))
     }
 
@@ -457,7 +460,7 @@ import scala.scalajs.js.annotation._
     * @param propertyUrn Property to examine.
     * @param pValue Value to compare.
     */
-    def numericGreaterThanOrEqual(propertyUrn: Cite2Urn, pValue: BigDecimal): Vector[CiteObject] = {
+    def numericGreaterThanOrEqual(propertyUrn: Cite2Urn, pValue: Double): Vector[CiteObject] = {
       citableObjects.filter(_.numericGreaterThanOrEqual(propertyUrn,pValue))
     }
 
@@ -468,7 +471,7 @@ import scala.scalajs.js.annotation._
     * @param n1 Lower bound,inclusive.
     * @param n2 Upperbound, inclusive.
     */
-    def numericWithin(n1: BigDecimal, n2: BigDecimal): Vector[CiteObject] = {
+    def numericWithin(n1: Double, n2: Double): Vector[CiteObject] = {
       citableObjects.filter(_.numericWithin(n1,n2))
     }
 
@@ -479,7 +482,7 @@ import scala.scalajs.js.annotation._
     * @param n1 Lower bound,inclusive.
     * @param n2 Upperbound, inclusive.
     */
-    def numericWithin(propertyUrn: Cite2Urn, n1: BigDecimal, n2: BigDecimal): Vector[CiteObject] = {
+    def numericWithin(propertyUrn: Cite2Urn, n1: Double, n2: Double): Vector[CiteObject] = {
       citableObjects.filter(_.numericWithin(propertyUrn,n1,n2))
     }
 

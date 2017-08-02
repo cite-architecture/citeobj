@@ -59,8 +59,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   it should "report boolean result of numeric greater than on any value" in {
     assert(oneVerso.numericGreaterThan(1))
-    // Integer-to-decimal comparison works only on JVM:
-    //    assert(oneVerso.numericGreaterThan(1.9))
+    assert(oneVerso.numericGreaterThan(1.9))
   }
 
   it should "report boolean result of numeric greater than or equal to on any value" in {
@@ -104,6 +103,8 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
+
+
   it should "report boolean result of numeric less than on a specified property" in {
       assert(oneRecto.numericLessThan(seqProperty,2))
       assert(oneRecto.numericLessThan(seqProperty,1.1))
@@ -115,53 +116,55 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         val propCheck = oneRecto.numericLessThan(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2")
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
+
   it should "report boolean result of numeric less than or equal to on a specified property" in {
     assert(oneRecto.numericLessThanOrEqual(seqProperty,1))
-    // Integer-to-decimal comparison works only on JVM:
-    //assert(oneRecto.numericLessThanOrEqual(seqProperty,1.5))
-    //assert(oneRecto.numericLessThanOrEqual(seqProperty,0.9) == false)
+    assert(oneRecto.numericLessThanOrEqual(seqProperty,1.5))
+    assert(oneRecto.numericLessThanOrEqual(seqProperty,0.9) == false)
   }
+
   it should "throw an exception if value and type do not match in less than or equal comparison" in {
     try {
         val propCheck = oneRecto.numericLessThanOrEqual(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2")
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
+
   it should "report boolean result of numeric greater than  on a specified property" in {
     assert(oneRecto.numericGreaterThan(seqProperty,1) == false)
-    // Integer-to-decimal comparison works only on JVM:
-    //assert(oneRecto.numericGreaterThan(seqProperty,1.5) == false)
-    //assert(oneRecto.numericGreaterThan(seqProperty,0.9))
+
+    assert(oneRecto.numericGreaterThan(seqProperty,1.5) == false)
+    assert(oneRecto.numericGreaterThan(seqProperty,0.9))
   }
   it should "throw an exception if value and type do not match in greater than  comparison" in {
     try {
         val propCheck = oneRecto.numericGreaterThan(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2")
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
 
   }
   it should "report boolean result of numeric greater than or equal to on a specified property" in {
     assert(oneRecto.numericGreaterThanOrEqual(seqProperty,1))
-    // Integer-to-decimal comparison works only on JVM:
-    //assert(oneRecto.numericGreaterThanOrEqual(seqProperty,1.5) == false)
-    //assert(oneRecto.numericGreaterThanOrEqual(seqProperty,0.9))
+
+    assert(oneRecto.numericGreaterThanOrEqual(seqProperty,1.5) == false)
+    assert(oneRecto.numericGreaterThanOrEqual(seqProperty,0.9))
   }
   it should "throw an exception if value and type do not match in greater than or equal comparison" in {
     try {
         val propCheck = oneRecto.numericGreaterThanOrEqual(rvProperty,2)
         fail("Should not have been able to check value")
     } catch {
-      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2")
+      case coe: CiteObjectException => assert(coe.message == "Type fails: ControlledVocabType does not match value 2.0")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
@@ -171,16 +174,18 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(oneVerso.numericWithin(seqProperty,2,3))
     assert(oneVerso.numericWithin(seqProperty,1,2.1))
   }
+
   it should "throw an exception if lower bound value and type do not match in range comparison" in {
     try {
         val propCheck = oneVerso.numericWithin(rvProperty,1,3)
         fail("Should not have been able to check value")
     } catch {
-      case iae:  IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Lower bound 1 did not match type ControlledVocabType")
+      case iae:  IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Lower bound 1.0 did not match type ControlledVocabType")
       case t: Throwable => fail("Should have thrown IllegalArgumentException but threw " + t)
     }
 
   }
+
   it should "report boolean result of substring match on a specified property" in {
     assert(oneRecto.stringContains(rvProperty,"rect",true))
 
@@ -196,7 +201,6 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
         fail("Should not have been able to check value")
     } catch {
       case coe: CiteObjectException => assert(coe.message == "Type NumericType did not match value rect.")
-      ///case iae:  IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Lower bound 1 did not match type ControlledVocabType")
       case t: Throwable => fail("Should have thrown CiteObjectException but threw " + t)
     }
   }
