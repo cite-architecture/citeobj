@@ -8,9 +8,11 @@ import edu.holycross.shot.cite._
 class CiteCollectionRepositorySpec extends FlatSpec {
 
   val cex = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
@@ -169,9 +171,11 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   it should "throw an exception if constraints of controlled vocab lists are violated" in {
 
     val badVocab =  """#!citecollections
+URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
@@ -199,9 +203,11 @@ msA#1#urn:cite2:hmt:msA.v1:1r#rectorated#Marcianus Graecus Z. 454 (= 822) (Venet
 
       it should "validate controlled vocab lists" in {
         val goodVocab =  """#!citecollections
+URN#Description#Labelling property#Ordering property#License        
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#

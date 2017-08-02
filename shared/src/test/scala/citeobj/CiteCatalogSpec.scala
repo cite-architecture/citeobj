@@ -9,9 +9,11 @@ class CiteCatalogSpec extends FlatSpec {
 
   val imageColl = """
 #!citecollections
+URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
 urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
 urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
@@ -113,12 +115,15 @@ urn#urn:cite2:cex:democex.2017a:test
 
 // Library has two collections:
 #!citecollections
+URN#Description#Labelling property#Ordering property#License
 // 1. Text-bearing surfaces:
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 // 2. Documentary images:
 urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
+
 // pages
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#

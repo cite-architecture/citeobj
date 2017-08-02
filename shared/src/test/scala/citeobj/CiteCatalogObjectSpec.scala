@@ -2,7 +2,7 @@ package edu.holycross.shot.citeobj
 import org.scalatest.FlatSpec
 import edu.holycross.shot.cite._
 
-import edu.holycross.shot.cite._
+import edu.holycross.shot.cex._
 
 
 
@@ -131,6 +131,49 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(propertyDefinition.vocabularyList.size == 2)
   }
 
+  it should "create a property definition list from parsed CEX" in {
+    val cexString = s"#!citecollections\n${collectionHeader}\n${collectionLine}\n\n#!citeproperties\n${propertyHeader}\n${property1Line}\n${property2Line}\n"
+    val cex = CexParser(cexString)
+    val pdefList = CiteCatalog.propertyDefListFromCex(cex,",")
+
+    val expectedProperties = 2
+    assert(pdefList.size == expectedProperties)
+  }
+
+  it should "create a collection tuple list from parsed CEX" in {
+    val cexString = s"#!citecollections\n${collectionHeader}\n${collectionLine}\n\n#!citeproperties\n${propertyHeader}\n${property1Line}\n${property2Line}\n"
+    val cex = CexParser(cexString)
+    val tups = CiteCatalog.collectionTuplesFromCex(cex,"#")
+
+    val expectedCollections = 1
+    assert(tups.size ==  expectedCollections)
+    val coll = tups(0)
+
+  }
+
+
+
+    it should "create a collection tuple list for multiple collections from parsed CEX" in {
+      val cexString = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:##CC-attribution-share-alike
+"""
+      val cex = CexParser(cexString)
+      val tups = CiteCatalog.collectionTuplesFromCex(cex,"#")
+
+      val expectedCollections = 2
+      assert(tups.size ==  expectedCollections)
+      val msPages = tups(0)
+      val expectedUrn1 = Cite2Urn("urn:cite2:hmt:msA.v1:")
+      assert (msPages._1 == expectedUrn1)
+
+
+      val imgs = tups(1)
+      val expectedUrn2 = Cite2Urn("urn:cite2:hmt:vaimg.2017a:")
+      assert(imgs._1 == expectedUrn2)
+    }
+
 
   it should "create a CiteCatalog from a CEX citecollections and citeproperties blocks" in {
     val cex = s"#!citecollections\n${collectionHeader}\n${collectionLine}\n\n#!citeproperties\n${propertyHeader}\n${property1Line}\n${property2Line}\n"
@@ -142,23 +185,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 
   }
 
-/*
 
-  it should "create property defintions from strings" in {
-    val vector1 = Vector("urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#",
-      "urn:cite2:hmt:msA.v1.label:#Label#String#",
-      "urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#",
-      "urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#",
-      "urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso",
-      "urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#")
-    val vectorOfVectors = vector1.map(_.split("#").toVector)
-    val propDefsVector = CiteCatalog.propDefsFromVofV(vectorOfVectors,",")
-    assert(propDefsVector.size == 6)
-    val rv = propDefsVector(4)
-    val expected = Vector("recto", "verso")
-    assert(rv.vocabularyList == expected)
-
-  }
 
 
   it should "create a CiteCatalog from any valid CEX source" in {
@@ -172,10 +199,12 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   it should "recognize CtsUrn types in cex source" in {
 
     val cexWithCts =  """#!citecollections
+URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:persName.v1:#People in the Iliad#urn:cite2:hmt:persName.v1.label:##CC-attribution-share-alike
 
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:persName.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:persName.v1.label:#Label#String#
 urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
@@ -187,6 +216,8 @@ urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
     assert(psg(0).propertyType == CtsUrnType)
 
   }
+
+
 
 
   it should "work with p12 demo CEX" in {
@@ -210,6 +241,6 @@ urn:cite2:hmt:persName.v1.psg:#Illustrative passage#CtsUrn#
     def collDef = cat.collection(imgColl)
     assert(collDef.get.license == "CC-attribution-share-alike")
   }
-  */
+
 
 }

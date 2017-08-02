@@ -100,16 +100,53 @@ import edu.holycross.shot.cex._
 */
 object CiteCatalog {
 
-
-  /** Create a Vector of [[CitePropertyDef]]s from a Vector of Vectors,
-  * where each of the innermost vectors is a Vector of strings.
+  /** Create a Vector of tuples from parsed CEX source.
+  *  Each tuple has the core data for a catalog entry that will be
+  * joined with individual property definitions to form a complete
+  * [[CatalogEntry]].
   *
-  * @param colsByRows Vector of String Vectors representing a Vector of property definitions.
-  * @param listDelimiter String value to use in delimiting controlled vocabulary lists.
+  * @param cex Parsed CEX source.
+  * @param columnDelimiter String delimiter separating columns of CEX data.
   */
-  def propDefsFromVofV(colsByRows : Vector[Vector[String]], listDelimiter: String = ","): Vector[CitePropertyDef] = {
-    val hasContent = colsByRows.filter( v => v(0).size > 0)
-    val propDefList = hasContent.map(propertyDefinition(_, listDelimiter))
+  def collectionTuplesFromCex(cex: CexParser, columnDelimiter: String = "#"):
+  Vector[(edu.holycross.shot.cite.Cite2Urn, String, Option[edu.holycross.shot.cite.Cite2Urn], Option[edu.holycross.shot.cite.Cite2Urn], String)] = {
+
+    val catalogVector = cex.blockVector("citecollections")
+    val stripped = catalogVector.flatMap(_.split("\n").drop(1).toVector)
+    val columnsByRows = stripped.map(_.split("#").toVector)
+    /*
+
+    // drop header line from each block:
+    val lines = catalogVector.
+       map(_.split("\n").drop(1).mkString("\n"))
+
+    val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
+
+    for (col <- columnsByRows) {
+      require(col.size == 5, s"CiteCatalog: wrong number of columns (${col.size}) in \n" + col.mkString("\n") )
+    }
+    */
+    val collectionTuples = columnsByRows.map(arr => collectionTuple(arr) )
+    collectionTuples
+    
+  }
+
+
+  /** Create a Vector of [[CitePropertyDef]] objects from parsed CEX source.
+  *
+  * @param cex Parsed CEX source.
+  * @param columnDelimiter String delimiter separating columns of CEX data.
+  * @param listDelimiter String delimiter used to separate items in lists.
+  */
+  def propertyDefListFromCex(cex: CexParser, columnDelimiter: String = "#", listDelimiter: String = ","): Vector[CitePropertyDef] = {
+    val propertyVector = cex.blockVector("citeproperties")
+    // Flatten vector of blocks to a Vector of Strings with a single property def per line
+    // and headers stripped out
+    val stripped = propertyVector.flatMap(_.split("\n").drop(1).toVector)
+    // Split individual rows up into columns of data
+    val vov = stripped.map(_.split("#").toVector)
+    // convert to CitePropertyDef
+    val propDefList = vov.map(CiteCatalog.propertyDefinition(_, ","))
     propDefList
   }
 
@@ -124,28 +161,8 @@ object CiteCatalog {
 
     val buffer = ArrayBuffer[CiteCollectionDef]()
     val cex  = CexParser(src)
-
-    val catalogVector = cex.blockVector("citecollections")
-    // drop header line from each block:
-    val lines = catalogVector.
-       map(_.split("\n").drop(1).mkString("\n"))
-
-    val columnsByRows = lines.map(_.split(columnDelimiter).toVector)
-
-    for (col <- columnsByRows) {
-      require(col.size == 5, s"CiteCatalog: Did not find 5 columns in ${col}")
-    }
-    val collectionTuples = columnsByRows.map(arr => collectionTuple(arr) )
-
-
-    val propertyVector = cex.blockVector("citeproperties")
-     val vov = propertyVector.map(_.split("\n").drop(1).toVector)
-
-    // drop header line from each block:
-    val propertyLines = propertyVector.
-       flatMap(_.split("\n").drop(1))
-    val propColsByRows = propertyLines.map(_.split(columnDelimiter).toVector)
-    val propDefList = propDefsFromVofV(propColsByRows)
+    val collectionTuples = collectionTuplesFromCex(cex, columnDelimiter)
+    val propDefList = propertyDefListFromCex(cex, listDelimiter)
 
     for (c <- collectionTuples)  {
       val urn = c._1
@@ -191,12 +208,12 @@ object CiteCatalog {
       tup
     }
 
-    /** Convert string content of a property line in
+    /** Convert string content of a single property line in
     * CEX catalog format to a tuple of objects.
     *
     * @param columns Vector of Strings.
     */
-    def propertyDefinition(columns: Vector[String], listDelimiter: String = "#"): CitePropertyDef = {
+    def propertyDefinition(columns: Vector[String], listDelimiter: String = ","): CitePropertyDef = {
       val urn = Cite2Urn(columns(0))
       val label = columns(1)
       val vocabList = {

@@ -9,9 +9,11 @@ class CiteCollectionDataObjectSpec extends FlatSpec {
 
 
 val srcData = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
@@ -111,6 +113,7 @@ name#Demo of DSE structure: Venetus A manuscript, folio 12 recto
 urn#urn:cite2:dse:demo.2017a:va12r
 license#public domain
 #!citecollections
+URN#Description#Labelling property#Ordering property#License
 // Text-bearing surfaces:
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 //Documentary images:
@@ -118,6 +121,7 @@ urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hm
 
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
