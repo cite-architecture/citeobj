@@ -112,6 +112,7 @@ val dataBlocks = """#!citelibrary
 name#Demo of DSE structure: Venetus A manuscript, folio 12 recto
 urn#urn:cite2:dse:demo.2017a:va12r
 license#public domain
+
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
 // Text-bearing surfaces:

@@ -12,6 +12,7 @@ URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
 urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
@@ -47,12 +48,14 @@ urn#urn:cite2:cex:democex.2017a:test
 
 // Library has two collections:
 #!citecollections
+URN#Description#Labelling property#Ordering property#License
 // 1. Text-bearing surfaces:
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 // 2. Documentary images:
 urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
 
 #!citeproperties
+Property#Label#Type#Authority list
 // pages
 urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
 urn:cite2:hmt:msA.v1.label:#Label#String#
@@ -72,9 +75,11 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
   it should "catch catalog entries with missing data " in {
     val defective = """
 #!citecollections
+URN#Description#Labelling property#Ordering property#License
 // Missing a column...
 urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:#CC-attribution-share-alike
 #!citeproperties
+Property#Label#Type#Authority list
 urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
 urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
 urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
@@ -83,7 +88,7 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
     val repo = CiteCollectionRepository(defective,"#",",")
 
   } catch {
-    case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: CiteCatalog: Did not find 5 columns in Vector(urn:cite2:hmt:vaimg.2017a:, Images of the Venetus A, urn:cite2:hmt:msA.v1.label:, CC-attribution-share-alike)")
+    case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: wrong number of components in  'CC-attribution-share-alike' (1)")
     case thr : Throwable => fail("Should have thrown IllegalArgumentException")
   }
   }
