@@ -48,10 +48,10 @@ urn:cite2:hmt:vaImg.v1:imgC#Detailed image of a second page
 
 
   val repo = CiteCollectionRepository(cex,"#",",")
-  "A Cite Collection repository" should "find a string in records" in pending/* {
+  "A Cite Collection repository" should "find a string in records" in  {
     val details = repo.stringContains("Detailed", true)
     assert(details.size == 2)
-  }*/
+  }
 
   it should "respect case in searching strings" in pending /*{
     val details = repo.stringContains("detailed", true)
