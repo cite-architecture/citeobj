@@ -46,7 +46,7 @@ import edu.holycross.shot.cex._
 
     collection(urn.dropProperty) match {
       case None => throw CiteObjectException(s"No collection ${urn} cataloged.")
-      case u: Option[edu.holycross.shot.citeobj.CiteCollectionDef] => {
+      case u: Option[CiteCollectionDef] => {
         u.get.orderingProperty match {
           case None => false
           case seqProp : Option[Cite2Urn] => true
