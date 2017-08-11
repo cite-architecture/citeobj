@@ -81,7 +81,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(oneRecto.valueEquals(seqProperty,1))
     assert(oneRecto.numericGreaterThan(seqProperty,0))
 
-    //assert(oneRecto.numericGreaterThan(seqProperty,0.9))
+    assert(oneRecto.numericGreaterThan(seqProperty,0.9))
   }
 
 }

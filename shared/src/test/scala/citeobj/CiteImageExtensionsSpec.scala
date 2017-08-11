@@ -59,6 +59,7 @@ urn:cite2:hmt:otherimg.v1:#localJpegString#./other_archive#urn:cite2:hmt:msA.v1.
   it should "find configured extensions by collection" in {
     val imgExtensions = ImageExtensions(cexSrc).get
     val extensions = imgExtensions.extensions(collection)
+    println("EXTENSIONS:  " + extensions)
     assert(extensions.size == 4)
   }
 

@@ -65,7 +65,11 @@ abstract class BinaryImageSource[+T] {
 	//http://www.homermultitext.org/iipsrv?OBJ=IIP,1.0&FIF=/project/homer/pyramidal/deepzoom/hmt/vaimg/2017a/VA012RN_0013.tif&RGN=0.2339,0.2645,0.2640,0.09705&wID=250&CVT=JPEG
 	//http://www.homermultitext.org/iipsrv?OBJ=IIP,1.0&FIF=/project/homer/pyramidal/deepzoom/hmt/vaimg/2017a/VA012RN_0013.tif&CVT=JPEG
   def pathString(u: Cite2Urn, fileExtension: String = "jpg"): String = {
-    baseRef + u.namespace + "/" + u.collection + "/" + u.version + "/" + u.objectComponent + ".tif&CVT=JPEG"
+      val img = baseRef + List(u.namespace, u.collection, u.version, u.dropExtensions.objectComponent).mkString("/") + ".tif"
+      u.objectExtensionOption match {
+        case None => List(img, "CVT=JPEG").mkString("&")
+        case _ =>  List(img , "RGN=" + u.objectExtension ,  "CVT=JPEG").mkString("&")
+    }
   }
 }
 

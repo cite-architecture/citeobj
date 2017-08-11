@@ -1,5 +1,8 @@
 # `citeobj`: release notes
 
+
+**5.0.0**: Fixes a bug in the implementation of IipImageJpegString extension of CiteImage.  Only API-breaking change is removal of obsolete and previously deprecated code handling configuration from XML sources.
+
 **4.3.3**: Numerous bug fixes related to searching repositories.
 
 **4.3.2**: Corrects handling of header line in `citecollections` and `citeproperties` blocks of CEX to agree with CEX 3.0 specification.
