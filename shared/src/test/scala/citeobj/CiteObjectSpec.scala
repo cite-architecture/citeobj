@@ -29,17 +29,25 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 """
   val repo = CiteCollectionRepository(cex,"#",",")
 
-  "A CITE object" should "be constructed by a repository" in {
+  "A CITE object" should "be constructed out of properties by a repository" in {
     val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
     val labelPropertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.label:")
-    val citableObj = repo.citableObject(objectUrn,labelPropertyUrn)
+    val citableObj = repo.citableObjectFromProperties(objectUrn,labelPropertyUrn)
 
     citableObj match {
       case co : CiteObject => assert(true)
       case _ => fail("Should have created a CiteObject")
     }
+  }
 
+  it should "be returned from the object Map" in {
+    val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
+    val citableObj = repo.citableObject(objectUrn)
 
+    citableObj match {
+      case co : CiteObject => assert(true)
+      case _ => fail("Should have created a CiteObject")
+    }
   }
 
   it should "require an object selector on its URN" in {
@@ -48,8 +56,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
       val citableObj = repo.citableObject(collUrn)
       fail("Should not have been able to make CiteObject from collection URN.")
     } catch {
-      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: For urn:cite2:hmt:msA.v1.urn:, found 3 matches")
-      case t: Throwable => fail("Should have thrown IllegalArgumentException: " + t)
+      case t: Throwable => true
     }
 
   }

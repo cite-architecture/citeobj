@@ -9,44 +9,42 @@ class CiteCollectionRepositoryOrderingSpec extends FlatSpec {
 
 
   val cex = """#!citecollections
-urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:speeches.v1:#Speeches in the Iliad#urn:cite2:hmt:speeches.v1.label:#urn:cite2:hmt:speeches.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
-urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
-urn:cite2:hmt:msA.v1.label:#Label#String#
-urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
-urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
-urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
-urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+Property#Label#Type#Authority list
+urn:cite2:hmt:speeches.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:speeches.v1.speaker:#Speaker#Cite2Urn#
+urn:cite2:hmt:speeches.v1.label:#Label#String#
+urn:cite2:hmt:speeches.v1.passage:#Passage#CtsUrn#
+urn:cite2:hmt:speeches.v1.sequence:#Speech Sequence#Number#
 
 #!citedata
-siglum#sequence#urn#rv#label#codex
-msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
-msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
-msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
+urn#speaker#label#passage#sequence
+urn:cite2:hmt:speeches.v1:speech1#urn:cite2:hmt:pers:pers22#Speech 1#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#1
+urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers22#Speech 2#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#2
+urn:cite2:hmt:speeches.v1:speech3#urn:cite2:hmt:pers:pers22#Speech 3#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#3
+urn:cite2:hmt:speeches.v1:speech4#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:greekLit:tlg0012.tlg001:1.85-1.91#4
 """
 
-  val collectionUrn = Cite2Urn("urn:cite2:hmt:msA.v1:")
+  val collectionUrn = Cite2Urn("urn:cite2:hmt:speeches.v1:")
+  val repo = CiteCollectionRepository(cex,"#",",")
 
-  "A Cite Collection repository" should "recognize an ordered collection" in pending /* {
-      val repo = CiteCollectionRepository(cex,"#",",")
-    assert(repo isOrdered Cite2Urn("urn:cite2:hmt:msA.v1:"))
-  }*/
-
-  it should "not break nearly so much" in {
-    val data = CiteCollectionData(cex,"#",",")
-    val catalog = CiteCatalog(cex,"#",",")
+  "A Cite Collection repository" should "recognize an ordered collection" in  {
+      assert(repo isOrdered Cite2Urn("urn:cite2:hmt:speeches.v1:"))
   }
-  /*()
+
   it should "find the first CiteObject in an ordered collection" in {
-    val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
+    val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech1"))
     assert(repo.first(collectionUrn) == expected)
   }
 
   it should "find the last CiteObject in an ordered collection" in {
-    val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:2r"))
+    val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech4"))
     assert(repo.last(collectionUrn) == expected)
   }
+  /*
 
 
   it should "find the index of an object in an ordered vector" in {
