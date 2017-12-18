@@ -27,7 +27,6 @@ import scala.collection.immutable.ListMap
   *
   */
   val citableObjects: Vector[CiteObject] = {
-    println("---- making citableObjects")
     this.objects.objectMap.map(obj => obj._2).toVector
   }
 
@@ -36,12 +35,10 @@ import scala.collection.immutable.ListMap
   * for unordered collections, the Vector[Cite2Urn] will be in any old order
   */
   val collectionsMap:Map[Cite2Urn,Vector[Cite2Urn]] = {
-      println("doing collectionsMap")
       val timeStart =  java.lang.System.currentTimeMillis()
       val colls:Vector[Cite2Urn] = this.catalog.collections.map(_.urn)
       val cm = colls.map(c => (c,urnsForCollectionFromProperties(c))).toMap
       val timeEnd =  java.lang.System.currentTimeMillis()
-      println(s"done doing collectionsMap in ${(timeEnd - timeStart)/1000}")
       cm
   }
 
@@ -80,30 +77,22 @@ import scala.collection.immutable.ListMap
   */
   def rangeFilter (filterUrn: Cite2Urn): Vector[CiteObject] = {
     if (filterUrn.isRange) {
-      var timeStart =  java.lang.System.currentTimeMillis()
       val baseUrn = filterUrn.dropSelector
       val simpleObjectUrn = filterUrn.dropExtensions
       if (catalog.isOrdered(baseUrn)) {
-
-        val obj1 = citableObject(simpleObjectUrn.rangeBeginUrn.dropProperty)
-        val obj2 = citableObject(simpleObjectUrn.rangeEndUrn.dropProperty)
-        var timeEnd = java.lang.System.currentTimeMillis()
-
-        timeStart = java.lang.System.currentTimeMillis()
-        val v = objectsForCollection(baseUrn)
-        val idx1 = v.indexOf(obj1)
-        timeEnd = java.lang.System.currentTimeMillis()
-        println(s"++++++ rangeFilter first rangeIndex in ${timeEnd - timeStart}")
-        timeStart = java.lang.System.currentTimeMillis()
-        val idx2 = v.indexOf(obj2) + 1 // "until" value
-        timeEnd = java.lang.System.currentTimeMillis()
-        println(s"++++++ rangeFilter second rangeIndex in ${timeEnd - timeStart}")
-        timeStart = java.lang.System.currentTimeMillis()
-        val ofc = v.slice(idx1 , idx2)
-        timeEnd = java.lang.System.currentTimeMillis()
-        println(s"++++++ rangeFilter objectsForCollection in ${timeEnd - timeStart}")
-        ofc
-
+        val rangeBegin:Cite2Urn = simpleObjectUrn.rangeBeginUrn.dropProperty
+        val rangeEnd:Cite2Urn = simpleObjectUrn.rangeEndUrn.dropProperty
+        if (this.objects.objectMap.contains(rangeBegin) && this.objects.objectMap.contains(rangeEnd) ){
+          val obj1 = citableObject(rangeBegin)
+          val obj2 = citableObject(rangeEnd)
+          val v = objectsForCollection(baseUrn)
+          val idx1 = v.indexOf(obj1)
+          val idx2 = v.indexOf(obj2) + 1 // "until" value
+          val ofc = v.slice(idx1 , idx2)
+          ofc
+        } else {
+          Vector()
+        }
       } else {
         throw CiteObjectException(s"Range expression not valid unless collection is ordered: ${filterUrn}")
       }
@@ -117,23 +106,68 @@ import scala.collection.immutable.ListMap
   * @param filterUrn URN to match.
   */
   def ~~ (filterUrn: Cite2Urn): Vector[CiteObject] = {
-    filterUrn.objectComponentOption match {
-      case None =>   citableObjects.filter(_.urn ~~ filterUrn)
-      case _ =>  if (filterUrn.isObject) {
-          filterUrn.versionOption match {
-            case Some(v) => {
-              val tempMap = objects.objectMap(filterUrn)
-              Vector(tempMap)
+    //println(s"twiddling on: ${filterUrn}")
+    val collUrn:Cite2Urn = {
+      val u1:Cite2Urn = filterUrn.dropSelector
+      u1.propertyOption match {
+        case None => u1
+        case _ => u1.dropProperty
+      }
+    }
+    val collectionMatches:Vector[CiteCollectionDef] = this.catalog.collections.filter(_.urn ~~ collUrn)
+    // Is the collection in the data? Don't waste time looking if it isn't.
+    collectionMatches.size match {
+      case 0 => {
+        println(s"NO collection for twiddle with: ${filterUrn}")
+          Vector()
+      } 
+      // Collection is in data
+      case _ => {
+        //println(s"matched collection for twiddle with: ${filterUrn}")
+        // Object or Whole Collection?
+        filterUrn.objectComponentOption match {
+          // Whole Collection:
+          case None => {  
+            // WORK HERE!!!!!!!
+            //println(s"No objectComponent for: ${filterUrn}")
+            citableObjects.filter(_.urn ~~ filterUrn)
+          }
+          // Object-component, present
+          case _ => {
+            // Object, not range
+            //println(s"Yes objectComponent for: ${filterUrn}")
+            if (filterUrn.isObject) {
+              //println(s"isObject true for: ${filterUrn}")
+              // Versioned URN?
+              filterUrn.versionOption match {
+                // Yes… has version
+                case Some(v) => {
+                  println(s"versionOption = Some(v) for: ${filterUrn}")
+                  val tempVec:Vector[CiteObject] = {
+                    objects.objectMap.contains(filterUrn.dropProperty.dropExtensions) match {
+                     case true => {
+                        Vector(objects.objectMap(filterUrn.dropProperty.dropExtensions))
+                      }
+                      case _ => Vector()
+                    }
+                  }
+                  tempVec 
+                }
+                //No… notional object
+                case _ => {
+                  println(s"No versionOption for: ${filterUrn}")
+                  val tempMap = objects.objectMap.filterKeys( _ ~~ filterUrn ) // faster!
+                  tempMap.map( k => k._2 ).toVector
+                }
+              } 
+            // range
+            } else {
+              rangeFilter(filterUrn)
             }
-            case _ => {
-              val tempMap = objects.objectMap.filterKeys( _ ~~ filterUrn ) // faster!
-              tempMap.map( k => k._2 ).toVector
-            }
-          } 
-        } else {
-          rangeFilter(filterUrn)
+          }
         }
       }
+    }
   }
 
   /** Construct a citable object for an identifying URN out of the vectdor of properties.
@@ -177,6 +211,7 @@ import scala.collection.immutable.ListMap
   def citableObject(objUrn:Cite2Urn): CiteObject = {
     val urn = objUrn.dropExtensions.dropProperty
     if (urn.objectComponentOption == None) throw CiteObjectException(s"No object identifier on ${objUrn}")
+    if (this.objects.objectMap.contains(urn) == false) throw CiteObjectException(s"${urn} not present in collection.")
     val thisObject = objects.objectMap(urn)
     thisObject
   }
@@ -263,20 +298,6 @@ import scala.collection.immutable.ListMap
   def objectsForCollection(urn: Cite2Urn) :  Vector[CiteObject]  = {
     val coll:Cite2Urn = urn.dropSelector.dropProperty
     this.collectionsMap(coll).map(u => this.objects.objectMap(u)).toVector
-    /*
-    val coll:Cite2Urn = urn.dropProperty.dropSelector
-    val tempMap = objects.objectMap.filterKeys( _ ~~ coll ) 
-    val v = tempMap.map( k => k._2 ).toVector
-    if (isOrdered(coll)) {
-      var timeStart =  java.lang.System.currentTimeMillis()
-      val sortedVec = v.sortWith(sortValue(_) < sortValue(_))
-      var timeEnd = java.lang.System.currentTimeMillis()
-      println(s"------ sorted in ${timeEnd - timeStart}")
-      sortedVec 
-    } else {
-      v
-    }
-    */
   }
 
 
@@ -603,7 +624,6 @@ import scala.collection.immutable.ListMap
     * @param caseSensitive True if case should be considered in comparing strings.
     */
     def stringContains(s: String, caseSensitive: Boolean = true ): Vector[CiteObject] = {
-      println(s"Looking for ${s} in citable objects")
       citableObjects.filter(_.stringContains(s, caseSensitive) )
     }
 
@@ -780,13 +800,11 @@ object CiteCollectionRepository {
   def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) : Vector[CitePropertyValue] = {
     var propertyBuffer = ArrayBuffer[CitePropertyValue]()
 
-    //println(s"Map ${dataMap.size} properties using def containing ${collectionDef.propertyDefs.size} props")
     val lcMap = dataMap.map{ case (k,v) => (k.toLowerCase,v)}
     val collectionUrn = collectionDef.urn
     val urn = Cite2Urn(lcMap("urn"))
     val lcLabelProperty = lcLabel(collectionDef)
     val label = lcMap(lcLabelProperty)
-
 
     val objectSelectorString = {
       for (k <- dataMap.keySet) yield {
@@ -797,15 +815,9 @@ object CiteCollectionRepository {
     }.filter(_.nonEmpty).toSeq(0)
 
     val objectSelectorUrn = Cite2Urn(objectSelectorString)
-    //println("OBJ URN " + objectSelectorUrn )
     for (k <- dataMap.keySet) {
        val propUrn = objectSelectorUrn.addProperty(k)
-       //println("With prop" + propUrn)
-       //println("CHeck out " + collectionDef.propertyDefs.map(_.urn))
-       //println("Look for " +propUrn.dropSelector + "in " + collectionDef.propertyDefs.map(_.urn))
        val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn.dropSelector)
-       // check that you have one and only  one propDef ...
-       //println("PROP DEF " + propDef.size)
 
        if (propDef.size == 1) {
          val typedValue = CitePropertyValue.valueForString(dataMap(k), propDef(0))
@@ -814,10 +826,7 @@ object CiteCollectionRepository {
        }else{
          println("No propdef matching " + propUrn)
        }
-
-      //}
     }
-    //println(s"has ${propertyBuffer.toVector.size} items in buffer " + propertyBuffer.toVector + "\n\n")
     propertyBuffer.toVector
   }
 
@@ -861,8 +870,6 @@ object CiteCollectionRepository {
       val expectedType = propDef(0).propertyType
       // get controlled vocab vector:
       val vocabVector = propDef(0).vocabularyList
-
-      //println(s"${p.propertyValue} :: ${expectedType}" )
 
       assert(CiteCollectionRepository.typesMatch(p.propertyValue,expectedType,vocabVector ),s"For ${p.urn}, ${p.propertyValue} did not match ${expectedType}")
     }
