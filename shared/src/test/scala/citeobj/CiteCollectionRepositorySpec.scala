@@ -9,7 +9,7 @@ class CiteCollectionRepositorySpec extends FlatSpec {
 
   val cex = """#!citecollections
 URN#Description#Labelling property#Ordering property#License
-urn:cite2:hmt:speeches.v1:#Speeches in the Iliad#urn:cite2:hmt:speeches.v1.label:#urn:cite2:hmt:speeches.v1:sequence:#CC-attribution-share-alike
+urn:cite2:hmt:speeches.v1:#Speeches in the Iliad#urn:cite2:hmt:speeches.v1.label:#urn:cite2:hmt:speeches.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list

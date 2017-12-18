@@ -259,7 +259,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   val orcacex = """
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
-urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:#urn:cite2:hmt:clausereading.v1.label:#CC-attribution-share-alike
+urn:cite2:hmt:clausereading.v1:#Clauses in text of the Iliad#urn:cite2:hmt:clausereading.v1.deformation:#urn:cite2:hmt:clausereading.v1.seq:#CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list
@@ -267,26 +267,30 @@ urn:cite2:hmt:clausereading.v1.urn:#ORCA URN#Cite2Urn#
 urn:cite2:hmt:clausereading.v1.passage:#Passage analyzed#CtsUrn#
 urn:cite2:hmt:clausereading.v1.analysis:#Analysis#Cite2Urn#
 urn:cite2:hmt:clausereading.v1.label:#Label#String#
+urn:cite2:hmt:clausereading.v1.seq:#Sequence#Number#
 urn:cite2:hmt:clausereading.v1.deformation:#Text deformation#String#
 
 #!citedata
-urn#passage#analysis#label#deformation
-urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.1-1.2@ν[2]#urn:cite2:hmt:iliadicClauses.v1:imperative#clause 1#Μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην
-urn:cite2:hmt:clausereading.v1:clause2#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2@ἣ[1]-1.2@ε[2]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 2#ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε
-urn:cite2:hmt:clausereading.v1:clause3#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]-1.4@ν[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 3#πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων
-urn:cite2:hmt:clausereading.v1:clause4#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.4@α[1]-1.5@ι[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 4#αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν οἰωνοῖσί τε πᾶσ
-urn:cite2:hmt:clausereading.v1:clause5#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.5@Δ[1]-1.5@ή[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 5#Διὸς δ᾽ ἐτελείετο βουλή
-urn:cite2:hmt:clausereading.v1:clause6#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.6-1.7#urn:cite2:hmt:iliadicClauses.v1:subordinate#clause 6#ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.
-urn:cite2:hmt:clausereading.v1:clause7#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8#urn:cite2:hmt:iliadicClauses.v1:interrogative#clause 7#Τίς τάρ σφωε θεῶν ἔριδι ξυνέηκε μάχεσθαι;
-urn:cite2:hmt:clausereading.v1:clause8#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9@Λ[1]-1.9@ς[3]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 8#Λητοῦς καὶ Διὸς υἱός [ξυνέηκε]
-urn:cite2:hmt:clausereading.v1:clause9#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9@ὃ[1]-1.10@ν[5]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 9#ὃ γὰρ βασιλῆϊ χολωθεὶς νοῦσον ἀνὰ στρατὸν ὄρσε κακήν
-urn:cite2:hmt:clausereading.v1:clause10#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.10@ὀ[1]-1.10@ί[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 10#ὀλέκοντο δὲ λαοί
-urn:cite2:hmt:clausereading.v1:clause11#urn:cts:greekLit:tlg0012.tlg001.fuPers:2.1@οὐδέ[1]-2.1@ἐΐσης[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 11#οὐδέ τι θυμὸς ἐδεύετο δαιτὸς ἐΐσης
+urn#passage#analysis#label#seq#deformation
+urn:cite2:hmt:clausereading.v1:clause1#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.1-1.2@ν[2]#urn:cite2:hmt:iliadicClauses.v1:imperative#clause 1#1#Μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος οὐλομένην
+urn:cite2:hmt:clausereading.v1:clause2#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.2@ἣ[1]-1.2@ε[2]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 2#2#ἣ μυρί᾽ Ἀχαιοῖς ἄλγε᾽ ἔθηκε
+urn:cite2:hmt:clausereading.v1:clause3#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.3@π[1]-1.4@ν[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 3#3#πολλὰς δ᾽ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν ἡρώων
+urn:cite2:hmt:clausereading.v1:clause4#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.4@α[1]-1.5@ι[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 4#4#αὐτοὺς δὲ ἑλώρια τεῦχε κύνεσσιν οἰωνοῖσί τε πᾶσ
+urn:cite2:hmt:clausereading.v1:clause5#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.5@Δ[1]-1.5@ή[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 5#5#Διὸς δ᾽ ἐτελείετο βουλή
+urn:cite2:hmt:clausereading.v1:clause6#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.6-1.7#urn:cite2:hmt:iliadicClauses.v1:subordinate#clause 6#6#ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.
+urn:cite2:hmt:clausereading.v1:clause7#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.8#urn:cite2:hmt:iliadicClauses.v1:interrogative#clause 7#7#Τίς τάρ σφωε θεῶν ἔριδι ξυνέηκε μάχεσθαι;
+urn:cite2:hmt:clausereading.v1:clause8#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9@Λ[1]-1.9@ς[3]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 8#8#Λητοῦς καὶ Διὸς υἱός [ξυνέηκε]
+urn:cite2:hmt:clausereading.v1:clause9#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.9@ὃ[1]-1.10@ν[5]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 9#9#ὃ γὰρ βασιλῆϊ χολωθεὶς νοῦσον ἀνὰ στρατὸν ὄρσε κακήν
+urn:cite2:hmt:clausereading.v1:clause10#urn:cts:greekLit:tlg0012.tlg001.fuPers:1.10@ὀ[1]-1.10@ί[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 10#10#ὀλέκοντο δὲ λαοί
+urn:cite2:hmt:clausereading.v1:clause11#urn:cts:greekLit:tlg0012.tlg001.fuPers:2.1@οὐδέ[1]-2.1@ἐΐσης[1]#urn:cite2:hmt:iliadicClauses.v1:indicative#clause 11#11#οὐδέ τι θυμὸς ἐδεύετο δαιτὸς ἐΐσης
 """
 
   it should "match URNs in properties" in {
+    println("----- got here 1")
     val orcaRepo = CiteCollectionRepository(orcacex,"#",",")
+    println("----- got here 2")
     val orcaObjects = orcaRepo.citableObjects
+    println("----- got here 3")
     val orca1 = orcaRepo.citableObject(Cite2Urn("urn:cite2:hmt:clausereading.v1:clause1"))
     val iliad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
     println("matches Iliad? " + orca1.urnMatch(iliad))
