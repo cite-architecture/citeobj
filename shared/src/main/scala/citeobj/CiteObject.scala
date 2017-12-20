@@ -343,7 +343,6 @@ trait BaseCitable {
     * @param u URN test for.
     */
     def urnMatch(u: Urn): Boolean = {
-      println(s"--- doing urnMatch on ${u}")
       val ctsProperties = propertyList.filter(p => (p.propertyDef.propertyType == CtsUrnType))
       val citeProperties = propertyList.filter( p => p.propertyDef.propertyType == Cite2UrnType )
 
