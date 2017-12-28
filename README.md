@@ -13,6 +13,11 @@ Status:  in active development.  See [release notes](releases.md)
 
 [GPL 3.0](https://opensource.org/licenses/gpl-3.0.html)
 
+
+## Documentation
+
+See <https://cite-architecture.github.io/citeobj/>.
+
 ## Using, building, testing
 
 `citeobj` is compiled for both the JVM and ScalaJS using scala versions 2.11 and 2.12.  Due to a dependency on `scala-xml`, the JVM builds cannot be used with Scala 2.10.  ScalaJS builds can be compiled for 2.10 as well as 2.11 and 2.12.
