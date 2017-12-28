@@ -1,0 +1,26 @@
+
+
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Citable object library
+tagline:          ''
+description:      ''
+
+
+baseurl: '/cex/'
+
+
+author:
+  name:           'Neel Smith'
+
+
+links:
+  - title:  CITE Architecture home
+    url:  https://cite-architecture.github.io/
+    external: true
+  - title:  Github repository
+    url:  https://github.com/cite-architecture/citeobj
+    external: true
