@@ -23,8 +23,8 @@ urn:cite2:hmt:speeches.v1.sequence:#Speech Sequence#Number#
 #!citedata
 urn#speaker#label#passage#sequence
 urn:cite2:hmt:speeches.v1:speech1#urn:cite2:hmt:pers:pers22#Speech 1#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#1
-urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers22#Speech 2#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#2
 urn:cite2:hmt:speeches.v1:speech3#urn:cite2:hmt:pers:pers22#Speech 3#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#3
+urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers22#Speech 2#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#2
 urn:cite2:hmt:speeches.v1:speech4#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:greekLit:tlg0012.tlg001:1.85-1.91#4
 """
 
@@ -44,13 +44,33 @@ urn:cite2:hmt:speeches.v1:speech4#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:gree
     val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech4"))
     assert(repo.last(collectionUrn) == expected)
   }
-  /*
 
 
   it should "find the index of an object in an ordered vector" in {
-    val obj = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:2r"))
-    assert(repo.indexOf(obj) == 2)
+    val obj = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech1"))
+    assert(repo.indexOf(obj) == 0)
   }
+
+  it should "find the index of another object in an ordered vector" in {
+    val obj = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech2"))
+    assert(repo.indexOf(obj) == 1)
+  }
+
+  it should "preserve order when twiddling on the repo" in {
+    val objs = repo ~~ Cite2Urn("urn:cite2:hmt:speeches.v1:")
+    val objZero = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech1"))
+    val objOne = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech2"))
+    val objTwo = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech3"))
+    val objThree = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech4"))
+
+    assert(objs.size == 4)
+    assert(objs(3) == objThree)
+    assert(objs(1) == objOne)
+    assert(objs(2) == objTwo)
+    assert(objs(0) == objZero)
+
+  }
+  /*
   it should "find the CiteObject following a given element in an ordered collection" in {
       val obj1 = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
       val expected = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1v"))

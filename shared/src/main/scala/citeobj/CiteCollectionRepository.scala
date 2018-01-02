@@ -130,7 +130,8 @@ import scala.collection.immutable.ListMap
           case None => {  
             // WORK HERE!!!!!!!
             //println(s"No objectComponent for: ${filterUrn}")
-            citableObjects.filter(_.urn ~~ filterUrn)
+            //citableObjects.filter(_.urn ~~ filterUrn)
+            this.collectionsMap(collUrn).map( cu => this.objects.objectMap(cu))
           }
           // Object-component, present
           case _ => {

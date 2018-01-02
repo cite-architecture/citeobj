@@ -13,7 +13,7 @@ class CiteImageExtensionsFilterSpec extends FlatSpec {
 
   "The ImageExtensions object" should  "filter the map by protocol" in {
 
-    val shortCex = """
+    val shortCex = """ 
 #!imagedata
 urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
 urn:cite2:hmt:vaimg.v1:#localJpegString#./images/#urn:cite2:hmt:msA.v1.rights:

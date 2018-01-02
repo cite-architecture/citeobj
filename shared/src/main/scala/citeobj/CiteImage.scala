@@ -73,7 +73,6 @@ abstract class BinaryImageSource[+T] {
   }
 }
 
-
 /** Implement [[BinaryImageSource]] trait for
 *
 * @param baseRef Root directory for local jpeg files.
