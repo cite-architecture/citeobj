@@ -1,7 +1,7 @@
 name := "CITE Object library"
 
-crossScalaVersions := Seq("2.11.8", "2.12.4")
-scalaVersion := "2.12.4"
+crossScalaVersions := Seq("2.11.8", "2.12.3")
+scalaVersion := "2.12.3"
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
