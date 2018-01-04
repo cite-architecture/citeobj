@@ -1,4 +1,4 @@
-package edu.holycross.shot.citeobj
+  package edu.holycross.shot.citeobj
 
 import edu.holycross.shot.cite._
 

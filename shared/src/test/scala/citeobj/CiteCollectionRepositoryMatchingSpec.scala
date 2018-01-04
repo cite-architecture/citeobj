@@ -115,5 +115,4 @@ urn:cite2:hmt:vaImg.v1:imgC#Detailed image of a second page
     assert(selection.size == expectedProperties)
   }
 
-
 }

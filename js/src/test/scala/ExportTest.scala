@@ -28,9 +28,8 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 """
 
   val repo = CiteCollectionRepository(cex,"#",",")
-  val citeObjects = repo.citableObjects
-  val oneRecto = citeObjects(0)
-  val oneVerso = citeObjects(1)
+  val oneRecto = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
+  val oneVerso = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1v"))
 
   val rvProperty = Cite2Urn("urn:cite2:hmt:msA.v1.rv:")
   val seqProperty = Cite2Urn("urn:cite2:hmt:msA.v1.sequence:")
@@ -61,7 +60,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val repo = CiteCollectionRepository(cex,"#",",")
     val objectUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1v")
     val labelPropertyUrn = Cite2Urn("urn:cite2:hmt:msA.v1.label:")
-    val citableObj = repo.citableObject(objectUrn,labelPropertyUrn)
+    val citableObj = repo.citableObject(objectUrn)
 
     citableObj match {
       case co : CiteObject => assert(true)
