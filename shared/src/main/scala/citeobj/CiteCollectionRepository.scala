@@ -106,7 +106,6 @@ import scala.collection.immutable.ListMap
   * @param filterUrn URN to match.
   */
   def ~~ (filterUrn: Cite2Urn): Vector[CiteObject] = {
-    //println(s"twiddling on: ${filterUrn}")
     val collUrn:Cite2Urn = {
       val u1:Cite2Urn = filterUrn.dropSelector
       u1.propertyOption match {
@@ -118,32 +117,26 @@ import scala.collection.immutable.ListMap
     // Is the collection in the data? Don't waste time looking if it isn't.
     collectionMatches.size match {
       case 0 => {
-        println(s"NO collection for twiddle with: ${filterUrn}")
           Vector()
       } 
       // Collection is in data
       case _ => {
-        //println(s"matched collection for twiddle with: ${filterUrn}")
         // Object or Whole Collection?
         filterUrn.objectComponentOption match {
           // Whole Collection:
           case None => {  
             // WORK HERE!!!!!!!
-            //println(s"No objectComponent for: ${filterUrn}")
             //citableObjects.filter(_.urn ~~ filterUrn)
             this.collectionsMap(collUrn).map( cu => this.objects.objectMap(cu))
           }
           // Object-component, present
           case _ => {
             // Object, not range
-            //println(s"Yes objectComponent for: ${filterUrn}")
             if (filterUrn.isObject) {
-              //println(s"isObject true for: ${filterUrn}")
               // Versioned URN?
               filterUrn.versionOption match {
                 // Yes… has version
                 case Some(v) => {
-                  println(s"versionOption = Some(v) for: ${filterUrn}")
                   val tempVec:Vector[CiteObject] = {
                     objects.objectMap.contains(filterUrn.dropProperty.dropExtensions) match {
                      case true => {
@@ -156,7 +149,6 @@ import scala.collection.immutable.ListMap
                 }
                 //No… notional object
                 case _ => {
-                  println(s"No versionOption for: ${filterUrn}")
                   val tempMap = objects.objectMap.filterKeys( _ ~~ filterUrn ) // faster!
                   tempMap.map( k => k._2 ).toVector
                 }
@@ -712,7 +704,7 @@ object CiteCollectionRepository {
       val collUrn = CiteCollectionData.collectionForDataBlock(ds,delimiter)
       val collectionDef = catalog.collection(collUrn)
       collectionDef match {
-        case None => println("missing collection definition")
+        case None => 
         case cd: Some[CiteCollectionDef] => {
           val mapped = mapsForDelimited(ds,delimiter).map(_.toMap)
           val labellingProperty:Option[Cite2Urn] = cd.get.labellingProperty

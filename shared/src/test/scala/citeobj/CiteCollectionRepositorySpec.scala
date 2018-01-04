@@ -89,12 +89,12 @@ urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:gree
     }
   }
 
-  it should "throw an assertion errror if there is not a 1<->1 relation of properties from  instantiated collections to catalog " in pending
-  /* {
+  it should "throw an assertion errror if there is not a 1<->1 relation of properties from  instantiated collections to catalog " in pending 
+  /*
+  {
     val shortData : Vector[CitePropertyValue] = Vector(
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech1"),Cite2Urn("urn:cite2:hmt:pers:pers22")),
       CitePropertyValue(Cite2Urn("urn:cite2:hmt:speeches.v1.speaker:speech4"),Cite2Urn("urn:cite2:hmt:pers:pers1")))
-
     try {
       val repo = CiteCollectionRepository(CiteCollectionData(shortData), catalogInfo)
       fail("Should not have created repository")
@@ -102,7 +102,8 @@ urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:gree
       case emptyErr: java.lang.AssertionError => assert(true)
       case er: Throwable => fail("Expected assertion error")
     }
-  }*/
+  }
+  */
 
   it should "identify all collections in the repository" in {
     val repo = CiteCollectionRepository(cex,"#",",")
