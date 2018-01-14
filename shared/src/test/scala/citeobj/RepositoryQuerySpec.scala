@@ -19,12 +19,13 @@ urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
 urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
 urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
 urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.image:#Codex URN#Cite2Urn#
 
 #!citedata
-siglum#sequence#urn#rv#label#codex
-msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA
-msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA
-msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
+siglum#sequence#urn#rv#label#codex#image
+msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA#urn:cite2:hmt:vaimg.v1:1r_image
+msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA#urn:cite2:hmt:vaimg.v1:1v_image
+msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA#urn:cite2:hmt:vaimg.v1:2r_image@0.1,0.2,0.3,0.4
 """
 
   val repo = CiteCollectionRepository(cex,"#",",")
@@ -225,6 +226,17 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     val codexPages = repo.urnMatch(codexProperty,codexCollection)
     assert(codexPages.size == 3)
   }
+
+  it should "ignore object-extensions when finding citable objects satisfying URN match on a specified property" in {
+    val imageProperty =Cite2Urn("urn:cite2:hmt:msA.v1.image:")
+    val imageUrnWithout = Cite2Urn("urn:cite2:hmt:vaimg.v1:2r_image")
+    val imageUrnWith = Cite2Urn("urn:cite2:hmt:vaimg.v1:2r_image@0.1,0.2,0.3,0.4")
+    val findTest1 = repo.urnMatch(imageProperty,imageUrnWith)
+    val findTest2 = repo.urnMatch(imageProperty,imageUrnWithout)
+    assert(findTest1.size == 1)
+    assert(findTest2.size == 1)
+  }
+
   it should "throw an exception if types do not match when matching URN" in {
     val codexCollection =Cite2Urn("urn:cite2:hmt:codex:")
     try {
