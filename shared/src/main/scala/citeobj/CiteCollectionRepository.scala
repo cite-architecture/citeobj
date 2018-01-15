@@ -385,7 +385,7 @@ import scala.collection.immutable.ListMap
   */
   def sortValue(obj: CiteObject, propertyKey: Cite2Urn):Double = {
     val propVect = obj.propertyList.filter(_.urn ~~ propertyKey)
-    require (propVect.size == 1, s"Wrong number of ordering properties (${propVect.size}) for ${propertyKey} in ${obj.propertyList}")
+    require (propVect.size == 1, s"Object URN = ${obj.urn} :: Wrong number of ordering properties (${propVect.size}) for ${propertyKey} in ${obj.propertyList}")
     propVect(0).propertyValue match {
       case d: Double => d
       case _ => throw CiteObjectException(s"Did not find property value for ${propVect(0)}")

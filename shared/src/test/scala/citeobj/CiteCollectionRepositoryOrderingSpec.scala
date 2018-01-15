@@ -70,6 +70,56 @@ urn:cite2:hmt:speeches.v1:speech4#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:gree
     assert(objs(0) == objZero)
 
   }
+
+  it should "return the ordering value for an object" in {
+    val objZero = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech1"))
+    val objOne = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech2"))
+    val objTwo = repo.citableObject(Cite2Urn("urn:cite2:hmt:speeches.v1:speech3"))
+    val sortProp = Cite2Urn("urn:cite2:hmt:speeches.v1.sequence:")
+    assert( repo.sortValue(objZero,sortProp).toInt == 1 )
+    assert( repo.sortValue(objOne,sortProp).toInt == 2 )
+    assert( repo.sortValue(objTwo,sortProp).toInt == 3 )
+  }
+
+  it should "correctly do sortValue for real data" in {
+    val newCex = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.text:#Text#CtsUrn#
+urn:cite2:hmt:msA.v1.image:#Image#Cite2Urn#
+urn:cite2:hmt:msA.v1.imageROI:#ImageROI#Cite2Urn#
+
+#!citedata
+siglum#sequence#urn#rv#label#codex#text#image#imageROI
+msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA#urn:cts:greekLit:tlg0012.tlg001.allen:1.1-1.25#urn:cite2:hmt:vaimg.v1:VA012RN_0013#urn:cite2:hmt:vaimg.v1:VA012RN_0013@0.208,0.2087,0.086,0.0225
+msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA#urn:cts:greekLit:tlg0012.tlg001.allen:1.26-1.50#urn:cite2:hmt:vaimg.v1:VA012VN_0514#urn:cite2:hmt:vaimg.v1:VA012VN_0514@0.4975,0.2141,0.3814,0.4793
+msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA#urn:cts:greekLit:tlg0012.tlg001.allen:1.51-1.75#urn:cite2:hmt:vaimg.v1:VA013RN_0014#urn:cite2:hmt:vaimg.v1:VA013RN_0014@0.1722,0.2329,0.3874,0.4793
+msA#4#urn:cite2:hmt:msA.v1:2v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2v#urn:cite2:hmt:codex:msA#urn:cts:greekLit:tlg0012.tlg001.msA:1.76-1.100#urn:cite2:hmt:vaimg.v1:VA013VN_0515#urn:cite2:hmt:vaimg.v1:VA013VN_0515@0.4805,0.2239,0.3994,0.4763
+msA#5#urn:cite2:hmt:msA.v1:3r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 3r#urn:cite2:hmt:codex:msA#urn:cts:greekLit:tlg0012.tlg001.msA:1.101-1.125#urn:cite2:hmt:vaimg.v1:VA014RN_0015#urn:cite2:hmt:vaimg.v1:VA014RN_0015@0.1802,0.2344,0.3844,0.4823
+"""
+
+    val newCollectionUrn = Cite2Urn("urn:cite2:hmt:msA.v1:")
+    val newRepo = CiteCollectionRepository(newCex,"#",",")
+
+    val objZero = newRepo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
+    val objOne = newRepo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1v"))
+    val objTwo = newRepo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:2r"))
+    val sortProp = Cite2Urn("urn:cite2:hmt:msA.v1.sequence:")
+    assert( repo.sortValue(objZero,sortProp).toInt == 1 )
+    assert( repo.sortValue(objOne,sortProp).toInt == 2 )
+    assert( repo.sortValue(objTwo,sortProp).toInt == 3 )
+
+  }
+
   /*
   it should "find the CiteObject following a given element in an ordered collection" in {
       val obj1 = repo.citableObject(Cite2Urn("urn:cite2:hmt:msA.v1:1r"))
