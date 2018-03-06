@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**5.2.3**: Correct dependency format in build.sbt.
+
 **5.2.2**: Changing binary publication to Scala 2.12 only.
 
 **5.2.1**: Republish 5.2.0 with corrected dependencies.

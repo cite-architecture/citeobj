@@ -4,7 +4,7 @@
 
 `citeobj` is a cross-platform library for working with collections of citable objects.
 
-## Current version: 5.2.2
+## Current version: 5.2.3
 
 Status:  in active development.  See [release notes](releases.md)
 
