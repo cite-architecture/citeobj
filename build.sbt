@@ -1,6 +1,6 @@
 name := "CITE Object library"
 
-crossScalaVersions := Seq("2.11.8", "2.12.3")
+//crossScalaVersions := Seq("2.11.8", "2.12.3")
 scalaVersion := "2.12.3"
 
 lazy val root = project.in(file(".")).
@@ -14,7 +14,7 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "citeobj",
       organization := "edu.holycross.shot",
-      version := "5.2.0",
+      version := "5.2.2",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       resolvers += Resolver.jcenterRepo,
       resolvers += Resolver.bintrayRepo("neelsmith", "maven"),

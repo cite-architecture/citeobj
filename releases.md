@@ -1,6 +1,10 @@
 # `citeobj`: release notes
 
-**5.2.0**: API-breaking update. Redesigned data storage for more rapid access to objects and ranges of objects. 
+**5.2.2**: Changing binary publication to Scala 2.12 only.
+
+**5.2.1**: Republish 5.2.0 with corrected dependencies.
+
+**5.2.0**: API-breaking update. Redesigned data storage for more rapid access to objects and ranges of objects.
 
 **5.0.0**: Fixes a bug in the implementation of IipImageJpegString extension of CiteImage.  Only API-breaking change is removal of obsolete and previously deprecated code handling configuration from XML sources.
 

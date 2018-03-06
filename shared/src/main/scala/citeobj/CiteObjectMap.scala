@@ -11,16 +11,16 @@ import scala.scalajs.js.annotation._
 
 
 /** Map of URN -> CiteObject for a repository of citable objects and properties.
-* The data are organized as a Map[Cite2Urn,CiteObject].  
+* The data are organized as a Map[Cite2Urn,CiteObject].
 *
-* @param objectMap map of urns to cite2 objects. 
+* @param objectMap map of urns to cite2 objects.
 */
 @JSExportAll  case class CiteObjectMap (objectMap: Map[Cite2Urn,CiteObject]) {
 
   /** Filter map by identifying URN.
   */
   def ~~(filterUrn: Cite2Urn): CiteObjectMap = {
-    val newMap:Map[Cite2Urn, CiteObject] = objectMap.filterKeys( _ ~~ filterUrn ) 
+    val newMap:Map[Cite2Urn, CiteObject] = objectMap.filterKeys( _ ~~ filterUrn )
     CiteObjectMap(newMap)
   }
 
@@ -76,7 +76,7 @@ import scala.scalajs.js.annotation._
   }
   */
 
-  /** Value for a single property value.
+  /* * Value for a single property value.
   * It is a CiteObjectException if propUrn does not
   * identify exactly 1 property value.
   *
@@ -95,7 +95,7 @@ import scala.scalajs.js.annotation._
 
 /** Factory for creating [[CiteCollectionData]] from source data in CEX format.
 */
-object CiteObjectMap { 
+object CiteObjectMap {
 
   /** Creates a Map of CITE Collection Obvjects from a CEX source.
   *
@@ -136,11 +136,11 @@ object CiteObjectMap {
               })
             }
 
-            // We don't want the URN property or the labelling property 
+            // We don't want the URN property or the labelling property
             val thisFilteredProps:Vector[CitePropertyImplementation] = {
-                thisObjectProps.filter( 
+                thisObjectProps.filter(
                   (p) => (
-                    (p.urn.dropSelector != labellingProperty.get) && 
+                    (p.urn.dropSelector != labellingProperty.get) &&
                     (p.urn.property != "urn")
                   )
                 )
