@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**6.0.0**:  Correct semantic versioning for API-breaking release.
+
 **5.2.3**: Correct dependency format in build.sbt.
 
 **5.2.2**: Changing binary publication to Scala 2.12 only.
