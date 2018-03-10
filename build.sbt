@@ -1,7 +1,9 @@
 name := "CITE Object library"
 
-//crossScalaVersions := Seq("2.11.8", "2.12.3")
-scalaVersion := "2.12.3"
+crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
+scalaVersion := (crossScalaVersions in ThisBuild).value.last
+
+
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
@@ -14,7 +16,7 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "citeobj",
       organization := "edu.holycross.shot",
-      version := "6.0.0",
+      version := "6.1.0",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       resolvers += Resolver.jcenterRepo,
       resolvers += Resolver.bintrayRepo("neelsmith", "maven"),
@@ -22,8 +24,8 @@ lazy val crossed = crossProject.in(file(".")).
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
         "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
         "edu.holycross.shot.cite" %%% "xcite" % "3.2.2",
+        
         "edu.holycross.shot" %%% "cex" % "6.1.0"
-
       )
     ).
     jvmSettings(
@@ -38,4 +40,4 @@ lazy val crossed = crossProject.in(file(".")).
     )
 
 lazy val crossedJVM = crossed.jvm.enablePlugins(TutPlugin)
-lazy val crossedJS = crossed.js.enablePlugins(ScalaJSPlugin)
+lazy val crossedJS = crossed.js

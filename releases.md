@@ -1,5 +1,8 @@
 # `citeobj`: release notes
 
+
+**6.1.0**:  Support for automated cross buildng.
+
 **6.0.0**:  Correct semantic versioning for API-breaking release.
 
 **5.2.3**: Correct dependency format in build.sbt.
