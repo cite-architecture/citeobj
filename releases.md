@@ -1,5 +1,6 @@
 # `citeobj`: release notes
 
+**6.1.1**: Bug fix in update to `cex` parser.
 
 **6.1.0**:  Support for automated cross buildng.
 
