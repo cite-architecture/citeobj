@@ -1,5 +1,8 @@
 # `citeobj`: release notes
 
+
+**7.0.0**: All special-case handling of images removed.  Higher-order constructs than basic CITE Collections can be handled via data models with the CITE Architecture's `scm` library. 
+
 **6.1.1**: Bug fix in update to `cex` parser.
 
 **6.1.0**:  Support for automated cross buildng.

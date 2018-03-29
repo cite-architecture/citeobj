@@ -46,15 +46,6 @@ msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A)
 msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA
 
 
-#!imagedata
-
-// Lines are structured as:
-// collection#protocol#image source initializier#rights property
-
-urn:cite2:hmt:vaimg.v1:#CITE image URL#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#CITE image string#http://www.homermultitext.org/hmtdigital/images?#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local jpeg file#./images#urn:cite2:hmt:msA.v1.rights:
-urn:cite2:hmt:vaimg.v1:#local jpeg string#./images#urn:cite2:hmt:msA.v1.rights:
 """
 
 
@@ -74,27 +65,5 @@ urn:cite2:hmt:vaimg.v1:#local jpeg string#./images#urn:cite2:hmt:msA.v1.rights:
         assert (cat.size == 1, "Repository has wrong number of collections in catalog! (${cat.size})")
         assert(data.size == 18, "Repository has wrong number of property values in data! (${data.size})")
         println(s"Made a collection repository directly from CEX, with ${repo.catalog.size} cataloged collection and ${repo.data.size} property values.")
-
-
-
-        val imgOption = ImageExtensions(cexSrc)
-        imgOption match {
-          case imgs: Option[ImageExtensions] => {
-            println(s"Instantiated ${imgs.size} image extension")
-            val mapPair = imgs.get.protocolMap.toSeq(0)
-
-            val collection = mapPair._1
-            val sourceVector = mapPair._2
-
-            val img = Cite2Urn("urn:cite2:hmt:vaimg:VA012RN_0013")
-            println(s"On collection ${collection}, found ${sourceVector.size} image extensions.")
-            println(s"For image ${img}, they produce:")
-            for (s <- sourceVector) {
-              println(s"${s.binaryImageSource(img)}  (${s.protocol})")
-            }
-
-          }
-          case _ => println("Failed to make image extensions option")
-      }
   }
 }
