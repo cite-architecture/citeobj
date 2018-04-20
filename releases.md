@@ -1,5 +1,6 @@
 # `citeobj`: release notes
 
+**7.0.1**: `xcite` dependency to v.3.3.0.
 
 **7.0.0**: All special-case handling of images removed.  Higher-order constructs than basic CITE Collections can be handled via data models with the CITE Architecture's `scm` library. 
 
