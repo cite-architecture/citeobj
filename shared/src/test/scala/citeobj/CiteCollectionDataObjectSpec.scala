@@ -147,4 +147,33 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017#Natural light photograph of Venetus 
       val expected = Set(Cite2Urn("urn:cite2:hmt:msA.v1:"), Cite2Urn("urn:cite2:hmt:vaimg.2017a:"))
       assert (collData.collections == expected)
     }
+
+  it should "with when there is an empty column" in {
+    val hmtData:String = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:pers.v1:#Names of persons#urn:cite2:hmt:pers.v1.label:##Public domain
+urn:cite2:hmt:place.v1:#Geographic names#urn:cite2:hmt:pers.v1.label:##Public domain
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:pers.v1.urn:#Person#Cite2Urn#
+urn:cite2:hmt:pers.v1.label:#Label#String#
+urn:cite2:hmt:pers.v1.description:#Description#String#
+urn:cite2:hmt:pers.v1.status:#Status#String#proposed,accepted,rejected
+urn:cite2:hmt:pers.v1.redirect:#Redirected to#Cite2Urn#
+
+#!citedata
+urn#Label#Description#Status#Redirect
+urn:cite2:hmt:pers.v1:pers1#Achilles#hero of the Iliad, greatest warrior of the Greeks at Troy#proposed#
+"""
+
+    val collData = CiteCollectionData(hmtData, delimiter = "#")
+
+  }
+
+
+
+
+
+
 }

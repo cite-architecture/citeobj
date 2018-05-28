@@ -769,7 +769,7 @@ object CiteCollectionRepository {
 
             // log each row, if you want to keep up
             if ( ( i % 1000) == 0){
-              print(s"\b\b\b\b\b\b\b${i}")
+              println(s"${i}")
             }
             mapBuffer += (thisObjectUrn -> tempObject)
           }

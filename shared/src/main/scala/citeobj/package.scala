@@ -20,7 +20,7 @@ package object citeobj {
 
     for (r <- rows.drop(1)) {
       val headerToCell = scala.collection.mutable.Map[String, String]()
-      val cols = r.split(delimiter).toVector
+      val cols = r.split(delimiter,-1).toVector
       if (cols.size == header.size) {
         for (i <- 0 until cols.size) {
           headerToCell += (header(i) -> cols(i))

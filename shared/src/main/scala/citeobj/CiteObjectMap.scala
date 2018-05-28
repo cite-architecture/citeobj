@@ -155,16 +155,16 @@ object CiteObjectMap {
                 throw CiteObjectException("No label for object: " + thisObjectUrn)
               }
             }
-            println(s"- ${i}")
+            //println(s"- ${i}")
             mapBuffer += (thisObjectUrn -> CiteObject(thisObjectUrn,thisObjectLabel, thisFilteredProps))
           }
         }
       }
     }
 
-    println("----- done constructing mapBuffer, copying to unmutable map…")
+    //println("----- done constructing mapBuffer, copying to unmutable map…")
     val objectMap:Map[Cite2Urn,CiteObject] = mapBuffer
-    println("…done copying. Memory pressure should drop.")
+    //println("…done copying. Memory pressure should drop.")
 
     CiteObjectMap(objectMap)
   }
