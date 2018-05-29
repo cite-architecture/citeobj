@@ -768,9 +768,11 @@ object CiteCollectionRepository {
            singleObjectPropBuffer.clear
 
             // log each row, if you want to keep up
+            /*
             if ( ( i % 1000) == 0){
               println(s"${i}")
             }
+            */
             mapBuffer += (thisObjectUrn -> tempObject)
           }
         }
