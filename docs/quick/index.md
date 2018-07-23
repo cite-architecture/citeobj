@@ -71,10 +71,10 @@ A `CiteCollectionRepository` has a catalog and data.
 
 ```scala
 scala> repo.catalog.size
-res1: Int = 1
+res0: Int = 1
 
 scala> repo.data.size
-res2: Int = 3
+res1: Int = 3
 
 scala> // Example repository has one collection with three objects
 ```
