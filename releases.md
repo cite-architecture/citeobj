@@ -1,6 +1,9 @@
 # `citeobj`: release notes
 
 
+**7.1.2**:  Support specification of character encoing when reading files with `scala.io.Source`.
+
+
 **7.1.1**: Updated `xcite` library.
 
 

@@ -17,8 +17,9 @@ import scala.io.Source
   * @param delimiter String used as primary column delimiter.
   * @param secondaryDelimiter String used as secondary object delimiter.
   */
-  def fromFile(f: String, delimiter: String = "#", secondaryDelimiter: String = ",") : CiteCollectionRepository  = {
-    val lns = Source.fromFile(f).getLines.toVector
+  def fromFile(f: String, delimiter: String = "#", secondaryDelimiter: String = ",",
+  encoding: String = "UTF-8") : CiteCollectionRepository  = {
+    val lns = Source.fromFile(f, encoding).getLines.toVector
     CiteCollectionRepository(lns.mkString("\n"),delimiter,secondaryDelimiter)
   }
 }
