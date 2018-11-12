@@ -1,12 +1,19 @@
 # `citeobj`: release notes
 
-**7.0.3**: Now throwing an exception when building from CEX data with duplicate URNs.
 
-**7.0.2**: Fixed bug with empty field values in citedata records.
+**7.1.3**: Now throwing an exception when building from CEX data with duplicate URNs.
+
+**7.1.2**:  Support specification of character encoing when reading files with `scala.io.Source`.
+
+
+**7.1.1**: Updated `xcite` library.
+
+
+**7.1.0**: Fixed bug with empty field values in citedata records.
 
 **7.0.1**: `xcite` dependency to v.3.3.0.
 
-**7.0.0**: All special-case handling of images removed.  Higher-order constructs than basic CITE Collections can be handled via data models with the CITE Architecture's `scm` library. 
+**7.0.0**: All special-case handling of images removed.  Higher-order constructs than basic CITE Collections can be handled via data models with the CITE Architecture's `scm` library.
 
 **6.1.1**: Bug fix in update to `cex` parser.
 
