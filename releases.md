@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**7.0.3**: Now throwing an exception when building from CEX data with duplicate URNs.
+
 **7.0.2**: Fixed bug with empty field values in citedata records.
 
 **7.0.1**: `xcite` dependency to v.3.3.0.

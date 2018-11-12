@@ -72,6 +72,8 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
     val repo = CiteCollectionRepository(noData,"#",",")
     assert(repo.catalog.size == 2)
   }
+
+  
   it should "catch catalog entries with missing data " in {
     val defective = """
 #!citecollections
@@ -83,14 +85,46 @@ Property#Label#Type#Authority list
 urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
 urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
 urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
-"""
-  try {
-    val repo = CiteCollectionRepository(defective,"#",",")
+    """
+    try {
+      val repo = CiteCollectionRepository(defective,"#",",")
 
-  } catch {
-    case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: wrong number of components in  'CC-attribution-share-alike' (1)")
-    case thr : Throwable => fail("Should have thrown IllegalArgumentException")
-  }
-  }
+    } catch {
+      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: wrong number of components in  'CC-attribution-share-alike' (1)")
+      case thr : Throwable => fail("Should have thrown IllegalArgumentException")
+      }
+    }
+
+    it should "catch catalog entries with duplicate urns " in {
+      val defective = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.validated:#Passed Validation#Boolean#
+
+#!citedata
+siglum#sequence#urn#rv#label#codex#validated
+msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#urn:cite2:hmt:codex:msA#true
+msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA#true
+msA#2#urn:cite2:hmt:msA.v1:1v#verso#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#urn:cite2:hmt:codex:msA#true
+msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2r#urn:cite2:hmt:codex:msA#false
+"""
+      try {
+        val repo = CiteCollectionRepository(defective,"#",",")
+        fail(s"Should have thrown error about duplicate URNs.")
+
+      } catch {
+        case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: wrong number of components in  'CC-attribution-share-alike' (1)")
+        case thr : Throwable => s"${thr}"
+        }
+      }
 
 }

@@ -761,6 +761,12 @@ object CiteCollectionRepository {
             case _ => throw CiteObjectException(s"constructed object fails to match catalog: ${row}.")
            } 
 
+           // Catch duplicate URNs
+           if (mapBuffer.contains(thisObjectUrn)){
+              val errorString:String = s"Error! There are two objects with URN ${thisObjectUrn}."
+              throw CiteObjectException(errorString)
+           }
+
            // Confirm that the props in the objects match the props in the data
            assert(singleObjectPropBuffer.size == (tempObject.propertyList.size + 2))
 
