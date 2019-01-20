@@ -151,15 +151,22 @@ object CiteCollectionData {
   def collectionForDataBlock(dataBlock: String, delimiter : String) = {//: Cite2Urn = {
     val dataLines = dataBlock.split("\n").toVector
     if (dataLines.size < 2) {
-      throw CiteObjectException("Data block has too few lines: " + dataLines.size)
-
+      throw CiteObjectException(s"""\n\nCiteObjectException\n\nData block has too few lines (${dataLines.size}).\n\nBad data:\n\n${dataLines}\n""")
     } else {
       val lcHeader = dataLines(0).split(delimiter).toVector.map(_.trim).map(_.toLowerCase)
       if (lcHeader.size < 1) {
-        throw CiteObjectException("No header found for required property 'urn'")
+        throw CiteObjectException(s"""\n\nCiteObjectException\n\nNo header found for required property 'urn'.\n\nBad data:\n\n${lcHeader}\n""")
       } else {
         val columnIdx = lcHeader.indexOf("urn")
-        Cite2Urn(dataLines(1).split(delimiter)(columnIdx)).dropSelector
+        try {
+          val urnString:String = dataLines(1).split(delimiter)(columnIdx)
+          Cite2Urn(urnString).dropSelector
+        } catch {
+          case e:Exception => {
+            val urnString:String = dataLines(1).split(delimiter)(columnIdx)
+            throw CiteObjectException(s"""\n\nCiteObjectException\n\nFailed to make a CITE2 URN out of "${urnString}".\n\nBad data:\n\n${dataLines(1)}\n""")
+          }
+        } 
       }
     }
   }

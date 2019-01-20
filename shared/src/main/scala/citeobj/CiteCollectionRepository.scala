@@ -688,7 +688,6 @@ object CiteCollectionRepository {
 
 
   def apply(cexSource: String, delimiter: String = "#", delimiter2: String = ",") : CiteCollectionRepository = {
-
     val cex = CexParser(cexSource)
     val catalog = CiteCatalog(cexSource, delimiter, delimiter2)
 
@@ -699,7 +698,6 @@ object CiteCollectionRepository {
     val propBuffer = ArrayBuffer[CitePropertyValue]()
     val singleObjectPropBuffer = ArrayBuffer[CitePropertyValue]()
     val mapBuffer:collection.mutable.Map[Cite2Urn,CiteObject] = collection.mutable.Map()
-
     for (ds <- dataSets){
       val collUrn = CiteCollectionData.collectionForDataBlock(ds,delimiter)
       val collectionDef = catalog.collection(collUrn)
@@ -721,7 +719,6 @@ object CiteCollectionRepository {
               propBuffer +=  propVal
               singleObjectPropBuffer += propVal
             }
-
             // Build up object map
             val thisObjectProps:Vector[CitePropertyImplementation] = {
               propertiesForMappedText(row, cd.get).map( r => {
@@ -825,7 +822,11 @@ object CiteCollectionRepository {
          val citePropertyVal = CitePropertyValue(propUrn, typedValue)
          propertyBuffer += citePropertyVal
        }else{
-         println("No propdef matching " + propUrn)
+
+         var errorString = s"\nFound an object with an invalid property: ${propUrn} \n"
+         errorString += s"""The properties defined for collection ${propUrn.dropProperty.dropSelector} in "#!citeproperties" are: \n\n${collectionDef.propertyDefs.map(_.urn.property).mkString("\n")}\n\n"""
+         errorString += s"""Look for ${propUrn.dropProperty} in the CEX, and check the heading line in its "#!citedata" block.\n\n"""
+         throw new CiteObjectException(errorString)
        }
     }
     propertyBuffer.toVector
@@ -850,10 +851,11 @@ object CiteCollectionRepository {
   */
   def objectMatchesCatalog(citeObj: CiteObject,collectionDef: CiteCollectionDef): Boolean = {
     val catalogSet = collectionDef.propertyDefs
-    val catalogPropUrns =  catalogSet.map(_.urn)
+    val catalogPropUrns:Vector[Cite2Urn] =  catalogSet.map(_.urn)
+    val catalogPropNames:Vector[String] = catalogPropUrns.map(_.property)
 
-    val objUrnSet = citeObj.propertyList.map(_.urn).toSet
-    val catUrnSet = catalogPropUrns.toSet
+    val objUrnSet:Set[Cite2Urn] = citeObj.propertyList.map(_.urn).toSet
+    val catUrnSet:Set[Cite2Urn] = catalogPropUrns.toSet
 
     // Constructed object elevates URN and label
     // properties out of the catalog set:

@@ -27,7 +27,8 @@ package object citeobj {
         }
         rowMaps += headerToCell
       } else {
-        throw new CiteObjectException(s"Could not map header with ${header.size} items onto data row with ${cols.size} items: ${cols}")
+        val errorStr = s"""\nCiteObjectException\n\nCould not map header with ${header.size} items onto data row with ${cols.size} items.\n\nHeader:\n\n${header.mkString(" ")}\n\nInvalid row:\n\n${r}\n"""
+        throw new CiteObjectException(errorStr)
       }
     }
     rowMaps.toVector
