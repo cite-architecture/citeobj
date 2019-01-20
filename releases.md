@@ -1,6 +1,6 @@
 # `citeobj`: release notes
 
-**7.1.4**: More informative error messages when failing to build CiteLibraries.
+**7.2.0**:  Updated version of `xcite` library.
 
 **7.1.3**: Now throwing an exception when building from CEX data with duplicate URNs.
 
