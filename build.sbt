@@ -1,15 +1,16 @@
-name := "CITE Object library"
+//name := "CITE Object library"
 
-crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
-scalaVersion := (crossScalaVersions in ThisBuild).value.last
+//crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
+//scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
 
+lazy val supportedScalaVersions = List("2.10.6","2.11.8", "2.12.4")
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
     settings(
-      publish := {},
-      publishLocal := {}
+      crossScalaVersions := Nil,
+      publish / skip := true
     )
 
 lazy val crossed = crossProject.in(file(".")).
@@ -30,11 +31,13 @@ lazy val crossed = crossProject.in(file(".")).
     ).
     jvmSettings(
       tutTargetDirectory := file("docs"),
-      tutSourceDirectory := file("shared/src/main/tut")
+      tutSourceDirectory := file("shared/src/main/tut"),
+      crossScalaVersions := supportedScalaVersions
     ).
     jsSettings(
       skip in packageJSDependencies := false,
-      scalaJSUseMainModuleInitializer in Compile := true
+      scalaJSUseMainModuleInitializer in Compile := true,
+      crossScalaVersions := supportedScalaVersions
 
 
     )
