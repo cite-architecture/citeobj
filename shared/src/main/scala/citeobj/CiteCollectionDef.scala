@@ -45,4 +45,20 @@ import scala.scalajs.js.annotation._
       case _ => false
     }
   }
+
+  def cex:String = {
+    val urn:String = this.urn.toString
+    val collectionLabel:String = this.collectionLabel
+    val labelProperty:String = this.labelProperty.toString
+    val orderingProperty:String = {
+      this.orderingProperty match {
+        case Some(op) => op.toString
+        case None => ""
+        }
+      }
+      val license:String = this.license
+      val stringVec:Vector[String] = Vector(urn, collectionLabel, labelProperty,orderingProperty,license)
+      stringVec.mkString("#")
+    }
+
 }

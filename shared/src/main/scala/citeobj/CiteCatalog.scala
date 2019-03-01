@@ -68,6 +68,43 @@ import edu.holycross.shot.cex._
     propertySet
   }
 
+    /** Serialize the CiteCatalog to CEX
+    *
+    **/
+    def cex:String = {
+      val collectionsHeader:String = """#!citecollections
+          |URN#Description#Labelling property#Ordering property#License""".stripMargin
+
+      val cat:Vector[CiteCollectionDef] = this.collections
+      val cexDefs:String = collectionsHeader + "\n" + cat.map(_.cex).mkString("\n")
+
+      val cexPropertyBlocks:String = {
+        cat.map(propertyDefs2CEX(_)).mkString("\n")
+      }
+
+      val stringVec:Vector[String] = Vector(
+          cexDefs,
+          cexPropertyBlocks
+      )
+
+      stringVec.mkString("\n\n")
+    }
+
+    private def propertyDefs2CEX(cd: CiteCollectionDef):String = {
+      val citePropertiesHeader:String = """#!citeproperties
+          |Property#Label#Type#Authority list""".stripMargin
+      val header:String = citePropertiesHeader
+      val propDefs:Vector[CitePropertyDef] = cd.propertyDefs
+      val propVec:Vector[String] = propDefs.map(pd => {
+        s"""${pd.urn}#${pd.label}#${pd.propertyType.cex}#${pd.vocabularyList.mkString(",")}"""
+      })
+      val cexBlock:String = (Vector(header) ++ propVec).mkString("\n")
+      cexBlock
+    }
+
+
+
+
 
   /** Find property definition for a given property.
   *
@@ -214,7 +251,6 @@ object CiteCatalog {
 
       CitePropertyDef(urn,label,propertyType,vocabList)
     }
-
 
 
   /** Determine [[CitePropertyType]] based on string name and presence of controlled vocabulary list.
