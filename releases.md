@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**7.3.0**:  Exporting CEX.
+
 **7.2.1**:  Significantly more informative error reporting.
 
 **7.2.0**:  Updated version of `xcite` library.

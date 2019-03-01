@@ -248,4 +248,62 @@ msA#1#urn:cite2:hmt:msA.v1:1r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   }
 
 
+val bigLib = """#!citelibrary
+license#public domain
+name#Demo library
+urn#urn:cite2:cex:democex.2017a:test
+
+#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+
+#!citedata
+urn#label#siglum#sequence#rv#codex
+urn:cite2:hmt:msA.v1:1r#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#msA#1#recto#urn:cite2:hmt:codex:msA
+urn:cite2:hmt:msA.v1:1v#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1v#msA#2#verso#urn:cite2:hmt:codex:msA
+urn:cite2:hmt:msA.v1:2r#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2 recto#msA#3#recto#urn:cite2:hmt:codex:msA
+urn:cite2:hmt:msA.v1:2v#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 2 verso#msA#4#verso#urn:cite2:hmt:codex:msA
+urn:cite2:hmt:msA.v1:3r#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 3 recto#msA#5#recto#urn:cite2:hmt:codex:msA
+urn:cite2:hmt:msA.v1:3v#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 3 verso#msA#6#verso#urn:cite2:hmt:codex:msA
+
+
+#!citedata
+urn#caption
+urn:cite2:hmt:vaImg.v1:imgA#Image of a page: overview
+urn:cite2:hmt:vaImg.v1:imgB#Detailed image of a page
+urn:cite2:hmt:vaImg.v1:imgC#Detailed image of a second page
+"""
+
+  it should "return valid CEX" in {
+    val repo = CiteCollectionRepository(bigLib,"#",",")
+    val justColl = bigLib.lines.drop(5).mkString("\n")
+    val testLines:Vector[String]  = repo.cex("#",",").replaceAll("[ ]+"," ").lines.toVector
+    val expectedLines:Vector[String] = justColl.replaceAll("[ ]+"," ").lines.toVector
+    assert(testLines.size == expectedLines.size)
+  }
+
+  it should "serialize a single CiteObject to CEX" in {
+    val repo = CiteCollectionRepository(bigLib,"#",",")
+    val objUrn = Cite2Urn("urn:cite2:hmt:msA.v1:1r")
+    val cex:String = repo.cexObject(objUrn,"#")
+    val expected:String = "urn:cite2:hmt:msA.v1:1r#Marcianus Graecus Z. 454 (= 822) (Venetus A) folio 1r#msA#1#recto#urn:cite2:hmt:codex:msA"
+    assert ( cex == expected )
+  }
+
 }

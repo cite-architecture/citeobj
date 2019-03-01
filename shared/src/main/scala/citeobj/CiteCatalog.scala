@@ -71,15 +71,15 @@ import edu.holycross.shot.cex._
     /** Serialize the CiteCatalog to CEX
     *
     **/
-    def cex:String = {
-      val collectionsHeader:String = """#!citecollections
-          |URN#Description#Labelling property#Ordering property#License""".stripMargin
+    def cex(delim1:String = "#", delim2:String = ","):String = {
+      val collectionsHeader:String = s"""#!citecollections
+          |URN${delim1}Description${delim1}Labelling property${delim1}Ordering property${delim1}License""".stripMargin
 
       val cat:Vector[CiteCollectionDef] = this.collections
-      val cexDefs:String = collectionsHeader + "\n" + cat.map(_.cex).mkString("\n")
+      val cexDefs:String = collectionsHeader + "\n" + cat.map(_.cex(delim1)).mkString("\n")
 
       val cexPropertyBlocks:String = {
-        cat.map(propertyDefs2CEX(_)).mkString("\n")
+        cat.map(propertyDefs2CEX(_, delim1, delim2)).mkString("\n\n")
       }
 
       val stringVec:Vector[String] = Vector(
@@ -90,16 +90,28 @@ import edu.holycross.shot.cex._
       stringVec.mkString("\n\n")
     }
 
-    private def propertyDefs2CEX(cd: CiteCollectionDef):String = {
-      val citePropertiesHeader:String = """#!citeproperties
-          |Property#Label#Type#Authority list""".stripMargin
+    private def propertyDefs2CEX(cd: CiteCollectionDef, delim1:String = "#", delim2:String=","):String = {
+      val citePropertiesHeader:String = s"""#!citeproperties
+          |Property${delim1}Label${delim1}Type${delim1}Authority list""".stripMargin
       val header:String = citePropertiesHeader
       val propDefs:Vector[CitePropertyDef] = cd.propertyDefs
       val propVec:Vector[String] = propDefs.map(pd => {
-        s"""${pd.urn}#${pd.label}#${pd.propertyType.cex}#${pd.vocabularyList.mkString(",")}"""
+        s"""${pd.urn}${delim1}${pd.label}${delim1}${pd.propertyType.cex}${delim1}${pd.vocabularyList.mkString(delim2)}"""
       })
       val cexBlock:String = (Vector(header) ++ propVec).mkString("\n")
       cexBlock
+    }
+
+    def cexDataHeader(urn:Cite2Urn, delim1:String = "#"):String = {
+      val colDefOpt:Option[CiteCollectionDef] = this.collection(urn)
+      colDefOpt match {
+        case Some(cd) => {
+            val props:Vector[CitePropertyDef] = cd.propertyDefs
+            val propNameVec:Vector[String] = props.map(_.urn.property)
+            propNameVec.mkString(delim1)
+        }
+        case None => throw CiteObjectException(s"Cannot export Cite Data Header for ${urn}, which is not a collection in this catalog.")
+        }
     }
 
 

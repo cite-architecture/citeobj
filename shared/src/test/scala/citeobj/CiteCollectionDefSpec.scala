@@ -59,7 +59,8 @@ class CiteCollectionDefSpec extends FlatSpec {
 
   it should "serialize to a CEX line" in {
       val expected:String = "urn:cite2:hmt:speeches.v1:#Speeches in the Iliad#urn:cite2:hmt:speeches.v1.label:#urn:cite2:hmt:speeches.v1.sequence:#CC attribution-share-alike"
-      assert( ccDef.cex == expected )
+      assert( ccDef.cex() == expected )
+      assert( ccDef.cex("\t") == expected.replaceAll("#","\t"))
   }
 
   

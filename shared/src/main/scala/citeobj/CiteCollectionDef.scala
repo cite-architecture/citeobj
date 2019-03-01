@@ -46,7 +46,7 @@ import scala.scalajs.js.annotation._
     }
   }
 
-  def cex:String = {
+  def cex(delim1:String = "#"):String = {
     val urn:String = this.urn.toString
     val collectionLabel:String = this.collectionLabel
     val labelProperty:String = this.labelProperty.toString
@@ -58,7 +58,7 @@ import scala.scalajs.js.annotation._
       }
       val license:String = this.license
       val stringVec:Vector[String] = Vector(urn, collectionLabel, labelProperty,orderingProperty,license)
-      stringVec.mkString("#")
+      stringVec.mkString(delim1)
     }
 
 }

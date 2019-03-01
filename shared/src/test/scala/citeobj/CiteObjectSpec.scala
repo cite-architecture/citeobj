@@ -60,6 +60,7 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     }
 
   }
+
   it should "require a version-level identifier in its collection component" in {
       val noVersion = Cite2Urn("urn:cite2:hmt:msA:1r")
       try {

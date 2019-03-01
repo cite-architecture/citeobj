@@ -70,6 +70,60 @@ import scala.collection.immutable.ListMap
     true
   }
 
+  def cex(d1:String = "#", d2:String = ","):String = {
+     val catalogCex:String = this.catalog.cex(d1, d2)
+     val dataCex:String = {
+        this.catalog.collections.map( c =>{
+            val dataHeaderCex:String = this.catalog.cexDataHeader(c.urn, d1)
+            val colls:Vector[Cite2Urn] = collections.toVector.sortBy(_.toString)
+            val dataCex:Vector[String] = colls.map(c => {
+              collectionsMap(c).map( o => {
+                  cexObject(o,d1)
+              })
+            }).flatten
+            val block:String = (Vector(dataHeaderCex) ++ dataCex).mkString("\n")
+            block
+        }).mkString("\n\n")
+     }
+     catalogCex + "\n\n" + dataCex
+  }
+
+    /** Export an object as a delimited line for CEX
+    *
+    * @param delimiter String, defaults to "#"
+    */
+    def cexObject(urn:Cite2Urn, delim1:String = "#"):String = {
+        val co:CiteObject = this.citableObject(urn)
+        val props:Vector[CitePropertyImplementation] = co.propertyList
+        val propStr:Vector[String] = props.map(p => {
+            val collDefOpt:Option[CiteCollectionDef] = this.catalog.collection(urn.dropSelector)  
+            collDefOpt match {
+              case Some(cd) => {
+                  val orderPropOpt:Option[Cite2Urn] = cd.orderingProperty
+                  orderPropOpt match {
+                    case Some(op) => {
+                      if (op == p.urn.dropSelector){
+                        p.propertyValue.toString.toFloat.toInt.toString
+                      } else {
+                        p.propertyValue.toString
+                      }
+
+                    }
+                    case None => {
+                      p.propertyValue.toString
+                    }
+                  }
+              }
+            case None => throw CiteObjectException(s"Could not find collection definition for ${urn}")
+            }
+        })
+        val urnAndLabel:Vector[String] = {
+            Vector( co.urn.toString, co.label)
+        } 
+        val allVec:Vector[String] = urnAndLabel ++ propStr
+        allVec.mkString(delim1)
+    }
+
 
   /** Find Vector of [[CiteObject]]s identified by URNs matching a given range URN.
   *
