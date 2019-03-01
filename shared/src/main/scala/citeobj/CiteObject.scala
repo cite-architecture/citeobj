@@ -137,6 +137,8 @@ trait BaseCitable {
       (matching.size > 0)
     }
 
+    
+
 
     /** True if the value of a given property is less than or equal to a given value.
     *

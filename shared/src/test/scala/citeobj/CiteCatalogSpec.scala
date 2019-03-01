@@ -141,4 +141,98 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
   assert(cat.size == 2)
   }
 
+
+
+  it should "serialize to CEX" in {
+    val bigLib = """#!citelibrary
+license#public domain
+name#Demo library
+urn#urn:cite2:cex:democex.2017a:test
+
+#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+"""
+
+    val justCollections = """#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#"""
+
+    val catalog = CiteCatalog(bigLib)
+    val cexized:String = catalog.cex("#")
+    assert( cexized.replaceAll("[\n ]+"," ") == justCollections.replaceAll("[\n ]+"," ") )
+
+    val otherDelim:String = catalog.cex("\t")
+    assert( otherDelim.replaceAll("[\n ]+"," ") == justCollections.replaceAll("#","\t").replaceAll("[\n ]+"," ").replaceAll("\t!","#!") )
+  }
+
+  it should "return a citedata header line for a collection" in {
+    val bigLib = """#!citelibrary
+license#public domain
+name#Demo library
+urn#urn:cite2:cex:democex.2017a:test
+
+#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:msA.v1.urn:#URN#Cite2Urn#
+urn:cite2:hmt:msA.v1.label:#Label#String#
+urn:cite2:hmt:msA.v1.siglum:#Manuscript siglum#String#
+urn:cite2:hmt:msA.v1.sequence:#Page sequence#Number#
+urn:cite2:hmt:msA.v1.rv:#Recto or Verso#String#recto,verso
+urn:cite2:hmt:msA.v1.codex:#Codex URN#Cite2Urn#
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+"""
+    val expectedHeader1:String = "urn#label#siglum#sequence#rv#codex"
+    val collectionUrn:Cite2Urn = Cite2Urn("urn:cite2:hmt:msA.v1:")
+    val catalog = CiteCatalog(bigLib)
+
+    assert ( catalog.cexDataHeader(collectionUrn, "#") == expectedHeader1 )
+    assert ( catalog.cexDataHeader(collectionUrn) == expectedHeader1 )
+    assert ( catalog.cexDataHeader(collectionUrn, "\t") == expectedHeader1.replaceAll("#","\t") )
+
+
+  }
+
 }
