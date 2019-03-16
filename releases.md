@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**7.3.1**:  Fixed bug with alternate secondary delimiter in CEX.
+
 **7.3.0**:  Exporting CEX.
 
 **7.2.1**:  Significantly more informative error reporting.
