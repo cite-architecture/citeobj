@@ -42,12 +42,16 @@ class CitePropertyValueObjectSpec extends FlatSpec {
   it should "throw an exception if the CtsUrn is not syntactically valid" in {
     val propDef = CitePropertyDef(Cite2Urn("urn:cite2:hmt:speeches.v1.passage:"),"Text passage",CtsUrnType)
 
+    val badUrn = "malformed:urn:value"
+    val msg = s"Unable to parse URN string ${badUrn}"
     try {
-      val propValue = CitePropertyValue.valueForString("malformed:urn:value:", propDef)
+      val propValue = CitePropertyValue.valueForString(badUrn, propDef)
       fail ("Should not have formed property value")
     } catch {
-      case iae: IllegalArgumentException => assert(iae.getMessage() == "requirement failed: Invalid URN syntax: too few components in malformed:urn:value:")
-      case e: Throwable => fail("Should have thrown a CiteObjectException: " + e)
+      case e: java.lang.Exception => {
+        println("ERR:  " + e)
+        assert(e.getMessage().contains(msg))
+      }
     }
   }
   it should "form a CitePropertyValue for a Cite2Urn" in {
