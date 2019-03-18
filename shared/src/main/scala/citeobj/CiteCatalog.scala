@@ -183,7 +183,7 @@ object CiteCatalog {
     // Split individual rows up into columns of data
     val vov = stripped.map(_.split("#").toVector)
     // convert to CitePropertyDef
-    val propDefList = vov.map(CiteCatalog.propertyDefinition(_, ","))
+    val propDefList = vov.map(CiteCatalog.propertyDefinition(_, listDelimiter))
     propDefList
   }
 

@@ -140,6 +140,15 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
     assert(pdefList.size == expectedProperties)
   }
 
+  it should "create a property definition list from parsed CEX, with an alternate delimiter" in {
+    val cexString = s"""#!citecollections\n${collectionHeader}\n${collectionLine}\n\n#!citeproperties\n${propertyHeader}\n${property1Line.replaceAll(",","!")}\n${property2Line}\n"""
+    val cex = CexParser(cexString)
+    val pdefList = CiteCatalog.propertyDefListFromCex(cex,"!")
+
+    val expectedProperties = 2
+    assert(pdefList.size == expectedProperties)
+  }
+
   it should "create a collection tuple list from parsed CEX" in {
     val cexString = s"#!citecollections\n${collectionHeader}\n${collectionLine}\n\n#!citeproperties\n${propertyHeader}\n${property1Line}\n${property2Line}\n"
     val cex = CexParser(cexString)
