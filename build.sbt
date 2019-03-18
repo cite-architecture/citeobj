@@ -1,15 +1,16 @@
-name := "CITE Object library"
+//name := "CITE Object library"
 
-crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
-scalaVersion := (crossScalaVersions in ThisBuild).value.last
+//crossScalaVersions in ThisBuild := Seq("2.10.6","2.11.8", "2.12.4")
+//scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
 
+lazy val supportedScalaVersions = List("2.10.6","2.11.8", "2.12.4")
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
     settings(
-      publish := {},
-      publishLocal := {}
+      crossScalaVersions := Nil,
+      publish / skip := true
     )
 
 lazy val crossed = crossProject.in(file(".")).
@@ -23,18 +24,20 @@ lazy val crossed = crossProject.in(file(".")).
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
         "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
-        "edu.holycross.shot.cite" %%% "xcite" % "3.7.0",
+        "edu.holycross.shot.cite" %%% "xcite" % "4.0.1",
 
         "edu.holycross.shot" %%% "cex" % "6.3.3"
       )
     ).
     jvmSettings(
       tutTargetDirectory := file("docs"),
-      tutSourceDirectory := file("shared/src/main/tut")
+      tutSourceDirectory := file("shared/src/main/tut"),
+      crossScalaVersions := supportedScalaVersions
     ).
     jsSettings(
       skip in packageJSDependencies := false,
-      scalaJSUseMainModuleInitializer in Compile := true
+      scalaJSUseMainModuleInitializer in Compile := true,
+      crossScalaVersions := supportedScalaVersions
 
 
     )

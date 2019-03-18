@@ -1,5 +1,6 @@
 # `citeobj`: release notes
 
+
 **7.3.1**:  Update `xcite` library. Fixed bug with alternate secondary delimiter in CEX.
 
 **7.3.0**:  Exporting CEX.
