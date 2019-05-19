@@ -1,6 +1,9 @@
 # `citeobj`: release notes
 
-**7.3.2**:  TBA
+
+**7.3.3**: Update `xcite` library.
+
+**7.3.2**:  Fixed bug with secondary delimiter in CEX.
 
 
 **7.3.1**:  Update `xcite` library. Fixed bug with alternate secondary delimiter in CEX.
