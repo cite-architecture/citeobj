@@ -1,5 +1,6 @@
 # `citeobj`: release notes
 
+**7.3.4**:  Update `xcite` library.
 
 **7.3.3**:  Update `xcite` library.
 
