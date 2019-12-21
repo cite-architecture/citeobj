@@ -6,6 +6,10 @@ import edu.holycross.shot.cex._
 import scala.collection.mutable.ArrayBuffer
 
 
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
+
 import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
@@ -15,7 +19,7 @@ import scala.scalajs.js.annotation._
 *
 * @param objectMap map of urns to cite2 objects.
 */
-@JSExportAll  case class CiteObjectMap (objectMap: Map[Cite2Urn,CiteObject]) {
+@JSExportAll  case class CiteObjectMap (objectMap: Map[Cite2Urn,CiteObject]) extends LogSupport {
 
   /** Filter map by identifying URN.
   */
@@ -95,7 +99,7 @@ import scala.scalajs.js.annotation._
 
 /** Factory for creating [[CiteCollectionData]] from source data in CEX format.
 */
-object CiteObjectMap {
+object CiteObjectMap extends LogSupport {
 
   /** Creates a Map of CITE Collection Obvjects from a CEX source.
   *
@@ -155,16 +159,16 @@ object CiteObjectMap {
                 throw CiteObjectException("No label for object: " + thisObjectUrn)
               }
             }
-            //println(s"- ${i}")
+            //debug(s"- ${i}")
             mapBuffer += (thisObjectUrn -> CiteObject(thisObjectUrn,thisObjectLabel, thisFilteredProps))
           }
         }
       }
     }
 
-    //println("----- done constructing mapBuffer, copying to unmutable map…")
+    //debug("----- done constructing mapBuffer, copying to unmutable map…")
     val objectMap:Map[Cite2Urn,CiteObject] = mapBuffer
-    //println("…done copying. Memory pressure should drop.")
+    //debug("…done copying. Memory pressure should drop.")
 
     CiteObjectMap(objectMap)
   }
@@ -204,7 +208,7 @@ object CiteObjectMap {
   def propertiesForMappedText(dataMap: Map[String,String], collectionDef: CiteCollectionDef) : Vector[CitePropertyValue] = {
     var propertyBuffer = ArrayBuffer[CitePropertyValue]()
 
-    //println(s"Map ${dataMap.size} properties using def containing ${collectionDef.propertyDefs.size} props")
+    //debug(s"Map ${dataMap.size} properties using def containing ${collectionDef.propertyDefs.size} props")
     val lcMap = dataMap.map{ case (k,v) => (k.toLowerCase,v)}
     val collectionUrn = collectionDef.urn
     val urn = Cite2Urn(lcMap("urn"))
@@ -221,27 +225,27 @@ object CiteObjectMap {
     }.filter(_.nonEmpty).toSeq(0)
 
     val objectSelectorUrn = Cite2Urn(objectSelectorString)
-    //println("OBJ URN " + objectSelectorUrn )
+    //debug("OBJ URN " + objectSelectorUrn )
     for (k <- dataMap.keySet) {
        val propUrn = objectSelectorUrn.addProperty(k)
-       //println("With prop" + propUrn)
-       //println("CHeck out " + collectionDef.propertyDefs.map(_.urn))
-       //println("Look for " +propUrn.dropSelector + "in " + collectionDef.propertyDefs.map(_.urn))
+       //debug("With prop" + propUrn)
+       //debug("CHeck out " + collectionDef.propertyDefs.map(_.urn))
+       //debug("Look for " +propUrn.dropSelector + "in " + collectionDef.propertyDefs.map(_.urn))
        val propDef = collectionDef.propertyDefs.filter(_.urn == propUrn.dropSelector)
        // check that you have one and only  one propDef ...
-       //println("PROP DEF " + propDef.size)
+       //debug("PROP DEF " + propDef.size)
 
        if (propDef.size == 1) {
          val typedValue = CitePropertyValue.valueForString(dataMap(k), propDef(0))
          val citePropertyVal = CitePropertyValue(propUrn, typedValue)
          propertyBuffer += citePropertyVal
        }else{
-         println("No propdef matching " + propUrn)
+         warn("No propdef matching " + propUrn)
        }
 
       //}
     }
-    //println(s"has ${propertyBuffer.toVector.size} items in buffer " + propertyBuffer.toVector + "\n\n")
+    //debug(s"has ${propertyBuffer.toVector.size} items in buffer " + propertyBuffer.toVector + "\n\n")
     propertyBuffer.toVector
   }
 

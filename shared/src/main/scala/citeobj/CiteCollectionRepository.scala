@@ -11,6 +11,11 @@ import scala.scalajs.js.annotation._
 
 import scala.collection.immutable.ListMap
 
+
+
+import wvlet.log._
+import wvlet.log.LogFormatter.SourceCodeLogFormatter
+
 /** A cataloged collection of citable data.
 * In initialization, the constructor validates every
 * object in the data against the structure defined
@@ -19,7 +24,7 @@ import scala.collection.immutable.ListMap
 * @param data Collection of data values.
 * @param catalog Documentation of the structure of each collection.
 */
-@JSExportAll  case class CiteCollectionRepository (data: CiteCollectionData, objects:CiteObjectMap, catalog: CiteCatalog) {
+@JSExportAll  case class CiteCollectionRepository (data: CiteCollectionData, objects:CiteObjectMap, catalog: CiteCatalog) extends LogSupport {
 
   assert (validateAll)
 
@@ -42,7 +47,7 @@ import scala.collection.immutable.ListMap
       cm
   }
 
- 
+
 
 
   /** Validate that data and catalog agree.
@@ -96,7 +101,7 @@ import scala.collection.immutable.ListMap
         val co:CiteObject = this.citableObject(urn)
         val props:Vector[CitePropertyImplementation] = co.propertyList
         val propStr:Vector[String] = props.map(p => {
-            val collDefOpt:Option[CiteCollectionDef] = this.catalog.collection(urn.dropSelector)  
+            val collDefOpt:Option[CiteCollectionDef] = this.catalog.collection(urn.dropSelector)
             collDefOpt match {
               case Some(cd) => {
                   val orderPropOpt:Option[Cite2Urn] = cd.orderingProperty
@@ -119,7 +124,7 @@ import scala.collection.immutable.ListMap
         })
         val urnAndLabel:Vector[String] = {
             Vector( co.urn.toString, co.label)
-        } 
+        }
         val allVec:Vector[String] = urnAndLabel ++ propStr
         allVec.mkString(delim1)
     }
@@ -172,13 +177,13 @@ import scala.collection.immutable.ListMap
     collectionMatches.size match {
       case 0 => {
           Vector()
-      } 
+      }
       // Collection is in data
       case _ => {
         // Object or Whole Collection?
         filterUrn.objectComponentOption match {
           // Whole Collection:
-          case None => {  
+          case None => {
             // WORK HERE!!!!!!!
             //citableObjects.filter(_.urn ~~ filterUrn)
             this.collectionsMap(collUrn).map( cu => this.objects.objectMap(cu))
@@ -199,14 +204,14 @@ import scala.collection.immutable.ListMap
                       case _ => Vector()
                     }
                   }
-                  tempVec 
+                  tempVec
                 }
                 //No… notional object
                 case _ => {
                   val tempMap = objects.objectMap.filterKeys( _ ~~ filterUrn ) // faster!
                   tempMap.map( k => k._2 ).toVector
                 }
-              } 
+              }
             // range
             } else {
               rangeFilter(filterUrn)
@@ -292,7 +297,7 @@ import scala.collection.immutable.ListMap
           case objUrn : Cite2Urn => {
             buffer += citableObject(objUrn)
           }
-          case _ => println("Could not figure out type of " + uprop.propertyValue)
+          case _ => warn("Could not figure out type of " + uprop.propertyValue)
         }
       }
     }
@@ -756,7 +761,7 @@ object CiteCollectionRepository {
       val collUrn = CiteCollectionData.collectionForDataBlock(ds,delimiter)
       val collectionDef = catalog.collection(collUrn)
       collectionDef match {
-        case None => 
+        case None =>
         case cd: Some[CiteCollectionDef] => {
           val mapped = mapsForDelimited(ds,delimiter).map(_.toMap)
           val labellingProperty:Option[Cite2Urn] = cd.get.labellingProperty
@@ -783,11 +788,11 @@ object CiteCollectionRepository {
               })
             }
 
-            // We don't want the URN property or the labelling property 
+            // We don't want the URN property or the labelling property
             val thisFilteredProps:Vector[CitePropertyImplementation] = {
-                thisObjectProps.filter( 
+                thisObjectProps.filter(
                   (p) => (
-                    (p.urn.dropSelector != labellingProperty.get) && 
+                    (p.urn.dropSelector != labellingProperty.get) &&
                     (p.urn.property != "urn")
                   )
                 )
@@ -808,9 +813,9 @@ object CiteCollectionRepository {
             /* DO SOME VALIDATION!! */
             //throw CiteObjectException("No property value found matching " + propUrn)
            CiteCollectionRepository.objectMatchesCatalog(tempObject,cd.get) match {
-            case true => 
+            case true =>
             case _ => throw CiteObjectException(s"constructed object fails to match catalog: ${row}.")
-           } 
+           }
 
            // Catch duplicate URNs
            if (mapBuffer.contains(thisObjectUrn)){
@@ -827,7 +832,7 @@ object CiteCollectionRepository {
             // log each row, if you want to keep up
             /*
             if ( ( i % 1000) == 0){
-              println(s"${i}")
+              debug(s"${i}")
             }
             */
             mapBuffer += (thisObjectUrn -> tempObject)
@@ -839,7 +844,7 @@ object CiteCollectionRepository {
     val valuesByProperty = propBuffer.toVector
     val objMap = mapBuffer.toMap
     val data = CiteCollectionData(valuesByProperty)
-    val objects = CiteObjectMap(objMap) 
+    val objects = CiteObjectMap(objMap)
     CiteCollectionRepository(data,objects,catalog)
   }
 

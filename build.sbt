@@ -4,7 +4,7 @@
 //scalaVersion := (crossScalaVersions in ThisBuild).value.last
 
 
-lazy val supportedScalaVersions = List("2.10.6","2.11.8", "2.12.4")
+lazy val supportedScalaVersions = List("2.12.4") // List("2.10.6","2.11.8", "2.12.4")
 
 lazy val root = project.in(file(".")).
     aggregate(crossedJVM, crossedJS).
@@ -17,14 +17,19 @@ lazy val crossed = crossProject.in(file(".")).
     settings(
       name := "citeobj",
       organization := "edu.holycross.shot",
-      version := "7.3.4",
+      version := "7.4.0",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
       resolvers += Resolver.jcenterRepo,
       resolvers += Resolver.bintrayRepo("neelsmith", "maven"),
       libraryDependencies ++= Seq(
         "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided",
         "org.scalatest" %%% "scalatest" % "3.0.1" % "test",
-        "edu.holycross.shot.cite" %%% "xcite" % "4.1.0",
+
+
+
+        "org.wvlet.airframe" %%% "airframe-log" % "19.8.10",
+
+        "edu.holycross.shot.cite" %%% "xcite" % "4.2.0",
 
         "edu.holycross.shot" %%% "cex" % "6.3.3"
       )

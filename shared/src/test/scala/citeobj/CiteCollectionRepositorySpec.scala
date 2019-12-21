@@ -89,7 +89,7 @@ urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:gree
     }
   }
 
-  it should "throw an assertion errror if there is not a 1<->1 relation of properties from  instantiated collections to catalog " in pending 
+  it should "throw an assertion errror if there is not a 1<->1 relation of properties from  instantiated collections to catalog " in pending
   /*
   {
     val shortData : Vector[CitePropertyValue] = Vector(
@@ -164,7 +164,7 @@ urn#speaker#label#passage#sequence
 urn:cite2:hmt:speeches.v1:speech1#urn:cite2:hmt:pers:pers22#Speech 1#urn:cts:greekLit:tlg0012.tlg001:1.26-1.32#1
 urn:cite2:hmt:speeches.v1:speech2#urn:cite2:hmt:pers:pers1#Speech 4#urn:cts:greekLit:tlg0012.tlg001:1.85-1.91#NOT_A_NUMBER
 """
-    
+
 
 
     try {
@@ -210,7 +210,7 @@ msA#1#urn:cite2:hmt:msA.v1:1r#rectorated#Marcianus Graecus Z. 454 (= 822) (Venet
 
       it should "validate controlled vocab lists" in {
         val goodVocab =  """#!citecollections
-URN#Description#Labelling property#Ordering property#License        
+URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscriptscript#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 
 #!citeproperties
@@ -292,10 +292,12 @@ urn:cite2:hmt:vaImg.v1:imgC#Detailed image of a second page
 
   it should "return valid CEX" in {
     val repo = CiteCollectionRepository(bigLib,"#",",")
-    val justColl = bigLib.lines.drop(5).mkString("\n")
-    val testLines:Vector[String]  = repo.cex("#",",").replaceAll("[ ]+"," ").lines.toVector
-    val expectedLines:Vector[String] = justColl.replaceAll("[ ]+"," ").lines.toVector
+
+    val justColl = bigLib.split("\n").drop(5).mkString("\n")
+    val testLines:Vector[String]  = repo.cex("#",",").replaceAll("[ ]+"," ").split("\n").toVector
+    val expectedLines:Vector[String] = justColl.replaceAll("[ ]+"," ").split("\n").toVector
     assert(testLines.size == expectedLines.size)
+
   }
 
   it should "serialize a single CiteObject to CEX" in {
