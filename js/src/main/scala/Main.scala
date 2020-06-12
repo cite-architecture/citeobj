@@ -4,7 +4,7 @@ import edu.holycross.shot.cite._
 import edu.holycross.shot.cex._
 
 object Main {
-  def main(): Unit = {
+  def main(args: Array[String]): Unit = {
 
         val cexSrc = """#!citelibrary
 name#demo
