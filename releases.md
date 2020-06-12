@@ -1,5 +1,6 @@
 # `citeobj`: release notes
 
+**7.5.0**: Correct cross building and publication with sbt 1.3.0.
 
 **7.4.0**:  Add support for logging.
 
