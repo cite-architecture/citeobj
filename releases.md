@@ -1,10 +1,18 @@
 # `citeobj`: release notes
 
-**7.3.3**:  Fixed bug with CEX output when labelling property is not called "label"; added requirement that ordering-properties and labelling properties belong to the same collection.
+**7.5.1**:  Fixed bug with CEX output when labelling property is not called "label"; added requirement that ordering-properties and labelling properties belong to the same collection.
 
-**7.3.2**:  Fixed bug with alternate secondary delimiter in CEX. 
+**7.5.0**: Correct cross building and publication with sbt 1.3.0.
 
-**7.3.1**:  Update `xcite` library. 
+**7.4.0**:  Add support for logging.
+
+**7.3.4**:  Update `xcite` library.
+
+**7.3.3**:  Update `xcite` library.
+
+**7.3.2**:  Fixed bug with alternate secondary delimiter in CEX.
+
+**7.3.1**:  Update `xcite` library.
 
 **7.3.0**:  Exporting CEX.
 
