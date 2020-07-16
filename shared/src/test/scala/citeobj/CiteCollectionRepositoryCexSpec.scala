@@ -52,7 +52,7 @@ URN#Description#Labelling property#Ordering property#License
 // 1. Text-bearing surfaces:
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 // 2. Documentary images:
-urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:vaimg.2017a.label:##CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list

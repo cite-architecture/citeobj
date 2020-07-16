@@ -119,7 +119,7 @@ URN#Description#Labelling property#Ordering property#License
 // 1. Text-bearing surfaces:
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
 // 2. Documentary images:
-urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:vaimg.2017a.label:##CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list
@@ -152,7 +152,7 @@ urn#urn:cite2:cex:democex.2017a:test
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
-urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:vaimg.2017a.label:##CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list
@@ -173,7 +173,7 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
     val justCollections = """#!citecollections
 URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
-urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:vaimg.2017a.label:##CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list
@@ -207,7 +207,7 @@ urn#urn:cite2:cex:democex.2017a:test
 #!citecollections
 URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:msA.v1:#Pages of the Venetus A manuscripts#urn:cite2:hmt:msA.v1.label:#urn:cite2:hmt:msA.v1.sequence:#CC-attribution-share-alike
-urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:msA.v1.label:##CC-attribution-share-alike
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A#urn:cite2:hmt:vaimg.2017a.label:##CC-attribution-share-alike
 
 #!citeproperties
 Property#Label#Type#Authority list
@@ -224,7 +224,7 @@ urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
 urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
 urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
 """
-    val expectedHeader1:String = "urn#label#siglum#sequence#rv#codex"
+    val expectedHeader1:String = ("urn#label#siglum#sequence#rv#codex").split("#").toVector.sortBy(f => f).reverse.mkString("#")
     val collectionUrn:Cite2Urn = Cite2Urn("urn:cite2:hmt:msA.v1:")
     val catalog = CiteCatalog(bigLib)
 
@@ -234,5 +234,49 @@ urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
 
 
   }
+
+
+  it should "check that the labeling property belongs to the same collection!" in {
+
+    val badCatalog = """
+#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:XXX.YYY.caption:##CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+"""
+
+   assertThrows[CiteObjectException] {
+     val catalog = CiteCatalog(badCatalog)
+     val cexed: String = catalog.cex()
+   }
+
+}
+ 
+  it should "check that the ordering property belongs to the same collection!" in {
+
+    val badCatalog2 = """
+#!citecollections
+URN#Description#Labelling property#Ordering property#License
+urn:cite2:hmt:vaimg.2017a:#Images of the Venetus A manuscriptscript#urn:cite2:hmt:vaimg.2017a.caption:#urn:cite2:hmt:xxx.yyy.seq:#CC-attribution-share-alike
+
+#!citeproperties
+Property#Label#Type#Authority list
+urn:cite2:hmt:vaimg.2017a.urn:#URN#Cite2Urn#
+urn:cite2:hmt:vaimg.2017a.caption:#Caption#String#
+urn:cite2:hmt:vaimg.2017a.rights:#Rights#String#
+"""
+
+   assertThrows[CiteObjectException] {
+     val catalog = CiteCatalog(badCatalog2)
+     val cexed: String = catalog.cex()
+   }
+
+   }
+ 
 
 }

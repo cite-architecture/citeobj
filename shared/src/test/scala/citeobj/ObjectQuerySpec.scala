@@ -37,9 +37,11 @@ msA#3#urn:cite2:hmt:msA.v1:2r#recto#Marcianus Graecus Z. 454 (= 822) (Venetus A)
   val codexProperty = Cite2Urn("urn:cite2:hmt:msA.v1.codex:")
 
   "A CiteObject" should "report boolean result of matching any value"  in {
+    /*
     println(s"""++++ ${oneRecto.valueEquals("recto")}""")
     println(s"""${oneRecto.urn}""")
     println(s"""${oneVerso.urn}""")
+    */
     assert(oneRecto.valueEquals("recto"))
     /*
     assert(oneRecto.valueEquals("verso") == false)
@@ -286,14 +288,14 @@ urn:cite2:hmt:clausereading.v1:clause11#urn:cts:greekLit:tlg0012.tlg001.fuPers:2
 """
 
   it should "match URNs in properties" in {
-    println("----- got here 1")
+    //println("----- got here 1")
     val orcaRepo = CiteCollectionRepository(orcacex,"#",",")
-    println("----- got here 2")
+    //println("----- got here 2")
     val orcaObjects = orcaRepo.citableObjects
-    println("----- got here 3")
+    //println("----- got here 3")
     val orca1 = orcaRepo.citableObject(Cite2Urn("urn:cite2:hmt:clausereading.v1:clause1"))
     val iliad = CtsUrn("urn:cts:greekLit:tlg0012.tlg001:")
-    println("matches Iliad? " + orca1.urnMatch(iliad))
+    //println("matches Iliad? " + orca1.urnMatch(iliad))
   }
 
 

@@ -152,7 +152,7 @@ urn:cite2:hmt:vaimg.2017a:VA012RN_0013.2017#Natural light photograph of Venetus 
     val hmtData:String = """#!citecollections
 URN#Description#Labelling property#Ordering property#License
 urn:cite2:hmt:pers.v1:#Names of persons#urn:cite2:hmt:pers.v1.label:##Public domain
-urn:cite2:hmt:place.v1:#Geographic names#urn:cite2:hmt:pers.v1.label:##Public domain
+urn:cite2:hmt:place.v1:#Geographic names#urn:cite2:hmt:place.v1.label:##Public domain
 
 #!citeproperties
 Property#Label#Type#Authority list

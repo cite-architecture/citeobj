@@ -140,7 +140,6 @@ sequence#urn#label
     val timeStart =  java.lang.System.currentTimeMillis()
     val repo = CiteCollectionRepository(cex,"#",",")
     val timeEnd =  java.lang.System.currentTimeMillis()
-    println(s"\n=================\nBuilt 3-collection (3k) repo in: ${(timeEnd - timeStart)/1000} seconds")
 
   "A CITE Object Map" should  "have a map of [Cite2Urn,CiteObject]" in {
     val com:CiteObjectMap = repo.objects

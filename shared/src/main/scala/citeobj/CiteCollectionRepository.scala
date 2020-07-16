@@ -75,13 +75,12 @@ import scala.collection.immutable.ListMap
      val dataCex:String = {
         this.catalog.collections.map( c =>{
             val dataHeaderCex:String = this.catalog.cexDataHeader(c.urn, d1)
-            val colls:Vector[Cite2Urn] = collections.toVector.sortBy(_.toString)
-            val dataCex:Vector[String] = colls.map(c => {
-              collectionsMap(c).map( o => {
-                  cexObject(o,d1)
-              })
-            }).flatten
-            val block:String = (Vector(dataHeaderCex) ++ dataCex).mkString("\n")
+            //val colls:Vector[Cite2Urn] = collections.toVector.sortBy(_.toString)
+            //println(s"\n---\n${colls}\n----")
+            val dataCex:Vector[String] = collectionsMap(c.urn).map( o => {
+                cexObject(o,d1)
+            })
+            val block:String = (Vector("#!citedata", dataHeaderCex) ++ dataCex).mkString("\n")
             block
         }).mkString("\n\n")
      }
@@ -95,33 +94,47 @@ import scala.collection.immutable.ListMap
     def cexObject(urn:Cite2Urn, delim1:String = "#"):String = {
         val co:CiteObject = this.citableObject(urn)
         val props:Vector[CitePropertyImplementation] = co.propertyList
-        val propStr:Vector[String] = props.map(p => {
+        val propStr:Vector[(String,String)] = props.map(p => {
             val collDefOpt:Option[CiteCollectionDef] = this.catalog.collection(urn.dropSelector)  
             collDefOpt match {
               case Some(cd) => {
+                  val propName: String = p.urn.property
                   val orderPropOpt:Option[Cite2Urn] = cd.orderingProperty
                   orderPropOpt match {
                     case Some(op) => {
                       if (op == p.urn.dropSelector){
-                        p.propertyValue.toString.toFloat.toInt.toString
+                        (propName, p.propertyValue.toString.toFloat.toInt.toString)
                       } else {
-                        p.propertyValue.toString
+                        (propName, p.propertyValue.toString)
                       }
 
                     }
                     case None => {
-                      p.propertyValue.toString
+                      (propName, p.propertyValue.toString)
                     }
                   }
               }
             case None => throw CiteObjectException(s"Could not find collection definition for ${urn}")
             }
         })
-        val urnAndLabel:Vector[String] = {
-            Vector( co.urn.toString, co.label)
+
+        val labelProperty: String = { 
+          collectionDefinition(co.urn.dropSelector).get.labelProperty.property
+        }
+
+        val urnAndLabel: Vector[(String, String)] = {
+            Vector( ("urn", co.urn.toString), ("labelProperty", co.label))
         } 
-        val allVec:Vector[String] = urnAndLabel ++ propStr
-        allVec.mkString(delim1)
+        val allVec: Vector[(String, String)] = urnAndLabel ++ propStr
+
+        /* We need to sort allVec so that its sequence matches
+           the order of cexDataHeader(). 
+       */
+        val sortedVec: Vector[String] = {
+          allVec.sortBy(t => t._1).reverse.map(_._2)
+        }
+
+        sortedVec.mkString(delim1)
     }
 
 

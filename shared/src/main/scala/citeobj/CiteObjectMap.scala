@@ -10,10 +10,10 @@ import scala.scalajs.js
 import scala.scalajs.js.annotation._
 
 
-/** Map of URN -> CiteObject for a repository of citable objects and properties.
+/** Map of Object-URN -> CiteObject for a repository of citable objects and properties.
 * The data are organized as a Map[Cite2Urn,CiteObject].
 *
-* @param objectMap map of urns to cite2 objects.
+* @param objectMap map of (object)-urns to cite2 objects.
 */
 @JSExportAll  case class CiteObjectMap (objectMap: Map[Cite2Urn,CiteObject]) {
 
@@ -97,7 +97,7 @@ import scala.scalajs.js.annotation._
 */
 object CiteObjectMap {
 
-  /** Creates a Map of CITE Collection Obvjects from a CEX source.
+  /** Creates a Map of CITE Collection Objects from a CEX source.
   *
   * @param cexSource Text in CEX format.  Note that there must be  one `citedata` block per
   * collection and at least one `citecatalog` block that may contain catalog data for

@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**7.3.3**:  Fixed bug with CEX output when labelling property is not called "label"; added requirement that ordering-properties and labelling properties belong to the same collection.
+
 **7.3.2**:  Fixed bug with alternate secondary delimiter in CEX. 
 
 **7.3.1**:  Update `xcite` library. 

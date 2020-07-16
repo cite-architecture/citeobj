@@ -108,7 +108,7 @@ import edu.holycross.shot.cex._
         case Some(cd) => {
             val props:Vector[CitePropertyDef] = cd.propertyDefs
             val propNameVec:Vector[String] = props.map(_.urn.property)
-            propNameVec.mkString(delim1)
+            propNameVec.sortBy(s => s).reverse.mkString(delim1)
         }
         case None => throw CiteObjectException(s"Cannot export Cite Data Header for ${urn}, which is not a collection in this catalog.")
         }
@@ -212,7 +212,36 @@ object CiteCatalog {
         license= c._5,
         propertyDefs = applicable )
     }
-    CiteCatalog(buffer.toVector)
+    val testCatalog = CiteCatalog(buffer.toVector)
+
+    for ( c <- testCatalog.collections) {
+      val urn = c.urn
+      val orderingUrn = c.orderingProperty
+      val labelProperty = c.labelProperty
+
+      val propertiesOkay: Boolean = {
+
+        if (labelProperty.dropProperty != urn) {
+          throw CiteObjectException(s"Label property ${labelProperty} is not in the same collection as ${urn}.")
+          false
+        } else {
+          orderingUrn match {
+            case Some(u) => {
+              if (u.dropProperty != urn) {
+                throw CiteObjectException(s"Ordering property ${u} is not in the same collection as ${urn}.")
+                false
+              } else true
+            }
+            case None => true
+          }
+        }
+      }
+      require(propertiesOkay)
+    }
+
+    testCatalog
+
+
   }
 
 

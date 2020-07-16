@@ -30,7 +30,7 @@ r3a,r3b,r3c
       fail("Should not have created map")
     } catch {
       case coe: CiteObjectException => {
-        println(coe)
+        //println(coe)
         assert(true)
       }
       case t: Throwable => fail("Should have thrown CiteObjectException, but threw " + t)
