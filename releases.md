@@ -1,5 +1,7 @@
 # `citeobj`: release notes
 
+**7.5.2**: Artifact published now at https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/
+
 **7.5.1**:  Fixed bug with CEX output when labelling property is not called "label"; added requirement that ordering-properties and labelling properties belong to the same collection.
 
 **7.5.0**: Correct cross building and publication with sbt 1.3.0.

@@ -13,20 +13,22 @@ lazy val crossed = crossProject(JSPlatform, JVMPlatform).in(file(".")).
     settings(
       name := "citeobj",
       organization := "edu.holycross.shot",
-      version := "7.5.1",
+      version := "7.5.2",
       licenses += ("GPL-3.0",url("https://opensource.org/licenses/gpl-3.0.html")),
-      resolvers += Resolver.jcenterRepo,
-      resolvers += Resolver.bintrayRepo("neelsmith", "maven"),
+      resolvers += "Nexus" at "https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/",
       libraryDependencies ++= Seq(
         "org.scalatest" %%% "scalatest" % "3.1.2" % "test",
 
 
         "org.wvlet.airframe" %%% "airframe-log" % "20.5.2",
 
-        "edu.holycross.shot.cite" %%% "xcite" % "4.3.0",
+        "edu.holycross.shot.cite" %%% "xcite" % "4.3.1",
 
-        "edu.holycross.shot" %%% "cex" % "6.5.0"
-      )
+        "edu.holycross.shot" %%% "cex" % "6.5.1"
+      ),
+      credentials += Credentials(Path.userHome / ".sbt" / ".credentials"),
+
+      publishTo := Some("releases" at "https://terracotta.hpcc.uh.edu/nexus/repository/maven-releases/")
     ).
     jvmSettings(
       libraryDependencies ++= Seq(
